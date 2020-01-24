@@ -30,7 +30,7 @@ endif()
 
 
 # C++ source
-file(GLOB_RECURSE SOURCE_FILES ./src/*.cpp)
+file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 
 # Executable
