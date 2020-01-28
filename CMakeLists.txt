@@ -40,9 +40,8 @@ include_directories(${CUDA_INCLUDE_DIRS})
 include_directories(${ZED_INCLUDE_DIRS})
 
 
-link_directories(${ZED_LIBRARY_DIR})
+link_directories(${ZED_LIBRARY_DIR}) 
 link_directories(${CUDA_LIBRARY_DIRS})
-
 
 if (LINK_SHARED_ZED)
     SET(ZED_LIBS ${ZED_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_CUDART_LIBRARY} ${CUDA_NPP_LIBRARIES_ZED})

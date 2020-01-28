@@ -1,5 +1,5 @@
 # Headers
-set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/zed_gym/zed_utils.hpp")
+set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/zed_utils/zed_utils.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(zed_util_library zed_utils.cpp ${HEADER_LIST})
