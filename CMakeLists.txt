@@ -22,14 +22,6 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 
 
-# ZED options
-option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
-
-if (NOT LINK_SHARED_ZED AND MSVC)
-    message(FATAL_ERROR "LINK_SHARED_ZED OFF : ZED SDK static libraries not available on Windows")
-endif()
-
-
 # Find packages
 find_package(ZED 3 REQUIRED)
 find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
@@ -42,6 +34,14 @@ include_directories(${ZED_INCLUDE_DIRS})
 
 link_directories(${ZED_LIBRARY_DIR}) 
 link_directories(${CUDA_LIBRARY_DIRS})
+
+
+# ZED options
+option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
+
+if (NOT LINK_SHARED_ZED AND MSVC)
+    message(FATAL_ERROR "LINK_SHARED_ZED OFF : ZED SDK static libraries not available on Windows")
+endif()
 
 if (LINK_SHARED_ZED)
     SET(ZED_LIBS ${ZED_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_CUDART_LIBRARY} ${CUDA_NPP_LIBRARIES_ZED})

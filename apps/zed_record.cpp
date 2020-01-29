@@ -1,10 +1,10 @@
-#include <iostream>
-#include <iomanip>
-#include <string>
+#include <zed_utils/lib.hpp>
 
 #include <sl/Camera.hpp>
 
-#include <zed_utils/zed_utils.hpp>
+#include <iostream>
+#include <iomanip>
+#include <string>
 
 int main()
 {
