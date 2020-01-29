@@ -28,14 +28,6 @@ find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
 message(STATUS "Found CUDA ${CUDA_VERSION_STRING} at ${CUDA_TOOLKIT_ROOT_DIR}")
 
 
-include_directories(${CUDA_INCLUDE_DIRS})
-include_directories(${ZED_INCLUDE_DIRS})
-
-
-link_directories(${ZED_LIBRARY_DIR}) 
-link_directories(${CUDA_LIBRARY_DIRS})
-
-
 # ZED options
 option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
 

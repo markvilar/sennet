@@ -1,4 +1,4 @@
-#include <zed_utils/lib.hpp>
+#include <zedutils/zederrors.hpp>
 
 #include <sl/Camera.hpp>
 
