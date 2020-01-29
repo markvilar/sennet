@@ -1,4 +1,5 @@
 #include <zedutils/zederrors.hpp>
+#include <zedutils/ZEDController.hpp>
 
 #include <sl/Camera.hpp>
 
@@ -29,5 +30,11 @@ int main()
 		std::cout << "Opened ZED!" << std::endl;
 	}
 
+	// Initialize controller
+	ZEDController controller;
+	controller.bind(&zed);
+	controller.unbind();
+
+	// Close camera
 	zed.close();
 }

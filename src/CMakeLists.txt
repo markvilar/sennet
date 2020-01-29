@@ -1,8 +1,13 @@
 # Headers
-set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/zedutils/zederrors.hpp")
+set(HEADER_LIST 
+	"${PROJECT_SOURCE_DIR}/include/zedutils/zederrors.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/ZEDController.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(zedutils_library zederrors.cpp ${HEADER_LIST})
+add_library(zedutils_library 
+	zederrors.cpp 
+	ZEDController.cpp
+	${HEADER_LIST})
 
 # We need this directory, and users of our library will need it too
 target_include_directories(zedutils_library PUBLIC ../include ${ZED_INCLUDE_DIRS} ${CUDA_INCLUDE_DIRS})
