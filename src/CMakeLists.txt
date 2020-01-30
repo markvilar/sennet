@@ -1,11 +1,11 @@
 # Headers
 set(HEADER_LIST 
-	"${PROJECT_SOURCE_DIR}/include/zedutils/zederrors.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/ZEDio.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/ZEDController.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(zedutils_library 
-	zederrors.cpp 
+	ZEDio.cpp 
 	ZEDController.cpp
 	${HEADER_LIST})
 

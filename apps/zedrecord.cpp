@@ -1,4 +1,4 @@
-#include <zedutils/zederrors.hpp>
+#include <zedutils/ZEDio.hpp>
 #include <zedutils/ZEDController.hpp>
 
 #include <sl/Camera.hpp>

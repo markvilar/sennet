@@ -10,7 +10,7 @@ ZEDController::ZEDController() : camera(nullptr)
 
 ZEDController::~ZEDController()
 {
-	if(camera != nullptr)
+	if(has_camera_bounded())
 	{
 		sl::CameraInformation cam_info = camera->getCameraInformation();
 		camera->close();
