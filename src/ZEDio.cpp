@@ -94,6 +94,6 @@ std::ostream& operator<<(std::ostream& os, const sl::CameraInformation& params)
 
 std::ostream& operator<<(std::ostream& os, const sl::Resolution& res)
 {
-	os << res.width << "x" << res.height << "\n";
+	os << res.width << "x" << res.height << " (WxH)\n";
 	return os;
 }
