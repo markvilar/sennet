@@ -1,12 +1,14 @@
 # Headers
 set(HEADER_LIST 
 	"${PROJECT_SOURCE_DIR}/include/zedutils/ZEDio.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/ZEDController.hpp")
+	"${PROJECT_SOURCE_DIR}/include/zedutils/ZEDController.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/ZEDfunctional.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(zedutils_library 
 	ZEDio.cpp 
 	ZEDController.cpp
+	ZEDfunctional.cpp
 	${HEADER_LIST})
 
 # We need this directory, and users of our library will need it too
