@@ -1,4 +1,4 @@
-#include <zedutils/ZEDController.hpp>
+#include <ZEDutils/ZEDController.hpp>
 
 ZEDController::ZEDController(const std::string path) 
 	: camera(nullptr), dir_path(path)

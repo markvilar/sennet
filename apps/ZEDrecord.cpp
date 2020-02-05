@@ -1,5 +1,5 @@
-#include <zedutils/ZEDio.hpp>
-#include <zedutils/ZEDController.hpp>
+#include <ZEDutils/ZEDio.hpp>
+#include <ZEDutils/ZEDController.hpp>
 
 #include <sl/Camera.hpp>
 

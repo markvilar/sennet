@@ -1,4 +1,4 @@
-#include <zedutils/ZEDio.hpp>
+#include <ZEDutils/ZEDio.hpp>
 
 #include <iostream>
 #include <string>
