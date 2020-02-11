@@ -1,5 +1,7 @@
 #include <ZEDutils/ZEDio.hpp>
 #include <ZEDutils/ZEDController.hpp>
+#include <ZEDutils/ZEDSender.hpp>
+#include <ZEDutils/ZEDReceiver.hpp>
 
 #include <sl/Camera.hpp>
 
@@ -17,10 +19,10 @@ int main()
 	sl::InitParameters init_params;
 	init_params.camera_resolution = sl::RESOLUTION::HD720;
 	init_params.camera_fps = 30;
-	init_params.camera_disable_self_calib = true;
+	init_params.camera_disable_self_calib = false;
 	init_params.enable_right_side_measure = false;
 	init_params.svo_real_time_mode = false;
-	init_params.depth_mode = sl::DEPTH_MODE::NONE; // Disable depth
+	init_params.depth_mode = sl::DEPTH_MODE::ULTRA; // Disable depth
 	init_params.sdk_verbose = true;
 	init_params.sensors_required = true; // Require IMU
 	init_params.enable_image_enhancement = true;
@@ -36,7 +38,7 @@ int main()
 	
 	
 	// Controller
-	std::string output_path = "~/dev/zedutils/data";
+	std::string output_path = "~/dev/zedutils/data/cblock";
 	ZEDController controller(output_path);
 
 
@@ -52,13 +54,8 @@ int main()
 		exit(-1);
 	}
 	
-	
-	// Print controller
-	std::cout << controller << std::endl;
-	
-	
 	// Recording parameters
-	sl::String file_path = "/home/martin/Downloads/zed/test.svo";
+	sl::String file_path = "/home/martin/dev/zedutils/data/cblock/recording.svo";
 	auto compression_mode = sl::SVO_COMPRESSION_MODE::H264; // Req. NVIDIA GPU
 	sl::RecordingParameters rec_params = sl::RecordingParameters(
 			file_path, compression_mode);
@@ -72,8 +69,9 @@ int main()
 		exit(-1);
 	}
 
+
 	// Record
-	rec_error = controller.camera_record(run_params, 1000);
+	rec_error = controller.camera_record(run_params, 90);
 	if (rec_error != sl::ERROR_CODE::SUCCESS)
 	{
 		std::cout << "Could not record!" << std::endl;
