@@ -2,17 +2,17 @@
 set(HEADER_LIST 
 	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDio.hpp"
 	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDController.hpp"
-	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDfunctional.hpp"
-	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDSender.hpp"
-	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDReceiver.hpp")
+	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDRecorder.hpp"
+	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDStreamer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDListener.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(ZEDutils_library 
 	ZEDio.cpp 
 	ZEDController.cpp
-	ZEDfunctional.cpp
-	ZEDSender.cpp
-	ZEDReceiver.cpp
+	ZEDRecorder.cpp
+	ZEDStreamer.cpp
+	ZEDListener.cpp
 	${HEADER_LIST})
 
 # We need this directory, and users of our library will need it too

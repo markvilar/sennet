@@ -1,0 +1,3 @@
+[submodule "extern/dyad"]
+	path = extern/dyad
+	url = ../../rxi/dyad.git

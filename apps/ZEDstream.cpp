@@ -1,8 +1,10 @@
 #include <sl/Camera.hpp>
 
-#include <ZEDutils/ZEDReceiver.hpp>
-#include <ZEDutils/ZEDSender.hpp>
 #include <ZEDutils/ZEDio.hpp>
+#include <ZEDutils/ZEDController.hpp>
+#include <ZEDutils/ZEDStreamer.hpp>
+
+#include <iostream>
 
 
 static bool exit_app = false;
@@ -39,44 +41,51 @@ int main()
 	// Camera
 	sl::Camera zed;
 	
-
 	// Initialization parameters
 	sl::InitParameters init_params;
-	//sl::String ip = "10.22.103.170"; // Private IP BROADCAST (IPv4)
-	sl::String ip = "127.0.0.1"; // Private IP LOOPBACK (IPv4)
-	unsigned int port = 30000;
-	init_params.input.setFromStream(ip, port);
+	init_params.camera_resolution = sl::RESOLUTION::HD720;
 	init_params.sdk_verbose = true;
 
 	// Open
 	auto error = zed.open(init_params);
 	if (error != sl::ERROR_CODE::SUCCESS)
 	{
-		print("", error, "");
-		zed.close();
+		print("Open camera: ", error, "");
+	}
+
+	
+	// Streaming parameters
+	sl::StreamingParameters stream_params;
+	stream_params.codec = sl::STREAMING_CODEC::H264;
+	stream_params.port = 30000;
+	stream_params.bitrate = 10000;
+
+	
+	// Enable streaming
+	error = zed.enableStreaming(stream_params);
+	if (error != sl::ERROR_CODE::SUCCESS)
+	{
+		print("Enable streaming: ", error, "");
 		return 1;
 	}
 
-
-	// Capture loop
-	sl::Mat left_image;
-	sl::Mat right_image;
+	
+	// Stream loop
 	while (!exit_app)
 	{
 		error = zed.grab();
 		if (error != sl::ERROR_CODE::SUCCESS)
 		{
-			print("Error during capture: ", error, "");
-			break;
+			print("Grab loop: ", error, "");
 		}
 		else
 		{
-			error = zed.retrieveImage(left_image, sl::VIEW::LEFT);
-			error = zed.retrieveImage(right_image, sl::VIEW::RIGHT);
+			sl::sleep_ms(1);
 		}
 	}
-
-	// Close
+	
+	// Disable streaming and close
+	zed.disableStreaming();
 	zed.close();
 	return 0;
 }

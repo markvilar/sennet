@@ -1,3 +1,0 @@
-#include <sl/Camera.hpp>
-
-

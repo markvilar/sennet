@@ -1,7 +1,7 @@
 #include <ZEDutils/ZEDio.hpp>
 #include <ZEDutils/ZEDController.hpp>
-#include <ZEDutils/ZEDSender.hpp>
-#include <ZEDutils/ZEDReceiver.hpp>
+#include <ZEDutils/ZEDStreamer.hpp>
+#include <ZEDutils/ZEDListener.hpp>
 
 #include <sl/Camera.hpp>
 
