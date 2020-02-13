@@ -4,6 +4,7 @@
 #include <ZEDutils/ZEDListener.hpp>
 
 #include <sl/Camera.hpp>
+#include "dyad/dyad.h"
 
 #include <iostream>
 #include <iomanip>

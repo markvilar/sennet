@@ -1,7 +1,9 @@
-# ZEDrecord
+# ZEDserver
 add_executable(ZEDserver ZEDserver.cpp)
 target_compile_features(ZEDserver PRIVATE cxx_std_17)
-target_link_libraries(ZEDserver PRIVATE ZEDutils_library)
+target_link_libraries(ZEDserver PRIVATE 
+	ZEDutils_library 
+	dyad_library)
 
 # ZEDstream
 add_executable(ZEDstream ZEDstream.cpp)
