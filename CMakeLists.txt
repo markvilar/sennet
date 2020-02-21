@@ -27,13 +27,17 @@ endif(COMMAND cmake_policy)
 
 
 # Find packages
+find_package(Threads)
+find_package(Boost COMPONENTS chrono system thread REQUIRED)
+message(STATUS "Found Boost ${Boost_VERSION_STRING} at ${BOOST_ROOT}")
 find_package(ZED 3 REQUIRED)
 find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
 message(STATUS "Found CUDA ${CUDA_VERSION_STRING} at ${CUDA_TOOLKIT_ROOT_DIR}")
 
 
 
-# ZED options
+# Package options
+option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
 option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
 
 if(NOT LINK_SHARED_ZED AND MSVC)

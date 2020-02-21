@@ -6,6 +6,7 @@ The requirements of zedutils are:
 - ZED SDK 3.X (available for Windows 10 and Ubuntu 16/18)
   - CUDA 9.X/10.X (dependent on the ZED SDK installation)
 - C++17/20
+- Boost 1.72.0
 
 ## Configuring, building and testing
 To configure zedutils:
