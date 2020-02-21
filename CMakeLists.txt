@@ -49,7 +49,6 @@ endif()
 
 
 # Git submodules
-add_subdirectory(extern/dyad)
 
 
 
