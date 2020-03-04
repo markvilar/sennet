@@ -1,19 +1,17 @@
 #include <ZEDutils/ZEDio.hpp>
 #include <ZEDutils/ZEDController.hpp>
-#include <ZEDutils/ZEDStreamer.hpp>
-#include <ZEDutils/ZEDListener.hpp>
+
+#include <boost/asio.hpp>
 
 #include <sl/Camera.hpp>
 
 #include <iostream>
-#include <iomanip>
 #include <string>
 
-int main()
+int main(int argc, char* argv[])
 {
 	// Camera
 	sl::Camera zed;
-	
 	
 	// Initial camera parameters
 	sl::InitParameters init_params;
@@ -27,7 +25,6 @@ int main()
 	init_params.sensors_required = true; // Require IMU
 	init_params.enable_image_enhancement = true;
 	
-	
 	// Runtime parameters
 	sl::RuntimeParameters run_params;
 	run_params.sensing_mode = sl::SENSING_MODE::STANDARD; // Depth sensing
@@ -35,7 +32,6 @@ int main()
 	run_params.enable_depth = false;
 	run_params.confidence_threshold = 80;
 	run_params.textureness_confidence_threshold = 80;
-	
 	
 	// Controller
 	std::string output_path = "~/dev/zedutils/data/cblock";

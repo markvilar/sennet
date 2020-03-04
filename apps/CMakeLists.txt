@@ -1,12 +1,3 @@
-# server
-add_executable(server server.cpp)
-target_compile_features(server PRIVATE cxx_std_17)
-target_link_libraries(server 
-	PRIVATE 
-	ZEDutils_library
-	Boost::chrono
-	Boost::thread)
-
 # ZEDlisten
 add_executable(ZEDlisten ZEDlisten.cpp)
 target_compile_features(ZEDlisten PRIVATE cxx_std_17)
@@ -20,7 +11,8 @@ add_executable(ZEDserver ZEDserver.cpp)
 target_compile_features(ZEDserver PRIVATE cxx_std_17)
 target_link_libraries(ZEDserver 
 	PRIVATE 
-	ZEDutils_library)
+	ZEDutils_library
+	Boost::thread)
 
 
 # ZEDstream

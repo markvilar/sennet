@@ -13,6 +13,10 @@ To configure zedutils:
 ```
 cmake -S . -B build
 ```
+Optionally, if you want to specify the root directory of Boost:
+```
+cmake -S . -B build -DBOOST_ROOT=/path/to/boost
+```
 To build zedutils:
 ```
 cmake --build build
