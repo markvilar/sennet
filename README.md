@@ -9,7 +9,11 @@ The requirements of zedutils are:
 - Boost 1.72.0
 
 ## Configuring, building and testing
-To configure zedutils:
+To update submodules:
+```
+git submodule update --remote --merge
+```
+To configure CMake:
 ```
 cmake -S . -B build
 ```
