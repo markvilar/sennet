@@ -1,9 +1,6 @@
-#include <sl/Camera.hpp>
-
-#include <ZEDutils/ZEDListener.hpp>
-#include <ZEDutils/ZEDStreamer.hpp>
 #include <ZEDutils/ZEDio.hpp>
 
+#include <sl/Camera.hpp>
 
 static bool exit_app = false;
 

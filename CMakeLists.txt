@@ -5,13 +5,10 @@ project(ZEDutils VERSION 1.0 LANGUAGES CXX C)
 
 # If main project
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-
 	# Let's ensure -std=c++xx instead of -std=g++xx
 	set(CMAKE_CXX_EXTENSIONS OFF)
-
 	# Support folders in IDEs
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
 	# Enable testing
 	include(CTest)
 endif()
@@ -68,19 +65,24 @@ if(NOT LINK_SHARED_ZED AND MSVC)
     message(FATAL_ERROR "LINK_SHARED_ZED OFF : ZED SDK static libraries not available on Windows")
 endif()
 
+# ZED libraries - static or dynamic linking
 if(LINK_SHARED_ZED)
-    SET(ZED_LIBS ${ZED_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_CUDART_LIBRARY} ${CUDA_NPP_LIBRARIES_ZED})
+    	SET(ZED_LIBS ${ZED_LIBRARIES} ${CUDA_CUDA_LIBRARY} 
+		${CUDA_CUDART_LIBRARY} ${CUDA_NPP_LIBRARIES_ZED})
 else()
-    SET(ZED_LIBS ${ZED_STATIC_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_LIBRARY})
+    	SET(ZED_LIBS ${ZED_STATIC_LIBRARIES} ${CUDA_CUDA_LIBRARY} 
+		${CUDA_LIBRARY})
 endif()
 
 
-# The compiled library code is here
+# Library code
 add_subdirectory(src)
 
 
-# The executable code is here
-add_subdirectory(apps)
+# Executable code - compile if main project
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+	add_subdirectory(apps)
+endif()
 
 
 # External libraries
@@ -89,6 +91,7 @@ add_subdirectory(extern/boostnet)
 
 # Testing only available if this is the main app
 # Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
-if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND BUILD_TESTING)
+if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND 
+	BUILD_TESTING)
 	add_subdirectory(tests)
 endif()

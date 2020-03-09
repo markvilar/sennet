@@ -1,11 +1,8 @@
+#include <ZEDutils/ZEDio.hpp>
+
 #include <sl/Camera.hpp>
 
-#include <ZEDutils/ZEDio.hpp>
-#include <ZEDutils/ZEDController.hpp>
-#include <ZEDutils/ZEDStreamer.hpp>
-
 #include <iostream>
-
 
 static bool exit_app = false;
 
