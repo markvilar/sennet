@@ -2,24 +2,15 @@
 
 //-------------------------------------------------------------------------------
 
-CameraConnection::CameraConnection(boost::shared_ptr<Hive> hive, 
-	sl::Camera* cam) : Connection(hive), m_cam(cam)
+ImageConnection::ImageConnection(boost::shared_ptr<Hive> hive) : Connection(hive)
 {
 }
 
-CameraConnection::~CameraConnection()
+ImageConnection::~ImageConnection()
 {
 }
 
-void CameraConnection::OnAccept(const std::string& host, boost::uint16_t port)
-{
-	GetMutex()->lock();
-	std::cout << "[" << __FUNCTION__ << "] " << host << ":" << port 
-		<< std::endl;
-	GetMutex()->unlock();
-}
-
-void CameraConnection::OnConnect(const std::string& host, boost::uint16_t port)
+void ImageConnection::OnAccept(const std::string& host, boost::uint16_t port)
 {
 	GetMutex()->lock();
 	std::cout << "[" << __FUNCTION__ << "] " << host << ":" << port 
@@ -27,21 +18,29 @@ void CameraConnection::OnConnect(const std::string& host, boost::uint16_t port)
 	GetMutex()->unlock();
 }
 
-void CameraConnection::OnSend(const std::vector<boost::uint8_t>& buffer)
+void ImageConnection::OnConnect(const std::string& host, boost::uint16_t port)
+{
+	GetMutex()->lock();
+	std::cout << "[" << __FUNCTION__ << "] " << host << ":" << port 
+		<< std::endl;
+	GetMutex()->unlock();
+}
+
+void ImageConnection::OnSend(const std::vector<boost::uint8_t>& buffer)
 {
 	GetMutex()->lock();
 	std::cout << "[" << __FUNCTION__ << "] " << std::endl;
 	GetMutex()->unlock();
 }
 
-void CameraConnection::OnRecv(std::vector<boost::uint8_t>& buffer)
+void ImageConnection::OnRecv(std::vector<boost::uint8_t>& buffer)
 {
 	GetMutex()->lock();
 	std::cout << "[" << __FUNCTION__ << "] " << std::endl;
 	GetMutex()->unlock();
 }
 
-void CameraConnection::OnTimer(const boost::posix_time::time_duration& delta)
+void ImageConnection::OnTimer(const boost::posix_time::time_duration& delta)
 {
 	GetMutex()->lock();
 	std::cout << "[" << __FUNCTION__ << "] " 
@@ -50,7 +49,7 @@ void CameraConnection::OnTimer(const boost::posix_time::time_duration& delta)
 
 }
 
-void CameraConnection::OnError(const boost::system::error_code& error)
+void ImageConnection::OnError(const boost::system::error_code& error)
 {
 	GetMutex()->lock();
 	std::cout << "[" << __FUNCTION__ << "] " << error << std::endl;
@@ -60,15 +59,15 @@ void CameraConnection::OnError(const boost::system::error_code& error)
 
 //-------------------------------------------------------------------------------
 
-CameraAcceptor::CameraAcceptor(boost::shared_ptr<Hive> hive) : Acceptor(hive)
+ControlAcceptor::ControlAcceptor(boost::shared_ptr<Hive> hive) : Acceptor(hive)
 {
 }
 
-CameraAcceptor::~CameraAcceptor()
+ControlAcceptor::~ControlAcceptor()
 {
 }
 
-bool CameraAcceptor::OnAccept(boost::shared_ptr<Connection> connection, 
+bool ControlAcceptor::OnAccept(boost::shared_ptr<Connection> connection, 
 	const std::string& host, boost::uint16_t port)
 {
 	GetMutex()->lock();
@@ -78,7 +77,7 @@ bool CameraAcceptor::OnAccept(boost::shared_ptr<Connection> connection,
 	return true;
 }
 
-void CameraAcceptor::OnTimer(const boost::posix_time::time_duration& delta)
+void ControlAcceptor::OnTimer(const boost::posix_time::time_duration& delta)
 {
 	GetMutex()->lock();
 	std::cout << "[" << __FUNCTION__ << "] " 
@@ -86,7 +85,7 @@ void CameraAcceptor::OnTimer(const boost::posix_time::time_duration& delta)
 	GetMutex()->unlock();
 }
 
-void CameraAcceptor::OnError(const boost::system::error_code& error)
+void ControlAcceptor::OnError(const boost::system::error_code& error)
 {
 	GetMutex()->lock();
 		std::cout << "[" << __FUNCTION__ << "] " << error << std::endl;

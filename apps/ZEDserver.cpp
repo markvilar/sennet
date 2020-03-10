@@ -1,24 +1,31 @@
 #include <ZEDutils/ZEDio.hpp>
 #include <ZEDutils/ZEDnetwork.hpp>
+#include <ZEDutils/ZEDtypes.hpp>
 
 #include <boostnet/network.hpp>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <sl/Camera.hpp>
 
+#include <cstdlib>
+#include <iostream>
+#include <type_traits>
+#include <typeinfo>
+
 int main(int argc, char* argv[])
 {
 	// Initialize mutex, camera and hive
-	boost::shared_ptr<boost::mutex> mutex_ptr(new boost::mutex());
+	//boost::shared_ptr<boost::mutex> mutex_ptr(new boost::mutex());
 	sl::Camera* cam = new sl::Camera();
-	boost::shared_ptr<Hive> hive(new Hive(mutex_ptr));
+	boost::shared_ptr<Hive> hive(new Hive(boost::shared_ptr<boost::mutex> (
+		new boost::mutex())));
 
 	
 	// Open camera
 	sl::InitParameters init_params;
 	init_params.sdk_verbose = true;
 	init_params.camera_fps = 30;
-	init_params.camera_resolution = sl::RESOLUTION::HD720;
+	init_params.camera_resolution = sl::RESOLUTION::HD2K;
 	auto error = cam->open(init_params);
 	if(error != sl::ERROR_CODE::SUCCESS)
 	{
@@ -37,56 +44,46 @@ int main(int argc, char* argv[])
 	}
 
 	
-	// Set up connection
-	boost::shared_ptr<CameraConnection> connection(new CameraConnection(
-		hive, cam));
-	// connection->SetReceiveBufferSize(); // Set tcp receive buffer size
-	connection->SetTimerInterval(2000); // 2 second timer
+	// Set up image connections
+	boost::shared_ptr<ImageConnection> left_img_conn(new ImageConnection(
+		hive));
+	boost::shared_ptr<ImageConnection> right_img_conn(new ImageConnection(
+		hive));
+	left_img_conn->Bind("127.0.0.1", 10000);
+	right_img_conn->Bind("127.0.0.1", 11000);
 
 	
-	// Set up acceptor
-	boost::shared_ptr<CameraAcceptor> acceptor(new CameraAcceptor(hive));
-	acceptor->Listen("127.0.0.1", 7777);
-	acceptor->Accept(connection);
+	// Initialize images and byte vectors
+	sl::Mat left_image, right_image;
+	std::vector<boost::uint8_t> left_bytes, right_bytes;
 	
-
+	
 	// Record loop
 	unsigned int frame_count = 0;
-	unsigned int total_frames = 10;
+	unsigned int total_frames = 120;
 	unsigned int send_every = 10;
-	sl::Mat left_image, right_image;
+	sl::uchar4 val;
 	try
 	{
-		while(frame_count < total_frames)
+		while(frame_count < total_frames) // While no interrupt or quit
 		{
 			error = cam->grab();
 			if(error == sl::ERROR_CODE::SUCCESS)
 			{
-				frame_count++;
-				std::cout << "Frame count: " << frame_count 
-					<< "/" << total_frames << std::endl;
-				
+				++frame_count;
+				std::cout << "Frames: " << frame_count << "/"
+					<< total_frames << std::endl;
+								
 				// Collect threads
 				hive->Poll();
 				
 				// Retrieve images
 				cam->retrieveImage(left_image, sl::VIEW::LEFT);
 				cam->retrieveImage(right_image, sl::VIEW::RIGHT);
-
-				std::cout << "Left image: " 
-					<< left_image.getWidth() << "x"
-					<< left_image.getHeight() << "x"
-					<< left_image.getChannels() << ", "
-					<< left_image.getPixelBytes() << ", "
-					<< left_image.getDatatype()
-					<< std::endl;
-
-				std::cout << "Right image: " 
-					<< right_image.getWidth() << "x"
-					<< right_image.getHeight() << "x"
-					<< right_image.getChannels() << ", "
-					<< right_image.getPixelBytes() 
-					<< std::endl;
+				
+				// Create byte vectors
+				left_bytes = slMat2Vec(left_image);
+				right_bytes = slMat2Vec(right_image);
 				
 				// Sleep
 				boost::this_thread::sleep(
@@ -101,7 +98,7 @@ int main(int argc, char* argv[])
 	}
 	catch(std::exception& ex)
 	{
-		std::cout << "[Exception]: " << ex.what() << std::endl;
+		std::cout << "[EXCEPTION]: " << ex.what() << std::endl;
 	}
 	
 	

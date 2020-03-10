@@ -1,13 +1,14 @@
 # Headers
 set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDcontrol.hpp"
 	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDio.hpp"
-	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDnetwork.hpp")
+	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDnetwork.hpp"
+	"${PROJECT_SOURCE_DIR}/include/ZEDutils/ZEDtypes.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(ZEDutils_library ZEDcontrol.cpp ZEDio.cpp ZEDnetwork.cpp 
+add_library(ZEDutils_library ZEDcontrol.cpp ZEDio.cpp ZEDnetwork.cpp ZEDtypes.cpp
 	${HEADER_LIST})
 	
-# We need this directory, and users of our library will need it too
+# We need these directories, and users of our library will need it too
 target_include_directories(ZEDutils_library PUBLIC ../include 
 	../extern/boostnet/include ${Boost_INCLUDE_DIRS} ${CUDA_INCLUDE_DIRS}
 	${ZED_INCLUDE_DIRS}) 

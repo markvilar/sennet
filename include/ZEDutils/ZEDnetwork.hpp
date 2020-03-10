@@ -7,10 +7,9 @@
 
 //-------------------------------------------------------------------------------
 
-class CameraConnection : public Connection
+class ImageConnection: public Connection
 {
 private:
-	sl::Camera* m_cam;
 
 public:
 
@@ -23,34 +22,25 @@ private:
 	void OnError(const boost::system::error_code& error);
 
 public:
-	CameraConnection(boost::shared_ptr<Hive> hive, sl::Camera* cam);
-	~CameraConnection();
+	ImageConnection(boost::shared_ptr<Hive> hive);
+	~ImageConnection();
 };
 
 //-------------------------------------------------------------------------------
 
-class CameraAcceptor : public Acceptor
+class ControlAcceptor: public Acceptor
 {
 private:
 
 public:
 
 private:
-	bool OnAccept(boost::shared_ptr<Connection> connection, const std::string& host,
-		boost::uint16_t port);
+	bool OnAccept(boost::shared_ptr<Connection> connection, 
+		const std::string& host, boost::uint16_t port);
 	void OnTimer(const boost::posix_time::time_duration& delta);
 	void OnError(const boost::system::error_code& error);
 
 public:
-	CameraAcceptor(boost::shared_ptr<Hive> hive);
-	~CameraAcceptor();
+	ControlAcceptor(boost::shared_ptr<Hive> hive);
+	~ControlAcceptor();
 };
-
-/*
-//-------------------------------------------------------------------------------
-
-class ImageConnection : public Connection
-{
-};
-
-*/
