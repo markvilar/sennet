@@ -28,7 +28,7 @@ public:
 
 //-------------------------------------------------------------------------------
 
-class ControlAcceptor: public Acceptor
+class ZEDAcceptor: public Acceptor
 {
 private:
 
@@ -41,6 +41,6 @@ private:
 	void OnError(const boost::system::error_code& error);
 
 public:
-	ControlAcceptor(boost::shared_ptr<Hive> hive);
-	~ControlAcceptor();
+	ZEDAcceptor(boost::shared_ptr<Hive> hive);
+	~ZEDAcceptor();
 };

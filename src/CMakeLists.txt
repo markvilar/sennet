@@ -14,7 +14,7 @@ target_include_directories(ZEDutils_library PUBLIC ../include
 	${ZED_INCLUDE_DIRS}) 
 	
 # This depends on ZED
-target_link_libraries(ZEDutils_library PRIVATE ${ZED_LIB})
+target_link_libraries(ZEDutils_library PRIVATE boostnet_library ${ZED_LIBS}) 
 
 # All users of this will need at least C++17
 target_compile_features(ZEDutils_library PUBLIC cxx_std_17)

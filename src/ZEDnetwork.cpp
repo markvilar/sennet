@@ -59,15 +59,15 @@ void ImageConnection::OnError(const boost::system::error_code& error)
 
 //-------------------------------------------------------------------------------
 
-ControlAcceptor::ControlAcceptor(boost::shared_ptr<Hive> hive) : Acceptor(hive)
+ZEDAcceptor::ZEDAcceptor(boost::shared_ptr<Hive> hive) : Acceptor(hive)
 {
 }
 
-ControlAcceptor::~ControlAcceptor()
+ZEDAcceptor::~ZEDAcceptor()
 {
 }
 
-bool ControlAcceptor::OnAccept(boost::shared_ptr<Connection> connection, 
+bool ZEDAcceptor::OnAccept(boost::shared_ptr<Connection> connection, 
 	const std::string& host, boost::uint16_t port)
 {
 	GetMutex()->lock();
@@ -77,7 +77,7 @@ bool ControlAcceptor::OnAccept(boost::shared_ptr<Connection> connection,
 	return true;
 }
 
-void ControlAcceptor::OnTimer(const boost::posix_time::time_duration& delta)
+void ZEDAcceptor::OnTimer(const boost::posix_time::time_duration& delta)
 {
 	GetMutex()->lock();
 	std::cout << "[" << __FUNCTION__ << "] " 
@@ -85,7 +85,7 @@ void ControlAcceptor::OnTimer(const boost::posix_time::time_duration& delta)
 	GetMutex()->unlock();
 }
 
-void ControlAcceptor::OnError(const boost::system::error_code& error)
+void ZEDAcceptor::OnError(const boost::system::error_code& error)
 {
 	GetMutex()->lock();
 		std::cout << "[" << __FUNCTION__ << "] " << error << std::endl;

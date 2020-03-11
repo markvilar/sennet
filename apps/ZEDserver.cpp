@@ -2,22 +2,18 @@
 #include <ZEDutils/ZEDnetwork.hpp>
 #include <ZEDutils/ZEDtypes.hpp>
 
-#include <boostnet/network.hpp>
-
 #include <boost/date_time/posix_time/posix_time.hpp>
+
 #include <sl/Camera.hpp>
 
-#include <cstdlib>
 #include <iostream>
-#include <type_traits>
-#include <typeinfo>
 
 int main(int argc, char* argv[])
 {
 	// Initialize mutex, camera and hive
 	//boost::shared_ptr<boost::mutex> mutex_ptr(new boost::mutex());
 	sl::Camera* cam = new sl::Camera();
-	boost::shared_ptr<Hive> hive(new Hive(boost::shared_ptr<boost::mutex> (
+	boost::shared_ptr<Hive> hive(new Hive(boost::shared_ptr<boost::mutex>(
 		new boost::mutex())));
 
 	
@@ -25,7 +21,7 @@ int main(int argc, char* argv[])
 	sl::InitParameters init_params;
 	init_params.sdk_verbose = true;
 	init_params.camera_fps = 30;
-	init_params.camera_resolution = sl::RESOLUTION::HD2K;
+	init_params.camera_resolution = sl::RESOLUTION::HD720;
 	auto error = cam->open(init_params);
 	if(error != sl::ERROR_CODE::SUCCESS)
 	{
@@ -42,52 +38,66 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "[ERROR] " << sl::toVerbose(error) << std::endl;
 	}
-
 	
-	// Set up image connections
-	boost::shared_ptr<ImageConnection> left_img_conn(new ImageConnection(
+	
+	// Set up acceptors and connections
+	boost::shared_ptr<ZEDAcceptor> l_accptr(new ZEDAcceptor(hive));
+	boost::shared_ptr<ImageConnection> l_conn(new ImageConnection(
 		hive));
-	boost::shared_ptr<ImageConnection> right_img_conn(new ImageConnection(
+	l_accptr->Listen("127.0.0.1", 10000);
+	l_accptr->Accept(l_conn);
+	boost::shared_ptr<ZEDAcceptor> r_accptr(new ZEDAcceptor(hive));
+	boost::shared_ptr<ImageConnection> r_conn(new ImageConnection(
 		hive));
-	left_img_conn->Bind("127.0.0.1", 10000);
-	right_img_conn->Bind("127.0.0.1", 11000);
-
+	r_accptr->Listen("127.0.0.1", 11000);
+	r_accptr->Accept(r_conn);
+	
 	
 	// Initialize images and byte vectors
-	sl::Mat left_image, right_image;
-	std::vector<boost::uint8_t> left_bytes, right_bytes;
+	sl::Mat l_img, r_img;
+	std::vector<boost::uint8_t> l_vec, r_vec;
 	
 	
 	// Record loop
-	unsigned int frame_count = 0;
-	unsigned int total_frames = 120;
+	unsigned int frame_cnt = 0;
+	unsigned int frame_tot = 3000;
 	unsigned int send_every = 10;
-	sl::uchar4 val;
 	try
 	{
-		while(frame_count < total_frames) // While no interrupt or quit
+		while(frame_cnt < frame_tot) // While no interrupt or quit
 		{
 			error = cam->grab();
 			if(error == sl::ERROR_CODE::SUCCESS)
 			{
-				++frame_count;
-				std::cout << "Frames: " << frame_count << "/"
-					<< total_frames << std::endl;
-								
-				// Collect threads
-				hive->Poll();
+				frame_cnt++;
+				std::cout << "Frames: " << frame_cnt << "/"
+					<< frame_tot << std::endl;
 				
 				// Retrieve images
-				cam->retrieveImage(left_image, sl::VIEW::LEFT);
-				cam->retrieveImage(right_image, sl::VIEW::RIGHT);
+				cam->retrieveImage(l_img, sl::VIEW::LEFT);
+				cam->retrieveImage(r_img, sl::VIEW::RIGHT);
 				
-				// Create byte vectors
-				left_bytes = slMat2Vec(left_image);
-				right_bytes = slMat2Vec(right_image);
-				
-				// Sleep
-				boost::this_thread::sleep(
-					boost::posix_time::milliseconds(1));
+				// If send frame
+				if(frame_cnt % send_every == 0)
+				{
+					// TODO: Authenticate clients before
+					// sending
+					// Create byte vectors
+					l_vec = slMat2Vec(l_img);
+					r_vec = slMat2Vec(r_img);
+					
+					// Collect threads
+					hive->Poll();
+					
+					// Send byte vectors
+					l_conn->Send(l_vec);
+					r_conn->Send(r_vec);
+					
+					// Sleep
+					boost::this_thread::sleep(
+						boost::posix_time::milliseconds(
+						1));
+				}
 			}
 			else
 			{
