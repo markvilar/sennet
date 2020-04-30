@@ -50,11 +50,11 @@ endif()
 
 
 # Git submodule - Boostnet
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/boostnet/CMakeLists.txt")
-    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
-		"was turned off or failed. Please update submodules and try "
-		"again.")
-endif()
+#if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/boostnet/CMakeLists.txt")
+#    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
+#		"was turned off or failed. Please update submodules and try "
+#		"again.")
+#endif()
 
 
 # Package options
@@ -86,7 +86,7 @@ endif()
 
 
 # External libraries
-add_subdirectory(extern/boostnet)
+#add_subdirectory(extern/boostnet)
 
 
 # Testing only available if this is the main app
