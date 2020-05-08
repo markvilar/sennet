@@ -1,5 +1,4 @@
-#include <ZEDutils/network.hpp>
-#include <ZEDutils/types.hpp>
+#include <zedutils/network.hpp>
 
 #include <sl/Camera.hpp>
 

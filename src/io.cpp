@@ -1,37 +1,7 @@
-#include <ZEDutils/io.hpp>
-
 #include <iostream>
 #include <string>
 
-void print(std::string msg_prefix, const sl::ERROR_CODE err_code, 
-		std::string msg_suffix)
-{
-	std::cout << "[Sample]";
-	if (err_code != sl::ERROR_CODE::SUCCESS)
-	{
-		std::cout << "[Error] ";
-	}
-	else
-	{
-		std::cout << " ";
-	}
-
-	std::cout << " ";
-
-	if (err_code != sl::ERROR_CODE::SUCCESS)
-	{
-		std::cout << " | " << toString(err_code) << " : ";
-		std::cout << toVerbose(err_code);
-	}
-
-	if (!msg_suffix.empty())
-	{
-		std::cout << " " << msg_suffix;
-	}
-
-	std::cout << std::endl;
-}
-
+#include <zedutils/io.hpp>
 
 std::ostream& operator<<(std::ostream& os, const sl::InitParameters& params)
 {
@@ -59,7 +29,6 @@ std::ostream& operator<<(std::ostream& os, const sl::InitParameters& params)
 	return os;
 }
 
-
 std::ostream& operator<<(std::ostream& os, const sl::RuntimeParameters& params)
 {
 	os << "\nRuntimeParameters:\n";
@@ -73,7 +42,6 @@ std::ostream& operator<<(std::ostream& os, const sl::RuntimeParameters& params)
 		<< params.textureness_confidence_threshold << "\n";
 	return os;
 }
-
 
 std::ostream& operator<<(std::ostream& os, const sl::CameraInformation& params)
 {
@@ -91,9 +59,45 @@ std::ostream& operator<<(std::ostream& os, const sl::CameraInformation& params)
 	return os;
 }
 
-
 std::ostream& operator<<(std::ostream& os, const sl::Resolution& res)
 {
 	os << res.width << "x" << res.height << " (WxH)\n";
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const sl::Mat& m)
+{
+	os << "(" << m.getWidth() << "," << m.getHeight() << "," 
+		<< m.getChannels() << ")"
+		<< ", type: " << m.getDataType()
+		<< ", memory: " << m.getMemoryType()
+		<< ", step: " << m.getStep() << "\n"
+		<< "step bytes: " << m.getStepBytes()
+		<< ", width bytes: " << m.getWidthBytes()
+		<< ", pixel bytes: " << m.getPixelBytes();
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, sl::Vector2<unsigned char> vs)
+{
+	os << "[" << static_cast<int>(vs[0]) 
+		<< ", " << static_cast<int>(vs[1]) << "]";
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, sl::Vector3<unsigned char> vs)
+{
+	os << "[" << static_cast<int>(vs[0]) 
+		<< ", " << static_cast<int>(vs[1])
+		<< ", " << static_cast<int>(vs[2]) << "]";
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, sl::Vector4<unsigned char> vs)
+{
+	os << "[" << static_cast<int>(vs[0]) 
+		<< ", " << static_cast<int>(vs[1])
+		<< ", " << static_cast<int>(vs[2])
+		<< ", " << static_cast<int>(vs[3]) << "]";
 	return os;
 }

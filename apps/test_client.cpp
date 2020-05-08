@@ -1,5 +1,3 @@
-#include <ZEDutils/types.hpp>
-
 #include <boost/asio.hpp>
 
 #include <sl/Camera.hpp>
