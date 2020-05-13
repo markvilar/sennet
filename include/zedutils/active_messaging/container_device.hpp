@@ -1,29 +1,45 @@
-#ifndef CONTAINER_DEVICE_H
-#define CONTAINER_DEVICE_H
+#ifndef CONTAINER_DEVICE_HPP
+#define CONTAINER_DEVICE_HPP
 
 #include <algorithm>				// copy, min
 #include <iosfwd>				// streamsize
 
-#include <boost/assert.hpp>
+#include <boost/assert.hpp>			// BOOST_ASSERT
 #include <boost/iostreams/categories.hpp>	// source_tag
 #include <boost/iostreams/positioning.hpp>	// stream_offset
 
 namespace zed { namespace am {
 
 // This is a Boost.IoStreams SeekableDevice that can be used to create an
-// (io)stream on top of a random accesss container (i.e. vector<>)
+// (io)stream on top of a random access container (i.e. vector<>).
+//
+// A device provides access to one or two character sequences. It may provide
+// access to an input sequence for reading and a output sequence for writing or
+// both. 
+//
+// Boost documentation references:
+// https://www.boost.org/doc/libs/1_72_0/libs/iostreams/doc/concepts/
+// seekable_device.html
 template<typename Container>
 class container_device
 {
 private:
+	// 
 	typedef typename Container::size_type size_type;
+
+	//
 	typedef typename Container::difference_type difference_type;
 
 	Container& m_container;
+
+	// 
 	boost::iostreams::stream_offset m_pos;
 
 public:
+	// The char type of the underlying container.
 	typedef typename Container::value_type char_type;
+
+	// Category tag identifying the device as a seekable device.
 	typedef boost::iostreams::seekable_device_tag category;
 	
 	container_device(Container& c)
@@ -54,8 +70,8 @@ public:
 		}
 	}
 
-	// Write up to n characters to the underlying data sink into the buffer
-	// s, return the number of characters written.
+	// Write up to n characters to the underlying data sink into the 
+	// buffer s, return the number of characters written.
 	std::streamsize write(const char_type* s, std::streamsize n)
 	{
 		std::streamsize result = 0;
@@ -136,4 +152,4 @@ public:
 } // namespace am
 }; // namespace zed
 
-#endif // CONTAINER_DEVICE_H
+#endif // CONTAINER_DEVICE_HPP

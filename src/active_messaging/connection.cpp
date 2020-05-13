@@ -20,12 +20,12 @@ void connection::async_read()
 	// Check that the in buffer is NULL.
 	BOOST_ASSERT(m_in_buffer == 0);
 
-	// Set up new attributes for a new read.
+	// Set up attributes for a new read.
 	m_in_size = 0;
 	m_in_buffer = new std::vector<char>();
 
 	// Set up the async. read operation and bind the member function
-	// handle_read_size as completion handler.
+	// handle_read_size() as completion handler.
 	boost::asio::async_read(m_socket,
 		boost::asio::buffer(&m_in_size, sizeof(m_in_size)),
 		boost::bind(&connection::handle_read_size,
@@ -35,7 +35,10 @@ void connection::async_read()
 
 void connection::async_write(action const& act)
 {
+	// Create a default function if a handler is not specified.
 	std::function<void(boost::system::error_code const&)> h;
+
+	// Start async. write operation with the default function.
 	async_write(act, h);
 }
 
@@ -48,7 +51,8 @@ void connection::async_write(
 	// stays alive.
 	std::shared_ptr<action> act_ptr(act.clone());
 
-	// TODO: Find out what happens here!
+	// Add the action async_write_worker(act_ptr, handler) to the runtime
+	// action queue.
 	m_runtime.get_local_queue().push(new std::function<void(runtime&)>(
 		boost::bind(&connection::async_write_worker,
 			shared_from_this(), act_ptr, handler)));
@@ -72,7 +76,7 @@ void connection::async_write_worker(
 	buffers.push_back(boost::asio::buffer(&*out_size, sizeof(*out_size)));
 	buffers.push_back(boost::asio::buffer(*out_buffer));
 
-	// Set up async. write operation with handler_write as completion
+	// Set up async. write operation with handler_write() as completion
 	// handler.
 	boost::asio::async_write(m_socket, buffers,
 		boost::bind(&connection::handle_write,
@@ -95,8 +99,8 @@ void connection::handle_read_size(boost::system::error_code const& error)
 	// Resize the in buffer to the in size.
 	(*m_in_buffer).resize(m_in_size);
 
-	// Set up async. read operation for the in data with handle_read_data as
-	// completion handler.
+	// Set up async. read operation for the in data with handle_read_data()
+	// as completion handler.
 	boost::asio::async_read(m_socket,
 		boost::asio::buffer(*m_in_buffer),
 		boost::bind(&connection::handle_read_data,

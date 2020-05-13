@@ -2,13 +2,13 @@
 #define RUNTIME_HPP
 
 #include <atomic>
+#include <memory>
 #include <thread>
 
 #include <boost/asio.hpp>
 #include <boost/assert.hpp>
 #include <boost/bind.hpp>
 #include <boost/cstdint.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/lockfree/queue.hpp>
 #include <boost/ref.hpp>
@@ -20,6 +20,10 @@
 namespace zed { namespace am {
 
 class connection; // Forward declaration.
+
+// Boost documentation references:
+// https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/reference.html
+// https://www.boost.org/doc/libs/1_67_0/libs/assert/doc/html/assert.html
 
 class runtime
 {

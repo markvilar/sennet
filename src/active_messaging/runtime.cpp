@@ -24,19 +24,23 @@ runtime::runtime(
 	m_main(f),
 	m_wait_for(wait_for)
 {
-	// Make sure we are waiting for clients.
+	// Make sure we are waiting for some clients.
 	BOOST_ASSERT(wait_for != 0);
 }
 
 void runtime::start()
 {
-	// Set up acceptor TODO: Look more into these options!
+	// Set up acceptor. 
+	// 	- Option 'reuse_address' allows the socket to be bound to an
+	// 		address that is already in use.
+	// 	- Option 'linger' specifies if socket should linger on close if
+	// 		unsent data is present.
 	m_acceptor.set_option(
 		boost::asio::ip::tcp::acceptor::reuse_address(true));
 	m_acceptor.set_option(
 		boost::asio::ip::tcp::acceptor::linger(true, 0));
 	
-	// Start execution thread
+	// Start execution thread.
 	m_exec_thread = 
 		std::thread(boost::bind(&runtime::exec_loop, boost::ref(*this)));
 	
@@ -70,20 +74,24 @@ std::shared_ptr<connection> runtime::connect(
 	std::string port
 	)
 {
+	// Set up resolver and query.
 	boost::asio::ip::tcp::resolver resolver(m_io_service);
 	boost::asio::ip::tcp::resolver::query query(
-		boost::asio::ip::tcp::v4(),
-		host,
-		port);
-
+		boost::asio::ip::tcp::v4(), host, port);
+	
+	// Initialize iterators.
 	boost::asio::ip::tcp::resolver::iterator it = resolver.resolve(query);
 	boost::asio::ip::tcp::resolver::iterator end;
 
-	// If the Runtime already has a connection establish with the endpoint.
+	// Iterate over list of entries from resolving the query.
 	for (boost::asio::ip::tcp::resolver::iterator i = it; i != end; ++i)
+		// If the runtime already has a connection established with the 
+		// endpoint.
 		if (m_connections.count(*i) != 0)
 			return m_connections[*i];
 
+	// If there are no existing connections to host, initialize new 
+	// connection.
 	std::shared_ptr<connection> conn(new connection(*this));
 
 	// Wait for some time for the Runtime to become available.
@@ -99,7 +107,12 @@ std::shared_ptr<connection> runtime::connect(
 		std::this_thread::sleep_for(period);
 	}
 
-	// Set connection socket options. TODO: Look into options!
+	// Set connection socket options. 
+	// 	- Option 'reuse_address' allows the socket to be bound to an
+	// 		address that is already in use.
+	// 	- Option 'linger' specifies if socket should linger on close if
+	// 		unsent data is present.
+
 	conn->get_socket().set_option(
 		boost::asio::ip::tcp::socket::reuse_address(true));
 	conn->get_socket().set_option(
@@ -144,6 +157,7 @@ void runtime::handle_accept(
 		// up.
 		std::shared_ptr<connection> old_conn(conn);
 
+		// Initialize new connection.
 		conn.reset(new connection(*this));
 
 		// Set up new async. accept operation with handle_accept() as
@@ -159,7 +173,8 @@ void runtime::handle_accept(
 		boost::asio::ip::tcp::endpoint ep =
 			old_conn->get_remote_endpoint();
 		BOOST_ASSERT(m_connections.count(ep) == 0);
-	
+
+		// Add accepted connection to connections.	
 		m_connections[ep] = old_conn;
 
 		// If main exists, do we have enough clients to run it?
@@ -171,7 +186,7 @@ void runtime::handle_accept(
 				new std::function<void(runtime&)>(m_main));
 		}
 
-		// Start read from the connection.
+		// Start read from the accepted connection.
 		old_conn->async_read();
 	}
 }
@@ -221,9 +236,14 @@ std::vector<char>* runtime::serialize_parcel(action const& act)
 	// TODO: Look more into this!
 	std::vector<char>* raw_msg_ptr = new std::vector<char>();
 
+	// Define I/O type.
 	typedef container_device<std::vector<char>> io_device_type;
+
+	// Create I/O stream in order to serialize action into parcel with an
+	// archive.
 	boost::iostreams::stream<io_device_type> io(*raw_msg_ptr);
 
+	// Initialize action pointer to be input to archive.
 	action const* act_ptr = &act;
 
 	// Local scope in order to make sure archive goes out of scope before
@@ -238,7 +258,11 @@ std::vector<char>* runtime::serialize_parcel(action const& act)
 
 action* runtime::deserialize_parcel(std::vector<char>& raw_msg)
 {
+	// Define I/O type.
 	typedef container_device<std::vector<char>> io_device_type;
+
+	// Create I/O stream in order to deserialize parcel into action with an
+	// archive.
 	boost::iostreams::stream<io_device_type> io(raw_msg);
 
 	action* act_ptr = 0;

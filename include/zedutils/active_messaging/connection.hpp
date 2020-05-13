@@ -2,17 +2,12 @@
 #define CONNECTION_HPP
 
 #include <memory>
-#include <thread>
 #include <vector>
 
 #include <boost/asio.hpp>
 #include <boost/assert.hpp>
 #include <boost/bind.hpp>
-//#include <boost/cstdint.hpp>
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/lexical_cast.hpp>
-//#include <boost/lockfree/queue.hpp>
-//#include <boost/ref.hpp>
 
 #include <zedutils/active_messaging/action.hpp>
 #include <zedutils/active_messaging/runtime.hpp>
@@ -20,6 +15,9 @@
 namespace zed { namespace am {
 
 class runtime; // Forward declaration.
+
+// Boost documentation references:
+// https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/reference.html
 
 class connection : public std::enable_shared_from_this<connection>
 {
