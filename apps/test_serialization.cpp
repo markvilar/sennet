@@ -3,8 +3,8 @@
 #include <vector>
 #include <string>
 
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
 
@@ -18,26 +18,23 @@ void save()
 {
 	namespace io = boost::iostreams;
 
-	auto m = sl::Mat(100, 150, sl::MAT_TYPE::U8_C4);
-	m.setTo(sl::uchar4(1, 2, 3, 4));
-	m.setValue(50, 50, sl::uchar4(5, 5, 5, 5));
+	auto m = sl::Mat(100, 150, sl::MAT_TYPE::F32_C4);
+	m.setTo(sl::float4(1.1, 2.1, 3.1, 4.1));
+	m.setValue(50, 50, sl::float4(5.1, 5.1, 5.1, 5.1));
 
-	std::ofstream ofs("matrix.bin", std::ios::out | std::ios::binary);
+	std::ofstream ofs("matrix.txt", std::ios::out | std::ios::binary);
 
 	// Use scope to ensure archive goes out of scope before stream.
 	{
-		io::filtering_streambuf<io::output> out;
-		//out.push(io::zlib_compressor(io::zlib::best_speed));
-		out.push(ofs);
-		
-		boost::archive::binary_oarchive oa(out);
+		// Create output archive
+		boost::archive::text_oarchive oa(ofs);
 		
 		// Send matrix to archive.
 		oa << m;
 		std::cout << "Saved matrix to archive!\n" << m << "\n";
 
 		// Get values from matrix
-		sl::uchar4 vs;
+		sl::float4 vs;
 		m.getValue(50, 50, &vs);
 		std::cout << vs << "\n";
 		m.getValue(0, 0, &vs);
@@ -53,20 +50,17 @@ void load()
 
 	sl::Mat m;
 
-	std::ifstream ifs("matrix.bin", std::ios::out | std::ios::binary);
+	std::ifstream ifs("matrix.txt", std::ios::out | std::ios::binary);
 
 	// Use scope to ensrue archive goes out of scope before stream.
 	{
-		io::filtering_streambuf<io::input> in;
-		//in.push(io::zlib_decompressor());
-		in.push(ifs);
-
-		boost::archive::binary_iarchive ia(in);
+		// Create input archive
+		boost::archive::text_iarchive ia(ifs);
 
 		// Load matrix from archive.
 		ia >> m;
 		std::cout << "Loaded matrix from archive!\n" << m << "\n";
-		sl::uchar4 vs;
+		sl::float4 vs;
 
 		// Get values from matrix
 		m.getValue(50, 50, &vs);

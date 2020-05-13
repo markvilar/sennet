@@ -101,3 +101,22 @@ std::ostream& operator<<(std::ostream& os, sl::Vector4<unsigned char> vs)
 		<< ", " << static_cast<int>(vs[3]) << "]";
 	return os;
 }
+
+std::ostream& operator<<(std::ostream& os, sl::Vector2<float> vs)
+{
+	os << "[" << vs[0] << ", " << vs[1] << "]";
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, sl::Vector3<float> vs)
+{
+	os << "[" << vs[0] << ", " << vs[1] << ", " << vs[2] << "]";
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, sl::Vector4<float> vs)
+{
+	os << "[" << vs[0] << ", " << vs[1] << ", " << vs[2] << ", " << vs[3]
+		<< "]";
+	return os;
+}

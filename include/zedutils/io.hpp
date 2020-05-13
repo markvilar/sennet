@@ -18,3 +18,9 @@ std::ostream& operator<<(std::ostream& os, sl::Vector2<unsigned char> vs);
 std::ostream& operator<<(std::ostream& os, sl::Vector3<unsigned char> vs);
 
 std::ostream& operator<<(std::ostream& os, sl::Vector4<unsigned char> vs);
+
+std::ostream& operator<<(std::ostream& os, sl::Vector2<float> vs);
+
+std::ostream& operator<<(std::ostream& os, sl::Vector3<float> vs);
+
+std::ostream& operator<<(std::ostream& os, sl::Vector4<float> vs);
