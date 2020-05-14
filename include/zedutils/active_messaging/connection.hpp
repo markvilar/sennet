@@ -14,7 +14,9 @@
 
 namespace zed { namespace am {
 
-class runtime; // Forward declaration.
+// Forward declaration.
+class action; 
+class runtime; 
 
 // Boost documentation references:
 // https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/reference.html

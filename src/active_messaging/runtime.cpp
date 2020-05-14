@@ -2,15 +2,15 @@
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 
+#include <zedutils/active_messaging/container_device.hpp>
 #include <zedutils/active_messaging/runtime.hpp>
 
 namespace zed { namespace am {
 
 runtime::runtime(
 	std::string port,
-	std::function<void(runtime&)> f =
-		std::function<void(runtime&)>(),
-	boost::uint64_t wait_for = 1
+	std::function<void(runtime&)> f,
+	boost::uint64_t wait_for
 	)
 	: m_io_service(),
 	m_acceptor(m_io_service, boost::asio::ip::tcp::endpoint(

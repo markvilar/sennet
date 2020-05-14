@@ -15,11 +15,12 @@
 
 #include <zedutils/active_messaging/action.hpp>
 #include <zedutils/active_messaging/connection.hpp>
-#include <zedutils/active_messaging/container_device.hpp>
 
 namespace zed { namespace am {
 
-class connection; // Forward declaration.
+// Forward declaration.
+class action;
+class connection;
 
 // Boost documentation references:
 // https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/reference.html
@@ -59,8 +60,9 @@ private:
 public:
 	runtime(
 		std::string port,
-		std::function<void(runtime&)> f,
-		boost::uint64_t wait_for
+		std::function<void(runtime&)> f 
+			= std::function<void(runtime&)>(),
+		boost::uint64_t wait_for = 1
 		);
 		
 	~runtime() 
@@ -129,5 +131,7 @@ private:
 
 } // namespace am
 }; // namespace zed
+
+
 
 #endif // RUNTIME_HPP

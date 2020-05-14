@@ -10,7 +10,6 @@ set(HEADER_LIST
 
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(zedutils_library 
-	active_messaging/action.cpp 
 	active_messaging/connection.cpp 
 	active_messaging/runtime.cpp 
 	io.cpp 

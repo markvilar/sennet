@@ -10,6 +10,18 @@ connection::connection(runtime& rt)
 {
 }
 
+connection::~connection()
+{
+	// Ensure a graceful shutdown.
+	if (m_socket.is_open())
+	{
+		boost::system::error_code ec;
+		m_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
+			ec);
+		m_socket.close(ec);
+	}
+}
+
 boost::asio::ip::tcp::endpoint connection::get_remote_endpoint() const
 {
 	return m_socket.remote_endpoint();

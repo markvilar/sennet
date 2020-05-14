@@ -23,7 +23,8 @@ endif(COMMAND cmake_policy)
 # Find packages
 find_package(Git QUIET)
 find_package(Threads)
-find_package(Boost COMPONENTS chrono serialization system thread REQUIRED)
+find_package(Boost COMPONENTS chrono program_options serialization system thread 
+	REQUIRED)
 message(STATUS "Found Boost ${Boost_VERSION_STRING} at ${BOOST_ROOT}")
 find_package(ZED 3 REQUIRED)
 find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
