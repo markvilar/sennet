@@ -1,7 +1,9 @@
+#ifndef HELLO_WORLD_ACTION_HPP
+#define HELLO_WORLD_ACTION_HPP
+
 #include <boost/serialization/export.hpp>
 
-#include <zedutils/active_messaging/action.hpp>
-#include <zedutils/active_messaging/runtime.hpp>
+#include <zedutils/active_messaging/core.hpp>
 
 namespace zed { namespace am {
 
@@ -30,3 +32,5 @@ public:
 };
 
 BOOST_CLASS_EXPORT_GUID(zed::am::hello_world_action, "hello_world_action");
+
+#endif // HELLO_WORLD_ACTION_HPP

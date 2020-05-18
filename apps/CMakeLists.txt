@@ -23,6 +23,11 @@ target_link_libraries(test_hello_world PRIVATE zedutils_library
 add_executable(test_serialization test_serialization.cpp)
 target_compile_features(test_serialization PRIVATE cxx_std_17)
 target_link_libraries(test_serialization PRIVATE zedutils_library)
+
+# Test - UHI
+add_executable(test_uhi test_uhi.cpp)
+target_compile_features(test_uhi PRIVATE cxx_std_17)
+target_link_libraries(test_uhi PRIVATE zedutils_library)
 	
 # Test - User
 add_executable(test_user test_user.cpp)
