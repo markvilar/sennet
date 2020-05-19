@@ -1,5 +1,8 @@
+#include <iostream>
+
 #include <sl/Camera.hpp>
-#include <zedutils/active_messaging/core.hpp>
+
+#include <zedutils/active_messaging/zed.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -16,36 +19,9 @@ int main(int argc, char* argv[])
 	rec_params.video_filename = "../../data/test.svo";
 	rec_params.compression_mode = sl::SVO_COMPRESSION_MODE::H264;
 
-	// Open camera
-	auto error = cam->open(init_params);
-	if (error != sl::ERROR_CODE::SUCCESS)
-	{
-		std::cout << "Could not open camera..." << std::endl;
-	}
+	std::string port = "8000";
+	std::string root = "/home/martin/dev/zedutils/data/am_test/";
 
-	// Enable recording
-	error = cam->enableRecording(rec_params);
-	if (error != sl::ERROR_CODE::SUCCESS)
-	{
-		std::cout << "Could not enable recording..." << std::endl;
-	}
-
-	// Retrieve image from camera
-	sl::Mat image;
-	cam->retrieveImage(image, sl::VIEW::LEFT, sl::MEM::CPU);
-	std::cout << "Image: " 
-		<< "\n- width: " << image.getWidth()
-		<< "\n- height: " << image.getHeight()
-		<< "\n- channels: " << image.getChannels()
-		<< "\n- type: " << image.getDataType() 
-		<< "\n- pixel bytes: " << image.getPixelBytes();
-
-	// Convert image to sendable format
-
-	// Send image over socket
-
-	// Close camera
-	cam->close();
-
+	zed::am::zed_runtime rt(port, root);
 	return 0;
 };

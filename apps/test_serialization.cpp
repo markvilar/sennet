@@ -11,10 +11,15 @@
 #include <zedutils/io.hpp>
 #include <zedutils/serialization.hpp>
 
-// Example illustrating one way of saving and loading data using a boost
-// archive.
+void save_string()
+{
+}
 
-void save()
+void load_string()
+{
+}
+
+void save_matrix()
 {
 	namespace io = boost::iostreams;
 
@@ -44,7 +49,7 @@ void save()
 	ofs.close();
 }
 
-void load()
+void load_matrix()
 {
 	namespace io = boost::iostreams;
 
@@ -74,7 +79,7 @@ void load()
 
 int main(int argc, char* argv[])
 {
-	save();
-	load();
+	save_matrix();
+	load_matrix();
 	return 0;
 };

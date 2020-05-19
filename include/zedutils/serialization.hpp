@@ -1,16 +1,23 @@
-#include <sl/Camera.hpp>
+#ifndef ZEDUTILS_SERIALIZATION_HPP
+#define ZEDUTILS_SERIALIZATION_HPP
 
-#include <boost/serialization/split_free.hpp>
+#include <string>
+
 #include <boost/serialization/array.hpp>
+#include <boost/serialization/split_free.hpp>
+#include <boost/serialization/string.hpp>
+
+#include <sl/Camera.hpp>
 
 // Allows for 'save' and 'load' templates rather than 'serialize'
 // for non-intrusive serialization. SPLIT = load/save, FREE = non-intrusive
 BOOST_SERIALIZATION_SPLIT_FREE(sl::Mat)
+BOOST_SERIALIZATION_SPLIT_FREE(sl::String)
 
 namespace boost { namespace serialization {
 
-	// Serialization support for sl::Mat
-	template<class Archive>
+	// ------------------------------ sl::Mat -------------------------------
+	template <class Archive>
 	void save(Archive& ar, const sl::Mat& m, const unsigned int version)
 	{
 		(void)version;
@@ -30,8 +37,7 @@ namespace boost { namespace serialization {
 			data_size);
 	}
 
-	// Serialization support for sl::Mat
-	template<class Archive>
+	template <class Archive>
 	void load(Archive& ar, sl::Mat& m, const unsigned int version)
 	{
 		(void)version;
@@ -50,28 +56,74 @@ namespace boost { namespace serialization {
 		ar & boost::serialization::make_array(m.getPtr<sl::uchar1>(), 
 			data_size);
 	}
+
+	// ------------------------ sl::InitParameters -------------------------
+	template <class Archive>
+	void serialize(
+		Archive& ar, 
+		sl::InitParameters& ips, 
+		const unsigned int version
+		)
+	{
+		ar & ips.camera_resolution;
+		ar & ips.camera_fps;
+		ar & ips.camera_image_flip;
+		ar & ips.camera_disable_self_calib;
+		ar & ips.enable_right_side_measure;
+		ar & ips.svo_real_time_mode;
+		ar & ips.depth_mode;
+		ar & ips.depth_stabilization;
+		ar & ips.depth_minimum_distance;
+		ar & ips.depth_maximum_distance;
+		ar & ips.coordinate_units;
+		ar & ips.coordinate_system;
+		ar & ips.sdk_gpu_id;
+		ar & ips.sdk_verbose;
+		ar & ips.sdk_verbose_log_file;
+		//ar & ips.sdk_cuda_ctx;
+		ar & ips.input;
+		ar & ips.optional_settings_path;
+		ar & ips.sensors_required;
+		ar & ips.enable_image_enhancement;
+	}
+	
+	// -------------------------- sl::InputType ----------------------------
+	template <class Archive>
+	void serialize(
+		Archive& ar, 
+		sl::InputType& it, 
+		const unsigned int version
+		)
+	{
+		// TODO: InputType doesn't seem to have any attributes, so it
+		// might not be necessary to implement this!
+	}
+
+	// -------------------------- sl::String ----------------------------
+	template <class Archive>
+	void save(Archive& ar, const sl::String& s, const unsigned int version)
+	{
+		// TODO: Implement!
+		// The sl::String has to be const in this function, but
+		// the size() function is not defined for const sl::String. Need
+		// to find a way to solve this.
+
+		(void)version;
+
+		// Possible solution? Might be ineffective due to copying!
+		sl::String z = s;
+		size_t size = z.size();
+	}
+
+	template <class Archive>
+	void load(Archive& ar, sl::String& s, const unsigned int version)
+	{
+		// TODO: Implement!
+
+		(void)version;
+	}
+	
 } // namespace serialization
 }; // namespace boost
 
-
-namespace zed {
-	
-	// Returns the data of a sl::Mat as a std::vector
-	std::vector<unsigned char> mat2vec(sl::Mat& m)
-	{
-		auto ptr = m.getPtr<sl::uchar1>();
-		size_t size = m.getWidth() * m.getHeight() 
-			* m.getPixelBytes();
-		auto v = std::vector<unsigned char>(ptr, ptr + size);
-		return v;
-	}
-
-	sl::Mat vec2mat(size_t width, size_t height, size_t pixel_bytes,
-		 sl::MAT_TYPE type, std::vector<unsigned char> data)
-	{
-		sl::Mat m;
-		// TODO: Implement!
-		return m;
-	}
-
-}; // namespace zed
+#endif // ZEDUTILS_SERIALIZATION_HPP

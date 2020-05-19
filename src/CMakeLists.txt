@@ -2,6 +2,7 @@
 set(HEADER_LIST 
 	"${PROJECT_SOURCE_DIR}/include/zedutils/active_messaging/container_device.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/active_messaging/core.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/active_messaging/zed.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/io.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/network.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/serialization.hpp")
@@ -9,9 +10,9 @@ set(HEADER_LIST
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(zedutils_library 
 	active_messaging/core.cpp 
+	active_messaging/zed.cpp
 	io.cpp 
 	network.cpp 
-	serialization.cpp
 	${HEADER_LIST})
 	
 # We need these directories, and users of our library will need it too
