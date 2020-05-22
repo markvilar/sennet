@@ -17,19 +17,23 @@ namespace zed { namespace am {
 // Forward declaration.
 class zed_runtime;
 
-// ----------------------------- open_camera_action ----------------------------
+// ----------------------------- open_camera_request ---------------------------
 
-class open_camera_action : public action
+class open_camera_request : public action
 {
 private:
 	// TODO: Possibly add more members.
 	sl::InitParameters m_init_params;
 
 public:
-	// TODO: Possibly add overloaded constructor.
-	open_camera_action();
+	// Basic constructor.
+	open_camera_request();
 
-	~open_camera_action();
+	// Overloaded constructor.
+	open_camera_request(sl::InitParameters ip);
+
+	// Destructor.
+	~open_camera_request();
 
 	// Action for base runtime instances.
 	void operator()(runtime& rt);
@@ -40,21 +44,27 @@ public:
 	// Clone function.
 	action* clone() const;
 
+	// Gets the initialization parameters.
+	sl::InitParameters get_params() const;
+
+	// Sets the initialization parameters.
+	void set_params(sl::InitParameters params);
+
 	template <typename Archive>
 	void serialize(Archive& ar, const unsigned int version);
-}; // class open_camera_action
+}; // class open_camera_request
 
 
-// ---------------------------- close_camera_action ----------------------------
+// ---------------------------- close_camera_request ---------------------------
 
-class close_camera_action : public action
+class close_camera_request : public action
 {
 private:
 	
 public:
-	close_camera_action();
+	close_camera_request();
 
-	~close_camera_action();
+	~close_camera_request();
 	
 	// Action for base runtime instances.
 	void operator()(runtime& rt);
@@ -68,12 +78,12 @@ public:
 	// Function for serializing with Boost.Serialization.
 	template <typename Archive>
 	void serialize(Archive& ar, const unsigned int version);
-}; // class close_camera_action
+}; // class close_camera_request
 
 
 // -------------------------------- zed_runtime --------------------------------
 
-class zed_runtime : private runtime
+class zed_runtime : public runtime
 {
 private:
 	// ZED camera.
@@ -94,7 +104,7 @@ public:
 	~zed_runtime();
 
 	// Opens the ZED camera.
-	sl::ERROR_CODE open_camera(sl::InitParameters init_params);
+	sl::ERROR_CODE open_camera(sl::InitParameters& init_params);
 
 	// Closes the ZED camera.
 	void close_camera();

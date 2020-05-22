@@ -110,9 +110,13 @@ namespace boost { namespace serialization {
 
 		(void)version;
 
-		// Possible solution? Might be ineffective due to copying!
-		sl::String z = s;
+		// TODO: This implementation is ineffective. Look to improve
+		// later!
+		sl::String z = s; // Copy the sl::String.
+		const char* ptr = z.get(); // Get pointer, not c-string!
 		size_t size = z.size();
+		std::string ss(ptr, size);
+		ar & ss;
 	}
 
 	template <class Archive>
@@ -121,6 +125,11 @@ namespace boost { namespace serialization {
 		// TODO: Implement!
 
 		(void)version;
+		
+		std::string ss;
+		ar & ss;
+		const char* ptr = ss.data();
+		s.set(ptr);
 	}
 	
 } // namespace serialization

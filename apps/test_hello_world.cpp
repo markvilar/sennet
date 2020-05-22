@@ -3,12 +3,6 @@
 
 #include <boost/program_options.hpp> 		// program_options
 
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/serialization/base_object.hpp>	// base_object
-#include <boost/serialization/export.hpp>	// BOOST_CLASS_EXPORT
-#include <boost/serialization/tracking.hpp>	// BOOST_CLASS_TRACKING
-
 #include <zedutils/active_messaging/hello_world_action.hpp>
 
 void hello_world_main(zed::am::runtime& rt)
@@ -17,15 +11,16 @@ void hello_world_main(zed::am::runtime& rt)
 
     	auto conns = rt.get_connections();
 
-    	std::shared_ptr<boost::uint64_t> count(new boost::uint64_t(conns.size()));
+    	std::shared_ptr<boost::uint64_t> count(
+		new boost::uint64_t(conns.size()));
 
     	for (auto node : conns) 
         	node.second->async_write(t,
-		    [count,&rt](boost::system::error_code const& ec)
-		    {
+			[count, &rt](boost::system::error_code const& ec)
+			{
 				if (--(*count) == 0)
 					rt.stop();
-		    });
+			});
 }
 
 int main(int argc, char** argv)
