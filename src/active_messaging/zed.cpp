@@ -118,6 +118,47 @@ void zed_runtime::close_camera()
 	m_camera.close();
 }
 
+void zed_runtime::exec_loop()
+{
+	std::cout << "Executing zed_runtime's execution loop!\n";
+	while (!m_stop_flag.load())
+	{
+		// Look for pending actions to execute.
+		std::function<void(runtime&)>* act_ptr = 0;
+
+		if (m_local_queue.pop(act_ptr))
+		{
+			// Check action validity.
+			BOOST_ASSERT(act_ptr);
+
+			// Extract action.
+			boost::scoped_ptr<std::function<void(runtime&)>>
+				act(act_ptr);
+
+			// Execute action.
+			(*act)(*this);
+		}
+
+		// If there's no pending actions, find parcel to deserialize and
+		// execute.
+		std::vector<char>* raw_msg_ptr = 0;
+
+		if (m_parcel_queue.pop(raw_msg_ptr))
+		{
+			// Extract raw message.
+			boost::scoped_ptr<std::vector<char>> 
+				raw_msg(raw_msg_ptr);
+
+			// Create action from raw message.
+			boost::scoped_ptr<action>
+				act(deserialize_parcel(*raw_msg));
+			
+			// Execute action.
+			(*act)(*this);
+		}
+	}
+}
+
 } // namespace am
 }; // namespace zed
 

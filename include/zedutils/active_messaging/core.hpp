@@ -2,6 +2,7 @@
 #define AM_CORE_HPP
 
 #include <atomic>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <thread>
@@ -119,6 +120,9 @@ private:
 	// IO service.
 	boost::asio::io_service m_io_service;
 
+	// Execution thread.
+	std::thread m_exec_thread;
+
 	// Connection acceptor.
 	boost::asio::ip::tcp::acceptor m_acceptor;
 
@@ -126,32 +130,32 @@ private:
 	std::map<boost::asio::ip::tcp::endpoint, std::shared_ptr<connection>>
 		m_connections;
 
-	// Execution thread.
-	std::thread m_exec_thread;
-
-	// Parcel queue.
-	boost::lockfree::queue<std::vector<char>*> m_parcel_queue;
-
-	// Action queue.
-	boost::lockfree::queue<std::function<void(runtime&)>*> m_local_queue;
-
-	// Stop flag.
-	std::atomic<bool> m_stop_flag;
-
 	// Main function handler for bootstrapping.
 	std::function<void(runtime&)> m_main;
 
 	// The number of clients to wait for before executing the main function.
 	boost::uint64_t m_wait_for;
 
+protected:
+	// Stop flag.
+	std::atomic<bool> m_stop_flag;
+
+	// Action queue.
+	boost::lockfree::queue<std::function<void(runtime&)>*> m_local_queue;
+
+	// Parcel queue.
+	boost::lockfree::queue<std::vector<char>*> m_parcel_queue;
+
 public:
+	// Constructor.
 	runtime(
 		std::string port,
 		std::function<void(runtime&)> f 
 			= std::function<void(runtime&)>(),
 		boost::uint64_t wait_for = 1
 		);
-		
+			
+	// Destructor.
 	~runtime() 
 	{ 
 		stop(); 
@@ -205,10 +209,11 @@ public:
 
 private:
 	friend class connection;
-
+	
 	// Execute actions until stop() is called.
-	void exec_loop();
+	virtual void exec_loop();
 
+protected:
 	// Serializes an action object into a parcel.
 	std::vector<char>* serialize_parcel(action const& act);
 

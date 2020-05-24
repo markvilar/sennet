@@ -255,7 +255,6 @@ std::shared_ptr<connection> runtime::connect(
 	// 		address that is already in use.
 	// 	- Option 'linger' specifies if socket should linger on close if
 	// 		unsent data is present.
-
 	conn->get_socket().set_option(
 		boost::asio::ip::tcp::socket::reuse_address(true));
 	conn->get_socket().set_option(
@@ -279,6 +278,8 @@ void runtime::async_accept()
 	std::shared_ptr<connection> conn;
 	conn.reset(new connection(*this));
 
+	// TODO: This might be an issue if handle_accept becomes a virtual
+	// function!
 	// Set up async. accept operation with handle_accept() as completion
 	// handler.
 	m_acceptor.async_accept(conn->get_socket(),
@@ -323,6 +324,8 @@ void runtime::handle_accept(
 		// If main exists, do we have enough clients to run it?
 		if (m_main && (m_connections.size() >= m_wait_for))
 		{
+			// TODO: This is why this function might have to be
+			// virtual.
 			// Instead of running main directly, we will stick it in
 			// the action queue.
 			m_local_queue.push(
@@ -336,6 +339,7 @@ void runtime::handle_accept(
 
 void runtime::exec_loop()
 {
+	std::cout << "Executing runtime's execution loop!\n";
 	while (!m_stop_flag.load())
 	{
 		// Look for pending actions to execute.
@@ -367,7 +371,7 @@ void runtime::exec_loop()
 			// Create action from raw message.
 			boost::scoped_ptr<action>
 				act(deserialize_parcel(*raw_msg));
-
+			
 			// Execute action.
 			(*act)(*this);
 		}

@@ -19,6 +19,11 @@ target_compile_features(test_hello_world PRIVATE cxx_std_17)
 target_link_libraries(test_hello_world PRIVATE zedutils_library 
 	Boost::program_options)
 
+# Test - Inheritance
+add_executable(test_inheritance test_inheritance.cpp)
+target_compile_features(test_inheritance PRIVATE cxx_std_17)
+target_link_libraries(test_inheritance PRIVATE)
+
 # Test - Serialization
 add_executable(test_serialization test_serialization.cpp)
 target_compile_features(test_serialization PRIVATE cxx_std_17)

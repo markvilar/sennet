@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 
 	if (vm.count("remote-host") || vm.count("remote-port"))
 	{
-		rt.reset(new zed::am::zed_runtime(port, root, zed_main));
+		rt.reset(new zed::am::zed_runtime(port, root));
 
 		std::string remote_host = "localhost";
 		std::string remote_port = port;
@@ -82,16 +82,17 @@ int main(int argc, char* argv[])
 		if (vm.count("remote-port"))
 			remote_port = vm["remote-port"].as<std::string>();
 
+		// Since we connect here, this is a client.
 		rt->connect(remote_host, remote_port);
 
-		std::cout << "Running as client, will execute "
+		std::cout << "Running as client, will not execute "
 			<< "zed_main.\n";
 	}
 	else
 	{
 		rt.reset(new zed::am::zed_runtime(port, root, zed_main));
 
-		std::cout << "Running as server, will not execute "
+		std::cout << "Running as server, will execute "
 			<< "zed_main.\n";
 	}
 

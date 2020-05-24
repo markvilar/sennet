@@ -89,6 +89,9 @@ private:
 	// ZED camera.
 	sl::Camera m_camera;
 
+	// Main function handler for bootstrapping.
+	std::function<void(zed_runtime&)> m_main;
+
 	// Path to root directory for data storage.
 	std::string m_root;
 
@@ -108,6 +111,10 @@ public:
 
 	// Closes the ZED camera.
 	void close_camera();
+
+private:
+	// TODO: Implement.
+	void exec_loop();
 
 }; // class zed_runtime
 
