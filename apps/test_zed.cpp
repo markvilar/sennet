@@ -5,12 +5,16 @@
 
 #include <sl/Camera.hpp>
 
-#include <zedutils/active_messaging/zed.hpp>
+#include <zedutils/active_messaging/action.hpp>
+#include <zedutils/active_messaging/runtime.hpp>
 
 void zed_main(zed::am::runtime& rt)
 {
 	std::cout << "Executing zed_main!\n";
-	zed::am::open_camera_request t;
+	sl::InitParameters ips;
+	ips.sdk_verbose = true;
+
+	zed::am::open_camera_request t(ips);
 
 	auto conns = rt.get_connections();
 

@@ -16,121 +16,128 @@ BOOST_SERIALIZATION_SPLIT_FREE(sl::String)
 
 namespace boost { namespace serialization {
 
-	// ------------------------------ sl::Mat -------------------------------
-	template <class Archive>
-	void save(Archive& ar, const sl::Mat& m, const unsigned int version)
-	{
-		(void)version;
-		size_t width = m.getWidth();
-		size_t height = m.getHeight();
-		size_t pixel_bytes = m.getPixelBytes();
-		auto type = m.getDataType();
+// ----------------------------------- sl::Mat ---------------------------------
 
-		ar & width;
-		ar & height;
-		ar & pixel_bytes;
-		ar & type;
+template <class Archive>
+void save(Archive& ar, const sl::Mat& m, const unsigned int version)
+{
+	(void)version;
+	size_t width = m.getWidth();
+	size_t height = m.getHeight();
+	size_t pixel_bytes = m.getPixelBytes();
+	auto type = m.getDataType();
 
-		const size_t data_size = width * height * pixel_bytes;
+	ar & width;
+	ar & height;
+	ar & pixel_bytes;
+	ar & type;
 
-		ar & boost::serialization::make_array(m.getPtr<sl::uchar1>(),
-			data_size);
-	}
+	const size_t data_size = width * height * pixel_bytes;
 
-	template <class Archive>
-	void load(Archive& ar, sl::Mat& m, const unsigned int version)
-	{
-		(void)version;
-		size_t width, height, pixel_bytes;
-		sl::MAT_TYPE type;
+	ar & boost::serialization::make_array(m.getPtr<sl::uchar1>(),
+		data_size);
+}
 
-		ar & width;
-		ar & height;
-		ar & pixel_bytes;
-		ar & type;
-		
-		m.alloc(width, height, type);
+template <class Archive>
+void load(Archive& ar, sl::Mat& m, const unsigned int version)
+{
+	(void)version;
+	size_t width, height, pixel_bytes;
+	sl::MAT_TYPE type;
 
-		const size_t data_size = width * height * pixel_bytes;
-
-		ar & boost::serialization::make_array(m.getPtr<sl::uchar1>(), 
-			data_size);
-	}
-
-	// ------------------------ sl::InitParameters -------------------------
-	template <class Archive>
-	void serialize(
-		Archive& ar, 
-		sl::InitParameters& ips, 
-		const unsigned int version
-		)
-	{
-		ar & ips.camera_resolution;
-		ar & ips.camera_fps;
-		ar & ips.camera_image_flip;
-		ar & ips.camera_disable_self_calib;
-		ar & ips.enable_right_side_measure;
-		ar & ips.svo_real_time_mode;
-		ar & ips.depth_mode;
-		ar & ips.depth_stabilization;
-		ar & ips.depth_minimum_distance;
-		ar & ips.depth_maximum_distance;
-		ar & ips.coordinate_units;
-		ar & ips.coordinate_system;
-		ar & ips.sdk_gpu_id;
-		ar & ips.sdk_verbose;
-		ar & ips.sdk_verbose_log_file;
-		//ar & ips.sdk_cuda_ctx;
-		ar & ips.input;
-		ar & ips.optional_settings_path;
-		ar & ips.sensors_required;
-		ar & ips.enable_image_enhancement;
-	}
+	ar & width;
+	ar & height;
+	ar & pixel_bytes;
+	ar & type;
 	
-	// -------------------------- sl::InputType ----------------------------
-	template <class Archive>
-	void serialize(
-		Archive& ar, 
-		sl::InputType& it, 
-		const unsigned int version
-		)
-	{
-		// TODO: InputType doesn't seem to have any attributes, so it
-		// might not be necessary to implement this!
-	}
+	m.alloc(width, height, type);
 
-	// -------------------------- sl::String ----------------------------
-	template <class Archive>
-	void save(Archive& ar, const sl::String& s, const unsigned int version)
-	{
-		// TODO: Implement!
-		// The sl::String has to be const in this function, but
-		// the size() function is not defined for const sl::String. Need
-		// to find a way to solve this.
+	const size_t data_size = width * height * pixel_bytes;
 
-		(void)version;
+	ar & boost::serialization::make_array(m.getPtr<sl::uchar1>(), 
+		data_size);
+}
 
-		// TODO: This implementation is ineffective. Look to improve
-		// later!
-		sl::String z = s; // Copy the sl::String.
-		const char* ptr = z.get(); // Get pointer, not c-string!
-		size_t size = z.size();
-		std::string ss(ptr, size);
-		ar & ss;
-	}
 
-	template <class Archive>
-	void load(Archive& ar, sl::String& s, const unsigned int version)
-	{
-		// TODO: Implement!
+// ----------------------------- sl::InitParameters ----------------------------
 
-		(void)version;
-		
-		std::string ss;
-		ar & ss;
-		const char* ptr = ss.data();
-		s.set(ptr);
-	}
+template <class Archive>
+void serialize(
+	Archive& ar, 
+	sl::InitParameters& ips, 
+	const unsigned int version
+	)
+{
+	ar & ips.camera_resolution;
+	ar & ips.camera_fps;
+	ar & ips.camera_image_flip;
+	ar & ips.camera_disable_self_calib;
+	ar & ips.enable_right_side_measure;
+	ar & ips.svo_real_time_mode;
+	ar & ips.depth_mode;
+	ar & ips.depth_stabilization;
+	ar & ips.depth_minimum_distance;
+	ar & ips.depth_maximum_distance;
+	ar & ips.coordinate_units;
+	ar & ips.coordinate_system;
+	ar & ips.sdk_gpu_id;
+	ar & ips.sdk_verbose;
+	ar & ips.sdk_verbose_log_file;
+	//ar & ips.sdk_cuda_ctx;
+	ar & ips.input;
+	ar & ips.optional_settings_path;
+	ar & ips.sensors_required;
+	ar & ips.enable_image_enhancement;
+}
+
+
+// ------------------------------- sl::InputType -------------------------------
+
+template <class Archive>
+void serialize(
+	Archive& ar, 
+	sl::InputType& it, 
+	const unsigned int version
+	)
+{
+	// TODO: InputType doesn't seem to have any attributes, so it
+	// might not be necessary to implement this!
+}
+
+
+// --------------------------------- sl::String --------------------------------
+
+template <class Archive>
+void save(Archive& ar, const sl::String& s, const unsigned int version)
+{
+	// TODO: Implement!
+	// The sl::String has to be const in this function, but
+	// the size() function is not defined for const sl::String. Need
+	// to find a way to solve this.
+
+	(void)version;
+
+	// TODO: This implementation is ineffective. Look to improve
+	// later!
+	sl::String z = s; // Copy the sl::String.
+	const char* ptr = z.get(); // Get pointer, not c-string!
+	size_t size = z.size();
+	std::string ss(ptr, size);
+	ar & ss;
+}
+
+template <class Archive>
+void load(Archive& ar, sl::String& s, const unsigned int version)
+{
+	// TODO: Implement!
+
+	(void)version;
+	
+	std::string ss;
+	ar & ss;
+	const char* ptr = ss.data();
+	s.set(ptr);
+}
 	
 } // namespace serialization
 }; // namespace boost

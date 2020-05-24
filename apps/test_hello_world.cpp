@@ -3,7 +3,9 @@
 
 #include <boost/program_options.hpp> 		// program_options
 
-#include <zedutils/active_messaging/hello_world_action.hpp>
+#include <zedutils/active_messaging/action.hpp>
+#include <zedutils/active_messaging/runtime.hpp>
+
 
 void hello_world_main(zed::am::runtime& rt)
 {

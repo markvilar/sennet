@@ -1,6 +1,7 @@
-#include <zedutils/active_messaging/core.hpp>
+#include <zedutils/active_messaging/runtime.hpp>
 
 namespace zed { namespace am {
+
 
 // --------------------------------- connection --------------------------------
 
@@ -147,6 +148,7 @@ void connection::handle_write(
 	if (handler)
 		handler(error);
 }
+
 
 // ---------------------------------- runtime ----------------------------------
 
@@ -425,6 +427,84 @@ action* runtime::deserialize_parcel(std::vector<char>& raw_msg)
 
 	return act_ptr;
 }
+
+
+// -------------------------------- zed_runtime --------------------------------
+
+zed_runtime::zed_runtime(
+	std::string port,
+	std::string root,
+	std::function<void(runtime&)> f,
+	boost::uint64_t wait_for
+	)
+	: runtime(port, f, wait_for),
+	m_camera(),
+	m_root(root)
+{
+}
+
+zed_runtime::~zed_runtime()
+{
+	// Stop I/O service and execution thread.
+	stop();
+
+	// Close camera.
+	close_camera();
+}
+
+sl::ERROR_CODE zed_runtime::open_camera(sl::InitParameters& init_params)
+{
+	// TODO: Possibly add some assertions?
+	return m_camera.open(init_params);
+}
+
+void zed_runtime::close_camera()
+{
+	// TODO: Possibly add some assertions?
+	m_camera.close();
+}
+
+void zed_runtime::exec_loop()
+{
+	std::cout << "Executing zed_runtime's execution loop!\n";
+	while (!m_stop_flag.load())
+	{
+		// Look for pending actions to execute.
+		std::function<void(runtime&)>* act_ptr = 0;
+
+		if (m_local_queue.pop(act_ptr))
+		{
+			// Check action validity.
+			BOOST_ASSERT(act_ptr);
+
+			// Extract action.
+			boost::scoped_ptr<std::function<void(runtime&)>>
+				act(act_ptr);
+
+			// Execute action.
+			(*act)(*this);
+		}
+
+		// If there's no pending actions, find parcel to deserialize and
+		// execute.
+		std::vector<char>* raw_msg_ptr = 0;
+
+		if (m_parcel_queue.pop(raw_msg_ptr))
+		{
+			// Extract raw message.
+			boost::scoped_ptr<std::vector<char>> 
+				raw_msg(raw_msg_ptr);
+
+			// Create action from raw message.
+			boost::scoped_ptr<action>
+				act(deserialize_parcel(*raw_msg));
+			
+			// Execute action.
+			(*act)(*this);
+		}
+	}
+}
+
 
 } // namespace am
 }; // namespace zed

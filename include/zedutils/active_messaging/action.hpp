@@ -1,21 +1,63 @@
-#ifndef AM_ZED_HPP
-#define AM_ZED_HPP
+#ifndef ACTION_HPP
+#define ACTION_HPP
 
 #include <iostream>
+
+#include <sl/Camera.hpp>
 
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/tracking.hpp>
 
-#include <sl/Camera.hpp>
-
-#include <zedutils/active_messaging/core.hpp>
+#include <zedutils/active_messaging/runtime.hpp>
 #include <zedutils/serialization.hpp>
 
 namespace zed { namespace am {
 
-// Forward declaration.
+// Forward declaration
+class runtime;
 class zed_runtime;
+
+
+// ---------------------------------- action -----------------------------------
+
+class action 
+{
+private:
+
+public:
+	virtual ~action() {}
+	
+	virtual void operator()(runtime& rt) = 0;
+	virtual void operator()(zed_runtime& rt) = 0;
+
+	virtual action* clone() const = 0;
+
+	// Member function needed in order to use Boost.Serialization.
+	template<typename Archive>
+	void serialize(Archive& ar, const unsigned int version) {};
+}; // class action
+
+
+// ----------------------------- hello_world_action ----------------------------
+
+class hello_world_action : public action
+{
+public:
+	hello_world_action();
+
+	~hello_world_action();
+	
+	void operator()(runtime& rt);
+
+	void operator()(zed_runtime& rt);
+
+	action* clone() const;
+
+	template <typename Archive>
+	void serialize(Archive& ar, const unsigned int version);
+}; // class hello_world_action
+
 
 // ----------------------------- open_camera_request ---------------------------
 
@@ -80,45 +122,7 @@ public:
 	void serialize(Archive& ar, const unsigned int version);
 }; // class close_camera_request
 
-
-// -------------------------------- zed_runtime --------------------------------
-
-class zed_runtime : public runtime
-{
-private:
-	// ZED camera.
-	sl::Camera m_camera;
-
-	// Main function handler for bootstrapping.
-	std::function<void(zed_runtime&)> m_main;
-
-	// Path to root directory for data storage.
-	std::string m_root;
-
-public:
-	zed_runtime(
-		std::string port, 
-		std::string root,
-		std::function<void(runtime&)> f 
-			= std::function<void(runtime&)>(),
-		boost::uint64_t wait_for = 1
-		);
-
-	~zed_runtime();
-
-	// Opens the ZED camera.
-	sl::ERROR_CODE open_camera(sl::InitParameters& init_params);
-
-	// Closes the ZED camera.
-	void close_camera();
-
-private:
-	// TODO: Implement.
-	void exec_loop();
-
-}; // class zed_runtime
-
 } // namespace am
 }; // namespace zed
 
-#endif // AM_ZED_HPP
+#endif // ACTION_HPP
