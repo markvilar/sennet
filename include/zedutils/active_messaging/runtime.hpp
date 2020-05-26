@@ -240,6 +240,24 @@ public:
 	// Closes the ZED camera.
 	void close_zed();
 
+	// Checks whether the ZED is opened or not.
+	bool is_zed_opened();
+
+	// Checks whether the ZED is recording or not.
+	bool is_zed_recording();
+
+	// Gets ZED recording status.
+	sl::RecordingStatus zed_recording_status();
+
+	// Gets ZED recording parameters.
+	sl::RecordingParameters zed_recording_parameters();
+
+	// Enables recording for the ZED.
+	sl::ERROR_CODE enable_zed_recording(sl::RecordingParameters rec_params);
+
+	// Disables recording for the ZED.
+	void disable_zed_recording();
+
 private:
 	// Deserializes parcels and executes actions.
 	void exec_loop();

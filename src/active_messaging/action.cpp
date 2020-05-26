@@ -51,7 +51,7 @@ zed_open_request::~zed_open_request()
 
 void zed_open_request::operator()(runtime& rt)
 {
-	std::cout << "This is a runtime node. Cannot open zed...\n";
+	std::cout << "This is a regular runtime. Cannot open zed...\n";
 	// TODO: Implement sending of invalid request.
 }
 
@@ -96,12 +96,13 @@ zed_close_request::~zed_close_request()
 
 void zed_close_request::operator()(runtime& rt)
 {
-	std::cout << "This is not a zed_runtime. Cannot close camera...\n";
+	std::cout << "This is a regular runtime. Cannot close zed...\n";
+	// TODO: Implement sending of invalid request.
 }
 
 void zed_close_request::operator()(zed_runtime& rt)
 {
-	std::cout << "This is a zed_runtime. Closing camera...\n";
+	std::cout << "This is a zed_runtime. Closing zed...\n";
 	rt.close_zed();
 }
 

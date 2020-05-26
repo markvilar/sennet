@@ -454,14 +454,53 @@ zed_runtime::~zed_runtime()
 
 sl::ERROR_CODE zed_runtime::open_zed(sl::InitParameters& init_params)
 {
-	// TODO: Possibly add some assertions?
+	// TODO: Assertions?
 	return m_zed.open(init_params);
 }
 
 void zed_runtime::close_zed()
 {
-	// TODO: Possibly add some assertions?
-	m_zed.close();
+	// TODO: Assertions?
+	if (is_zed_opened())
+		m_zed.close();
+}
+
+bool zed_runtime::is_zed_opened()
+{
+	// TODO: Assertions?
+	return m_zed.isOpened();
+}
+
+bool zed_runtime::is_zed_recording()
+{
+	// TODO: Assertions?
+	return zed_recording_status().is_recording;
+}
+
+sl::RecordingStatus zed_runtime::zed_recording_status()
+{
+	// TODO: Assertions?
+	return m_zed.getRecordingStatus();
+}
+
+sl::RecordingParameters zed_runtime::zed_recording_parameters()
+{
+	// TODO: Assertions?
+	return m_zed.getRecordingParameters();
+}
+
+sl::ERROR_CODE zed_runtime::enable_zed_recording(
+	sl::RecordingParameters rec_params
+	)
+{
+	// TODO: Assertions?
+	return m_zed.enableRecording(rec_params);
+}
+
+void zed_runtime::disable_zed_recording()
+{
+	// TODO: Assertions?
+	m_zed.disableRecording();
 }
 
 void zed_runtime::exec_loop()
@@ -474,7 +513,6 @@ void zed_runtime::exec_loop()
 
 		if (m_local_queue.pop(act_ptr))
 		{
-			std::cout << "Found pending action!\n";
 			// Check action validity.
 			BOOST_ASSERT(act_ptr);
 
@@ -492,7 +530,6 @@ void zed_runtime::exec_loop()
 
 		if (m_parcel_queue.pop(raw_msg_ptr))
 		{
-			std::cout << "Found pending parcel!\n";
 			// Extract raw message.
 			boost::scoped_ptr<std::vector<char>> 
 				raw_msg(raw_msg_ptr);

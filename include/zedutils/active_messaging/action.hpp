@@ -47,7 +47,7 @@ public:
 	hello_world_action();
 
 	~hello_world_action();
-	
+
 	void operator()(runtime& rt);
 
 	void operator()(zed_runtime& rt);

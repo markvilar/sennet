@@ -1,5 +1,7 @@
+#include <chrono>	// std::chrono::seconds
 #include <iostream>	// std::cout
 #include <memory> 	// std::shared_ptr
+#include <thread>	// std::this_thread
 
 #include <boost/program_options.hpp>
 
@@ -25,15 +27,52 @@ void zed_main(zed::am::runtime& rt)
 	std::shared_ptr<boost::uint64_t> count(
 		new boost::uint64_t(conns.size()));
 
+	boost::asio::ip::address address;
+	unsigned short port;
 	for (auto node : conns)
 	{
-		std::cout << "Count: " << (*count)-- << "\n";
-		// Call the connection's async_write().
+		// Node: std::map< endpoint, shared_ptr<connection> >
+		address = node.first.address();
+		port = node.first.port();
+
+		std::cout << "\nNode " << --(*count) << "\n";
+		std::cout << "- Address: " << address << "\n";
+		std::cout << "- Port: " << port << "\n";
+
+		// Send request to open ZED.
 		node.second->async_write(open_action,
-			[count, &rt](boost::system::error_code const& ec)
+			[&address, &port](
+				boost::system::error_code const& ec
+				)
 			{
-				if (--(*count) == 0)
-					rt.stop();
+				if (ec)
+				{
+					std::cout << "Error when writing ZED "
+						<< "open action to address "
+						<< address << " on port " 
+						<< port << ".\n"
+						<< " - " << ec.value() << "\n";
+				}
+			});
+	}
+
+	for (auto node: conns)
+	{
+		address = node.first.address();
+		port = node.first.port();
+		
+		// Send request to close ZED.
+		node.second->async_write(close_action,
+			[&address, &port](boost::system::error_code const& ec)
+			{
+				if (ec)
+				{
+					std::cout << "Error when writing ZED "
+						<< "close action to address "
+						<< address << " on port " 
+						<< port << ".\n"
+						<< " - " << ec.value() << "\n";
+				}
 			});
 	}
 }
