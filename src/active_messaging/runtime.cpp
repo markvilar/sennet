@@ -438,7 +438,7 @@ zed_runtime::zed_runtime(
 	boost::uint64_t wait_for
 	)
 	: runtime(port, f, wait_for),
-	m_camera(),
+	m_zed(),
 	m_root(root)
 {
 }
@@ -449,19 +449,19 @@ zed_runtime::~zed_runtime()
 	stop();
 
 	// Close camera.
-	close_camera();
+	close_zed();
 }
 
-sl::ERROR_CODE zed_runtime::open_camera(sl::InitParameters& init_params)
+sl::ERROR_CODE zed_runtime::open_zed(sl::InitParameters& init_params)
 {
 	// TODO: Possibly add some assertions?
-	return m_camera.open(init_params);
+	return m_zed.open(init_params);
 }
 
-void zed_runtime::close_camera()
+void zed_runtime::close_zed()
 {
 	// TODO: Possibly add some assertions?
-	m_camera.close();
+	m_zed.close();
 }
 
 void zed_runtime::exec_loop()
@@ -474,6 +474,7 @@ void zed_runtime::exec_loop()
 
 		if (m_local_queue.pop(act_ptr))
 		{
+			std::cout << "Found pending action!\n";
 			// Check action validity.
 			BOOST_ASSERT(act_ptr);
 
@@ -491,6 +492,7 @@ void zed_runtime::exec_loop()
 
 		if (m_parcel_queue.pop(raw_msg_ptr))
 		{
+			std::cout << "Found pending parcel!\n";
 			// Extract raw message.
 			boost::scoped_ptr<std::vector<char>> 
 				raw_msg(raw_msg_ptr);
@@ -504,7 +506,6 @@ void zed_runtime::exec_loop()
 		}
 	}
 }
-
 
 } // namespace am
 }; // namespace zed

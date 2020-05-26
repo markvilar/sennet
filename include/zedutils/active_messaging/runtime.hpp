@@ -205,6 +205,7 @@ protected:
 
 	// Deserializes a parcel into an action object.
 	action* deserialize_parcel(std::vector<char>& raw_msg);
+
 }; // class runtime
 
 
@@ -214,7 +215,7 @@ class zed_runtime : public runtime
 {
 private:
 	// ZED camera.
-	sl::Camera m_camera;
+	sl::Camera m_zed;
 
 	// Main function handler for bootstrapping.
 	std::function<void(zed_runtime&)> m_main;
@@ -234,13 +235,13 @@ public:
 	~zed_runtime();
 
 	// Opens the ZED camera.
-	sl::ERROR_CODE open_camera(sl::InitParameters& init_params);
+	sl::ERROR_CODE open_zed(sl::InitParameters& init_params);
 
 	// Closes the ZED camera.
-	void close_camera();
+	void close_zed();
 
 private:
-	// TODO: Implement.
+	// Deserializes parcels and executes actions.
 	void exec_loop();
 
 }; // class zed_runtime

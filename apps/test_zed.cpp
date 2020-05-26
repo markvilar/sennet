@@ -1,5 +1,5 @@
-#include <iostream>
-#include <memory>
+#include <iostream>	// std::cout
+#include <memory> 	// std::shared_ptr
 
 #include <boost/program_options.hpp>
 
@@ -11,10 +11,14 @@
 void zed_main(zed::am::runtime& rt)
 {
 	std::cout << "Executing zed_main!\n";
+
+	// ZED initialization parameters.
 	sl::InitParameters ips;
 	ips.sdk_verbose = true;
 
-	zed::am::open_camera_request t(ips);
+	// Actions.
+	zed::am::zed_open_request open_action(ips);
+	zed::am::zed_close_request close_action;
 
 	auto conns = rt.get_connections();
 
@@ -22,12 +26,16 @@ void zed_main(zed::am::runtime& rt)
 		new boost::uint64_t(conns.size()));
 
 	for (auto node : conns)
-		node.second->async_write(t,
+	{
+		std::cout << "Count: " << (*count)-- << "\n";
+		// Call the connection's async_write().
+		node.second->async_write(open_action,
 			[count, &rt](boost::system::error_code const& ec)
 			{
 				if (--(*count) == 0)
 					rt.stop();
 			});
+	}
 }
 
 int main(int argc, char* argv[])
@@ -89,14 +97,14 @@ int main(int argc, char* argv[])
 		// Since we connect here, this is a client.
 		rt->connect(remote_host, remote_port);
 
-		std::cout << "Running as client, will not execute "
+		std::cout << "Running as server, will not execute "
 			<< "zed_main.\n";
 	}
 	else
 	{
 		rt.reset(new zed::am::zed_runtime(port, root, zed_main));
 
-		std::cout << "Running as server, will execute "
+		std::cout << "Running as client, will execute "
 			<< "zed_main.\n";
 	}
 

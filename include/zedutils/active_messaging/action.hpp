@@ -59,9 +59,9 @@ public:
 }; // class hello_world_action
 
 
-// ----------------------------- open_camera_request ---------------------------
+// ----------------------------- zed_open_request ---------------------------
 
-class open_camera_request : public action
+class zed_open_request : public action
 {
 private:
 	// TODO: Possibly add more members.
@@ -69,13 +69,13 @@ private:
 
 public:
 	// Basic constructor.
-	open_camera_request();
+	zed_open_request();
 
 	// Overloaded constructor.
-	open_camera_request(sl::InitParameters ip);
+	zed_open_request(sl::InitParameters ip);
 
 	// Destructor.
-	~open_camera_request();
+	~zed_open_request();
 
 	// Action for base runtime instances.
 	void operator()(runtime& rt);
@@ -94,19 +94,19 @@ public:
 
 	template <typename Archive>
 	void serialize(Archive& ar, const unsigned int version);
-}; // class open_camera_request
+}; // class zed_open_request
 
 
-// ---------------------------- close_camera_request ---------------------------
+// ---------------------------- zed_close_request ---------------------------
 
-class close_camera_request : public action
+class zed_close_request : public action
 {
 private:
 	
 public:
-	close_camera_request();
+	zed_close_request();
 
-	~close_camera_request();
+	~zed_close_request();
 	
 	// Action for base runtime instances.
 	void operator()(runtime& rt);
@@ -120,7 +120,7 @@ public:
 	// Function for serializing with Boost.Serialization.
 	template <typename Archive>
 	void serialize(Archive& ar, const unsigned int version);
-}; // class close_camera_request
+}; // class zed_close_request
 
 } // namespace am
 }; // namespace zed
