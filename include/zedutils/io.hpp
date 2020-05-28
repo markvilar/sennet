@@ -1,7 +1,8 @@
-#include <sl/Camera.hpp>
+#pragma once
 
 #include <iostream>
-#include <string>
+
+#include <sl/Camera.hpp>
 
 std::ostream& operator<<(std::ostream& os, const sl::InitParameters& params);
 

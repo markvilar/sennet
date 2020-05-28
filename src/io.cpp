@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-
 #include <zedutils/io.hpp>
 
 std::ostream& operator<<(std::ostream& os, const sl::InitParameters& params)

@@ -7,10 +7,11 @@
 
 #include <sl/Camera.hpp>
 
-#include <zedutils/active_messaging/action.hpp>
-#include <zedutils/active_messaging/runtime.hpp>
+#include <zedutils/am/actions/zed_close_request.hpp>
+#include <zedutils/am/actions/zed_open_request.hpp>
+#include <zedutils/am/core.hpp>
 
-void zed_main(zed::am::runtime& rt)
+void zed_main(am::runtime& rt)
 {
 	std::cout << "Executing zed_main!\n";
 
@@ -19,8 +20,8 @@ void zed_main(zed::am::runtime& rt)
 	ips.sdk_verbose = true;
 
 	// Actions.
-	zed::am::zed_open_request open_action(ips);
-	zed::am::zed_close_request close_action;
+	am::action::zed_open_request open_action(ips);
+	am::action::zed_close_request close_action;
 
 	auto conns = rt.get_connections();
 
@@ -118,11 +119,11 @@ int main(int argc, char* argv[])
 
 	std::string port = vm["port"].as<std::string>();
 
-	std::shared_ptr<zed::am::zed_runtime> rt;
+	std::shared_ptr<am::zed_runtime> rt;
 
 	if (vm.count("remote-host") || vm.count("remote-port"))
 	{
-		rt.reset(new zed::am::zed_runtime(port, root));
+		rt.reset(new am::zed_runtime(port, root));
 
 		std::string remote_host = "localhost";
 		std::string remote_port = port;
@@ -141,7 +142,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		rt.reset(new zed::am::zed_runtime(port, root, zed_main));
+		rt.reset(new am::zed_runtime(port, root, zed_main));
 
 		std::cout << "Running as client, will execute "
 			<< "zed_main.\n";

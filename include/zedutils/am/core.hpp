@@ -1,5 +1,8 @@
-#ifndef RUNTIME_HPP
-#define RUNTIME_HPP
+// Boost documentation references:
+// https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/reference.html
+// https://www.boost.org/doc/libs/1_67_0/libs/assert/doc/html/assert.html
+
+#pragma once
 
 #include <atomic>
 #include <iostream>
@@ -20,21 +23,36 @@
 #include <boost/iostreams/stream.hpp>
 #include <boost/ref.hpp>
 
-#include <zedutils/active_messaging/action.hpp>
-#include <zedutils/active_messaging/container_device.hpp>
+#include <sl/Camera.hpp>
 
-namespace zed { namespace am {
-
-// Boost documentation references:
-// https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/reference.html
-// https://www.boost.org/doc/libs/1_67_0/libs/assert/doc/html/assert.html
-
+namespace am {
 
 // Forward declaration
-class action;
 class runtime;
 class zed_runtime;
 
+namespace action {
+
+// -------------------------------- base_action --------------------------------
+
+class base_action 
+{
+private:
+
+public:
+	virtual ~base_action() {}
+	
+	virtual void operator()(runtime& rt) = 0;
+	virtual void operator()(zed_runtime& rt) = 0;
+
+	virtual base_action* clone() const = 0;
+
+	// Member function needed in order to use Boost.Serialization.
+	template<typename Archive>
+	void serialize(Archive& ar, const unsigned int version) {};
+};
+
+} // namespace action
 
 // -------------------------------- connection ---------------------------------
 
@@ -68,17 +86,17 @@ public:
 	void async_read();
 
 	// Asynchronously write an action to the socket.
-	void async_write(action const& act);
+	void async_write(action::base_action const& act);
 
 	// Asynchronously write an action to the socket.
 	void async_write(
-		action const& act,
+		action::base_action const& act,
 		std::function<void(boost::system::error_code const&)> handler
 		);
 
 	// Asynchronously write worker. It performs the action serializing.
 	void async_write_worker(
-		std::shared_ptr<action> act,
+		std::shared_ptr<action::base_action> act,
 		std::function<void(boost::system::error_code const&)> handler
 		);
 
@@ -95,8 +113,7 @@ public:
 		std::shared_ptr<std::vector<char>> out_buffer,
 		std::function<void(boost::system::error_code const&)> handler
 		);
-}; // class connection
-
+};
 
 // ---------------------------------- runtime ----------------------------------
 
@@ -201,13 +218,12 @@ private:
 
 protected:
 	// Serializes an action object into a parcel.
-	std::vector<char>* serialize_parcel(action const& act);
+	std::vector<char>* serialize_parcel(action::base_action const& act);
 
 	// Deserializes a parcel into an action object.
-	action* deserialize_parcel(std::vector<char>& raw_msg);
+	action::base_action* deserialize_parcel(std::vector<char>& raw_msg);
 
-}; // class runtime
-
+};
 
 // -------------------------------- zed_runtime --------------------------------
 
@@ -261,10 +277,6 @@ public:
 private:
 	// Deserializes parcels and executes actions.
 	void exec_loop();
+};
 
-}; // class zed_runtime
-
-} // namespace am
-}; // namespace zed
-
-#endif // RUNTIME_HPP
+}; // namespace am

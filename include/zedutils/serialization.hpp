@@ -1,5 +1,4 @@
-#ifndef ZEDUTILS_SERIALIZATION_HPP
-#define ZEDUTILS_SERIALIZATION_HPP
+#pragma once
 
 #include <string>
 
@@ -141,5 +140,3 @@ void load(Archive& ar, sl::String& s, const unsigned int version)
 	
 } // namespace serialization
 }; // namespace boost
-
-#endif // ZEDUTILS_SERIALIZATION_HPP

@@ -1,15 +1,16 @@
 # Headers
 set(HEADER_LIST 
-	"${PROJECT_SOURCE_DIR}/include/zedutils/active_messaging/action.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/active_messaging/container_device.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/active_messaging/runtime.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/hello_world.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_close_request.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_open_request.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/container_device.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/core.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/io.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/serialization.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(zedutils_library 
-	active_messaging/action.cpp
-	active_messaging/runtime.cpp 
+	am/core.cpp 
 	io.cpp 
 	${HEADER_LIST})
 	

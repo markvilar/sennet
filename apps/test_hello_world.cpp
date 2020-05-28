@@ -3,13 +3,13 @@
 
 #include <boost/program_options.hpp> 		// program_options
 
-#include <zedutils/active_messaging/action.hpp>
-#include <zedutils/active_messaging/runtime.hpp>
+#include <zedutils/am/actions/hello_world.hpp>
+#include <zedutils/am/core.hpp>
 
 
-void hello_world_main(zed::am::runtime& rt)
+void hello_world_main(am::runtime& rt)
 {
-	zed::am::hello_world_action t;
+	am::action::hello_world t;
 
     	auto conns = rt.get_connections();
 
@@ -62,11 +62,11 @@ int main(int argc, char** argv)
 
 	std::string port = vm["port"].as<std::string>();
 
-	std::shared_ptr<zed::am::runtime> rt;
+	std::shared_ptr<am::runtime> rt;
 
 	if (vm.count("remote-host") || vm.count("remote-port"))
 	{
-		rt.reset(new zed::am::runtime(port));
+		rt.reset(new am::runtime(port));
 
 		std::cout << "Running as client, will not execute "
 			<< "hello_world_main\n";
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 	}
 	else
 	{
-		rt.reset(new zed::am::runtime(port, hello_world_main));
+		rt.reset(new am::runtime(port, hello_world_main));
 
 		std::cout << "Running as server, will execute "
 			<< "hello_world_main\n";

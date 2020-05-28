@@ -1,5 +1,4 @@
-#ifndef CONTAINER_DEVICE_HPP
-#define CONTAINER_DEVICE_HPP
+#pragma once
 
 #include <algorithm>				// copy, min
 #include <iosfwd>				// streamsize
@@ -8,7 +7,7 @@
 #include <boost/iostreams/categories.hpp>	// source_tag
 #include <boost/iostreams/positioning.hpp>	// stream_offset
 
-namespace zed { namespace am {
+namespace am {
 
 // This is a Boost.IoStreams SeekableDevice that can be used to create an
 // (io)stream on top of a random access container (i.e. vector<>).
@@ -149,7 +148,4 @@ public:
 
 }; // class container_device
 
-} // namespace am
-}; // namespace zed
-
-#endif // CONTAINER_DEVICE_HPP
+}; // namespace am

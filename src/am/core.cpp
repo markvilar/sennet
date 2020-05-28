@@ -1,7 +1,7 @@
-#include <zedutils/active_messaging/runtime.hpp>
+#include <zedutils/am/container_device.hpp>
+#include <zedutils/am/core.hpp>
 
-namespace zed { namespace am {
-
+namespace am {
 
 // --------------------------------- connection --------------------------------
 
@@ -48,7 +48,7 @@ void connection::async_read()
 			boost::asio::placeholders::error));
 }
 
-void connection::async_write(action const& act)
+void connection::async_write(action::base_action const& act)
 {
 	// Create a default function if a handler is not specified.
 	std::function<void(boost::system::error_code const&)> h;
@@ -58,13 +58,13 @@ void connection::async_write(action const& act)
 }
 
 void connection::async_write(
-	action const& act,
+	action::base_action const& act,
 	std::function<void(boost::system::error_code const&)> handler
 	)
 {
 	// Create a shared pointer to a clone of the action to make sure it
 	// stays alive.
-	std::shared_ptr<action> act_ptr(act.clone());
+	std::shared_ptr<action::base_action> act_ptr(act.clone());
 
 	// Add the action async_write_worker(act_ptr, handler) to the runtime
 	// action queue.
@@ -74,7 +74,7 @@ void connection::async_write(
 }
 
 void connection::async_write_worker(
-	std::shared_ptr<action> act,
+	std::shared_ptr<action::base_action> act,
 	std::function<void(boost::system::error_code const&)> handler
 	)
 {
@@ -344,7 +344,8 @@ void runtime::exec_loop()
 	std::cout << "Executing runtime's execution loop!\n";
 	while (!m_stop_flag.load())
 	{
-		// Look for pending actions to execute.
+		// Look for pending actions that has been posted locally to 
+		// execute.
 		std::function<void(runtime&)>* act_ptr = 0;
 
 		if (m_local_queue.pop(act_ptr))
@@ -371,7 +372,7 @@ void runtime::exec_loop()
 				raw_msg(raw_msg_ptr);
 
 			// Create action from raw message.
-			boost::scoped_ptr<action>
+			boost::scoped_ptr<action::base_action>
 				act(deserialize_parcel(*raw_msg));
 			
 			// Execute action.
@@ -380,7 +381,7 @@ void runtime::exec_loop()
 	}
 }
 
-std::vector<char>* runtime::serialize_parcel(action const& act)
+std::vector<char>* runtime::serialize_parcel(action::base_action const& act)
 {
 	// TODO: Look more into this!
 	std::vector<char>* raw_msg_ptr = new std::vector<char>();
@@ -393,7 +394,7 @@ std::vector<char>* runtime::serialize_parcel(action const& act)
 	boost::iostreams::stream<io_device_type> io(*raw_msg_ptr);
 
 	// Initialize action pointer to be input to archive.
-	action const* act_ptr = &act;
+	action::base_action const* act_ptr = &act;
 
 	// Local scope in order to make sure archive goes out of scope before
 	// proceeding.
@@ -405,7 +406,7 @@ std::vector<char>* runtime::serialize_parcel(action const& act)
 	return raw_msg_ptr;
 }
 
-action* runtime::deserialize_parcel(std::vector<char>& raw_msg)
+action::base_action* runtime::deserialize_parcel(std::vector<char>& raw_msg)
 {
 	// Define I/O type.
 	typedef container_device<std::vector<char>> io_device_type;
@@ -414,7 +415,7 @@ action* runtime::deserialize_parcel(std::vector<char>& raw_msg)
 	// archive.
 	boost::iostreams::stream<io_device_type> io(raw_msg);
 
-	action* act_ptr = 0;
+	action::base_action* act_ptr = 0;
 
 	// Local scope in order to make sure archive goes out of scope before
 	// proceeding.
@@ -427,9 +428,6 @@ action* runtime::deserialize_parcel(std::vector<char>& raw_msg)
 
 	return act_ptr;
 }
-
-
-// -------------------------------- zed_runtime --------------------------------
 
 zed_runtime::zed_runtime(
 	std::string port,
@@ -535,7 +533,7 @@ void zed_runtime::exec_loop()
 				raw_msg(raw_msg_ptr);
 
 			// Create action from raw message.
-			boost::scoped_ptr<action>
+			boost::scoped_ptr<action::base_action>
 				act(deserialize_parcel(*raw_msg));
 			
 			// Execute action.
@@ -544,5 +542,4 @@ void zed_runtime::exec_loop()
 	}
 }
 
-} // namespace am
-}; // namespace zed
+}; // namespace am
