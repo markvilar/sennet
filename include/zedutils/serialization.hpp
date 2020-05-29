@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <string>
 
 #include <boost/serialization/array.hpp>
@@ -109,11 +110,6 @@ void serialize(
 template <class Archive>
 void save(Archive& ar, const sl::String& s, const unsigned int version)
 {
-	// TODO: Implement!
-	// The sl::String has to be const in this function, but
-	// the size() function is not defined for const sl::String. Need
-	// to find a way to solve this.
-
 	(void)version;
 
 	// TODO: This implementation is ineffective. Look to improve
@@ -128,15 +124,47 @@ void save(Archive& ar, const sl::String& s, const unsigned int version)
 template <class Archive>
 void load(Archive& ar, sl::String& s, const unsigned int version)
 {
-	// TODO: Implement!
-
 	(void)version;
-	
+
 	std::string ss;
 	ar & ss;
 	const char* ptr = ss.data();
 	s.set(ptr);
 }
-	
+
+// --------------------------- std::chrono::duration ---------------------------
+
+template <class Archive, class Rep, class Period>
+inline void serialize(
+	Archive& ar, 
+	std::chrono::duration<Rep, Period>& t,
+	const unsigned int version
+	)
+{
+	boost::serialization::split_free(ar, t, version);
+}
+
+template <class Archive, class Rep, class Period>
+inline void save(
+	Archive& ar,
+	std::chrono::duration<Rep, Period> const& t,
+	const unsigned int version
+	)
+{
+	ar << t.count();
+}
+
+template <class Archive, class Rep, class Period>
+inline void load(
+	Archive& ar,
+	std::chrono::duration<Rep, Period>& t,
+	const unsigned int version
+	)
+{
+	Rep rep;
+	ar >> rep;
+	t = std::chrono::duration<Rep, Period>(rep);
+}
+
 } // namespace serialization
 }; // namespace boost

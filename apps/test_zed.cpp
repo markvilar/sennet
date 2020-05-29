@@ -7,8 +7,7 @@
 
 #include <sl/Camera.hpp>
 
-#include <zedutils/am/actions/zed_close_request.hpp>
-#include <zedutils/am/actions/zed_open_request.hpp>
+#include <zedutils/am/actions.hpp>
 #include <zedutils/am/core.hpp>
 
 void zed_main(am::runtime& rt)
@@ -20,8 +19,9 @@ void zed_main(am::runtime& rt)
 	ips.sdk_verbose = true;
 
 	// Actions.
-	am::action::zed_open_request open_action(ips);
-	am::action::zed_close_request close_action;
+	am::action::request_zed_open open_action(ips);
+	am::action::request_zed_close close_action;
+	am::action::sleep sleep_action(std::chrono::seconds(5));
 
 	auto conns = rt.get_connections();
 
@@ -52,6 +52,26 @@ void zed_main(am::runtime& rt)
 						<< "open action to address "
 						<< address << " on port " 
 						<< port << ".\n"
+						<< " - " << ec.value() << "\n";
+				}
+			});
+	}
+
+	for (auto node: conns)
+	{
+		address = node.first.address();
+		port = node.first.port();
+		
+		// Send request to close ZED.
+		node.second->async_write(sleep_action,
+			[&address, &port](boost::system::error_code const& ec)
+			{
+				if (ec)
+				{
+					std::cout << "Error when writing "
+						<< "sleep close action to "
+						<< "address" << address
+						<< " on port " << port << ".\n"
 						<< " - " << ec.value() << "\n";
 				}
 			});

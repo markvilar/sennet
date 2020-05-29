@@ -1,8 +1,10 @@
 # Headers
 set(HEADER_LIST 
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/hello_world.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_close_request.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_open_request.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/request_zed_close.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/request_zed_open.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/sleep.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/container_device.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/core.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/io.hpp"

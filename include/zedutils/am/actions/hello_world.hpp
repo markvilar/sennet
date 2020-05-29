@@ -9,7 +9,7 @@
 
 namespace am { namespace action {
 
-class hello_world: public base_action
+class hello_world : public base_action
 {
 public:
 	hello_world()

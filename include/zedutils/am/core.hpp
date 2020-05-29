@@ -27,13 +27,11 @@
 
 namespace am {
 
-// Forward declaration
+// Forward declaration.
 class runtime;
 class zed_runtime;
 
 namespace action {
-
-// -------------------------------- base_action --------------------------------
 
 class base_action 
 {
@@ -54,7 +52,6 @@ public:
 
 } // namespace action
 
-// -------------------------------- connection ---------------------------------
 
 class connection : public std::enable_shared_from_this<connection>
 {
@@ -115,7 +112,6 @@ public:
 		);
 };
 
-// ---------------------------------- runtime ----------------------------------
 
 class runtime
 {
@@ -225,7 +221,6 @@ protected:
 
 };
 
-// -------------------------------- zed_runtime --------------------------------
 
 class zed_runtime : public runtime
 {

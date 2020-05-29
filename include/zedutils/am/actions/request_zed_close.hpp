@@ -7,16 +7,16 @@
 
 namespace am { namespace action {
 
-class zed_close_request : public base_action
+class request_zed_close : public base_action
 {
 private:
 	
 public:
-	zed_close_request()
+	request_zed_close()
 	{
 	}
 
-	~zed_close_request()
+	~request_zed_close()
 	{
 	}
 
@@ -37,7 +37,7 @@ public:
 	// Clone function.
 	base_action* clone() const
 	{
-		return new zed_close_request();
+		return new request_zed_close();
 	}
 
 	// Function for serializing with Boost.Serialization.
@@ -51,5 +51,5 @@ public:
 } // namespace action
 }; // namespace am
 
-BOOST_CLASS_EXPORT_GUID(am::action::zed_close_request,
-	"am::action::zed_close_request");
+BOOST_CLASS_EXPORT_GUID(am::action::request_zed_close,
+	"am::action::request_zed_close");

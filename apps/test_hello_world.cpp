@@ -3,7 +3,7 @@
 
 #include <boost/program_options.hpp> 		// program_options
 
-#include <zedutils/am/actions/hello_world.hpp>
+#include <zedutils/am/actions.hpp>
 #include <zedutils/am/core.hpp>
 
 

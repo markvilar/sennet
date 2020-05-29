@@ -1,5 +1,8 @@
 #pragma once
 
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/export.hpp>
+
 #include <sl/Camera.hpp>
 
 #include <zedutils/am/core.hpp>
@@ -7,7 +10,7 @@
 
 namespace am { namespace action {
 
-class zed_open_request : public base_action
+class request_zed_open : public base_action
 {
 private:
 	// TODO: Possibly add more members.
@@ -15,19 +18,19 @@ private:
 
 public:
 	// Basic constructor.
-	zed_open_request()
+	request_zed_open()
 		: m_init_params()
 	{
 	}
 
 	// Overloaded constructor.
-	zed_open_request(sl::InitParameters ip)
+	request_zed_open(sl::InitParameters ip)
 		: m_init_params(ip)
 	{
 	}
 
 	// Destructor.
-	~zed_open_request()
+	~request_zed_open()
 	{
 	}
 
@@ -48,7 +51,7 @@ public:
 	// Clone function.
 	base_action* clone() const
 	{
-		return new zed_open_request(m_init_params);
+		return new request_zed_open(m_init_params);
 	}
 
 	// Gets the initialization parameters.
@@ -73,5 +76,5 @@ public:
 } // namespace action
 }; // namespace am
 
-BOOST_CLASS_EXPORT_GUID(am::action::zed_open_request, 
-	"am::action::zed_open_request");
+BOOST_CLASS_EXPORT_GUID(am::action::request_zed_open, 
+	"am::action::request_zed_open");
