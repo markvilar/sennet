@@ -6,12 +6,13 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
+#include <zedutils/am/actions/request.hpp>
 #include <zedutils/am/core.hpp>
 #include <zedutils/serialization.hpp>
 
 namespace am { namespace action {
 
-class sleep : public base_action
+class sleep : public request
 {
 private:
 	std::chrono::milliseconds m_duration;
@@ -55,7 +56,7 @@ public:
 	template <typename Archive>
 	void serialize(Archive& ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object<base_action>(*this);
+		ar & boost::serialization::base_object<request>(*this);
 		ar & m_duration;
 	}
 
@@ -71,8 +72,8 @@ public:
 	}
 };
 
-} // namespace action
-}; // namespace am
+}
+};
 
 BOOST_CLASS_EXPORT_GUID(am::action::sleep, 
 	"am::action::sleep");

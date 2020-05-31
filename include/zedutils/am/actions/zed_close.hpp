@@ -3,20 +3,22 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
+#include <zedutils/am/actions/request.hpp>
 #include <zedutils/am/core.hpp>
 
-namespace am { namespace action {
+namespace am { 
+namespace action {
 
-class request_zed_close : public base_action
+class zed_close : public request
 {
 private:
 	
 public:
-	request_zed_close()
+	zed_close()
 	{
 	}
 
-	~request_zed_close()
+	~zed_close()
 	{
 	}
 
@@ -37,19 +39,19 @@ public:
 	// Clone function.
 	base_action* clone() const
 	{
-		return new request_zed_close();
+		return new zed_close();
 	}
 
 	// Function for serializing with Boost.Serialization.
 	template <typename Archive>
 	void serialize(Archive& ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object<base_action>(*this);
+		ar & boost::serialization::base_object<request>(*this);
 	}
 }; 
 
 } // namespace action
 }; // namespace am
 
-BOOST_CLASS_EXPORT_GUID(am::action::request_zed_close,
-	"am::action::request_zed_close");
+BOOST_CLASS_EXPORT_GUID(am::action::zed_close,
+	"am::action::zed_close");
