@@ -14,7 +14,8 @@
 BOOST_SERIALIZATION_SPLIT_FREE(sl::Mat)
 BOOST_SERIALIZATION_SPLIT_FREE(sl::String)
 
-namespace boost { namespace serialization {
+namespace boost { 
+namespace serialization {
 
 // ----------------------------------- sl::Mat ---------------------------------
 
@@ -83,11 +84,13 @@ void serialize(
 	ar & ips.sdk_gpu_id;
 	ar & ips.sdk_verbose;
 	ar & ips.sdk_verbose_log_file;
-	//ar & ips.sdk_cuda_ctx;
 	ar & ips.input;
 	ar & ips.optional_settings_path;
 	ar & ips.sensors_required;
 	ar & ips.enable_image_enhancement;
+
+	// TODO: Look into implementing serialization method for CUcontext.
+	// ar & ips.sdk_cuda_ctx;
 }
 
 
@@ -137,34 +140,65 @@ void load(Archive& ar, sl::String& s, const unsigned int version)
 template <class Archive, class Rep, class Period>
 inline void serialize(
 	Archive& ar, 
-	std::chrono::duration<Rep, Period>& t,
+	std::chrono::duration<Rep, Period>& d,
 	const unsigned int version
 	)
 {
-	boost::serialization::split_free(ar, t, version);
+	boost::serialization::split_free(ar, d, version);
 }
 
 template <class Archive, class Rep, class Period>
 inline void save(
 	Archive& ar,
-	std::chrono::duration<Rep, Period> const& t,
+	std::chrono::duration<Rep, Period> const& d,
 	const unsigned int version
 	)
 {
-	ar << t.count();
+	ar << d.count();
 }
 
 template <class Archive, class Rep, class Period>
 inline void load(
 	Archive& ar,
-	std::chrono::duration<Rep, Period>& t,
+	std::chrono::duration<Rep, Period>& d,
 	const unsigned int version
 	)
 {
 	Rep rep;
 	ar >> rep;
-	t = std::chrono::duration<Rep, Period>(rep);
+	d = std::chrono::duration<Rep, Period>(rep);
 }
 
-} // namespace serialization
-}; // namespace boost
+// ------------------------------- sl::Timestamp -------------------------------
+
+template <class Archive>
+inline void serialize(
+	Archive& ar,
+	sl::Timestamp& t,
+	const unsigned int version
+	)
+{
+	ar & t.data_ns;
+}
+
+// --------------------------- sl::RuntimeParameters ---------------------------
+
+template <class Archive>
+inline void serialize(
+	Archive& ar,
+	sl::RuntimeParameters rt,
+	const unsigned int version
+	)
+{
+	// TODO: As of version 3.1 the sl::RuntimeParameters has an additional
+	// member variable called texture_confidence_threshold. Look into adding
+	// it to the serialization function.
+	ar & rt.sensing_mode;
+	ar & rt.measure3D_reference_frame;
+	ar & rt.enable_depth;
+	ar & rt.confidence_threshold;
+	ar & rt.textureness_confidence_threshold;
+}
+
+}
+};

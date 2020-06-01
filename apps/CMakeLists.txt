@@ -13,10 +13,10 @@ add_executable(node_zed node_zed.cpp)
 target_compile_features(node_zed PRIVATE cxx_std_17)
 target_link_libraries(node_zed PRIVATE zedutils_library)
 
-# Test - Generic
-add_executable(test_generic test_generic.cpp)
-target_compile_features(test_generic PRIVATE cxx_std_17)
-target_link_libraries(test_generic PRIVATE zedutils_library)
+# Sandbox
+add_executable(sandbox sandbox.cpp)
+target_compile_features(sandbox PRIVATE cxx_std_17)
+target_link_libraries(sandbox PRIVATE zedutils_library)
 
 # Test - Hello world
 add_executable(test_hello_world test_hello_world.cpp)

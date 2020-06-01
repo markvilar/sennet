@@ -17,13 +17,15 @@ class zed_open : public request
 public:
 	// Basic constructor.
 	zed_open()
-		: m_init_params()
+		: request(),
+		m_init_params()
 	{
 	}
 
 	// Overloaded constructor.
 	zed_open(sl::InitParameters ip)
-		: m_init_params(ip)
+		: request(),
+		m_init_params(ip)
 	{
 	}
 
@@ -65,15 +67,15 @@ public:
 	template <typename Archive>
 	void serialize(Archive& ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object<base_action>(*this);
+		ar & boost::serialization::base_object<request>(*this);
 		ar & m_init_params;
 	}
 private:
 	sl::InitParameters m_init_params;
 };
 
-} // namespace action
-}; // namespace am
+}
+};
 
 BOOST_CLASS_EXPORT_GUID(am::action::zed_open, 
 	"am::action::zed_open");

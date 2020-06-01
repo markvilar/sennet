@@ -5,7 +5,7 @@ zedutils is a library of utility functions for the ZED and ZED Mini. zedutils is
 The requirements of zedutils are:
 - ZED SDK 3.X (available for Windows 10 and Ubuntu 16/18)
   - CUDA 9.X/10.X (dependent on the ZED SDK installation)
-- C++17/20
+- C++17 compiler (gcc 7.X+, clang 8.X+)
 - Boost 1.72.0
 
 ## Configuring, building and testing

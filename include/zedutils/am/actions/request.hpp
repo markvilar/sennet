@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <tuple>
+
 #include <zedutils/am/core.hpp>
 
 namespace am { 
@@ -8,7 +11,6 @@ namespace action {
 class request : public base_action
 {
 public:
-	// TODO: Revise this class!
 	request()
 		: m_sender_addr(""),
 		m_sender_port(0),
@@ -35,13 +37,47 @@ public:
 		m_has_responder = true;
 	}
 
+	request(
+		const std::string& sender_addr, 
+		const unsigned short sender_port
+		)
+		: request()
+	{
+		m_sender_addr = sender_addr;
+		m_sender_port = sender_port;
+	}
+
+	request(
+		const std::string& sender_addr, 
+		const unsigned short sender_port,
+		const std::string& responder_addr,
+		const unsigned short responder_port
+		)
+		: request(sender_addr, sender_port)
+	{
+		m_responder_addr = responder_addr;
+		m_responder_port = responder_port;
+		m_has_responder = true;
+	}
+
 	// Virtual destructor due to this class being an interface.
 	virtual ~request() {}
 
-	// TODO: Implement get functions.
+	std::tuple<std::string, unsigned short> get_sender() const
+	{
+		return std::make_tuple(m_sender_addr, m_sender_port);
+	}
 
+	std::tuple<std::string, unsigned short> get_responder() const
+	{
+		return std::make_tuple(m_responder_addr, m_responder_port);
+	}
+
+	bool has_responder() const { return m_has_responder; }
+
+	// Sets the sender.
 	inline void set_sender(
-		const std::string addr, 
+		const std::string& addr, 
 		const unsigned short port
 		)
 	{
@@ -55,7 +91,7 @@ public:
 	}
 
 	inline void set_responder(
-		const std::string addr,
+		const std::string& addr,
 		const unsigned short port
 		)
 	{
@@ -70,6 +106,12 @@ public:
 	{
 		set_responder(responder.address().to_string(),
 			responder.port());
+	}
+
+	bool is_responder(const boost::asio::ip::tcp::endpoint& ep)
+	{
+		return (ep.address().to_string() == m_responder_addr) and
+			(ep.port() == m_responder_port);
 	}
 
 	template <typename Archive>

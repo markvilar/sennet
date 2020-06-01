@@ -45,7 +45,7 @@ public:
 	// Action for runtime.
 	void operator()(runtime& rt) override
 	{
-		std::cout << "This is a runtime. Cannot send image...\n";
+		std::cout << "This is a runtime. Cannot retrieve ZED image...\n";
 	}
 
 	// Action for zed_runtime.
@@ -67,11 +67,13 @@ public:
 	{
 		ar & boost::serialization::base_object<request>(*this);
 		ar & m_run_params;
+		ar & m_time_ref;
 		ar & m_view;
 	}
 
 private:
 	sl::RuntimeParameters m_run_params;
+	sl::TIME_REFERENCE m_time_ref;
 	sl::VIEW m_view;
 };
 

@@ -19,8 +19,8 @@ void zed_main(am::runtime& rt)
 	ips.sdk_verbose = true;
 
 	// Actions.
-	am::action::request_zed_open open_action(ips);
-	am::action::request_zed_close close_action;
+	am::action::zed_open open_action(ips);
+	am::action::zed_close close_action;
 	am::action::sleep sleep_action(std::chrono::seconds(5));
 
 	auto conns = rt.get_connections();

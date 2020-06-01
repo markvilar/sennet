@@ -14,10 +14,38 @@ class zed_close : public request
 private:
 	
 public:
-	zed_close()
-	{
-	}
+	zed_close() 
+		: request()
+	{}
 
+	zed_close(const boost::asio::ip::tcp::endpoint& sender)
+		: request(sender)
+	{}
+
+	zed_close(
+		const boost::asio::ip::tcp::endpoint& sender,
+		const boost::asio::ip::tcp::endpoint& responder
+		)
+		: request(sender, responder)
+	{}
+
+	zed_close(
+		const std::string sender_addr,
+		const unsigned short sender_port
+		)
+		: request(sender_addr, sender_port)
+	{}
+
+	zed_close(
+		const std::string sender_addr,
+		const unsigned short sender_port,
+		const std::string responder_addr,
+		const unsigned short responder_port
+		)
+		: request(sender_addr, sender_port, 
+			responder_addr, responder_port)
+	{}
+	
 	~zed_close()
 	{
 	}
@@ -36,7 +64,7 @@ public:
 		rt.close_zed();
 	}
 
-	// Clone function.
+	// Clone function. TODO: Implement proper cloning.
 	base_action* clone() const
 	{
 		return new zed_close();
@@ -50,8 +78,8 @@ public:
 	}
 }; 
 
-} // namespace action
-}; // namespace am
+}
+};
 
 BOOST_CLASS_EXPORT_GUID(am::action::zed_close,
 	"am::action::zed_close");

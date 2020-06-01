@@ -10,7 +10,8 @@
 #include <zedutils/am/core.hpp>
 #include <zedutils/serialization.hpp>
 
-namespace am { namespace action {
+namespace am { 
+namespace action {
 
 class sleep : public request
 {

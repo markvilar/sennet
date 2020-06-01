@@ -8,7 +8,8 @@
 #include <zedutils/am/core.hpp>
 #include <zedutils/serialization.hpp>
 
-namespace am { namespace action {
+namespace am { 
+namespace action {
 
 class zed_image : public response
 {
@@ -41,14 +42,14 @@ public:
 	{
 		ar & boost::serialization::base_object<base_action>(*this);
 		ar & m_image;
-		ar & m_view;
 		ar & m_timestamp;
+		ar & m_view;
 	}
 
 private:
 	sl::Mat m_image;
-	sl::VIEW m_view;
 	sl::Timestamp m_timestamp;
+	sl::VIEW m_view;
 };
 
 }
