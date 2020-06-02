@@ -86,7 +86,7 @@ endif()
 
 
 # External libraries
-#add_subdirectory(extern/boostnet)
+add_subdirectory(extern/glad)
 
 
 # Testing only available if this is the main app

@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 
+#include <boost/asio.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
@@ -10,6 +11,8 @@
 
 #include <sl/Camera.hpp>
 
+#include <zedutils/am/actions.hpp>
+#include <zedutils/am/core.hpp>
 #include <zedutils/io.hpp>
 #include <zedutils/serialization.hpp>
 
@@ -114,6 +117,66 @@ void load_matrix()
 	ifs.close();
 }
 
+void save_zed_close()
+{
+	namespace io = boost::iostreams;
+
+	am::action::zed_close close_action("127.0.0.1", 3000, "129.1.1.5", 1000);
+
+	std::ofstream ofs("zed_close.txt", std::ios::out | std::ios::binary);
+
+	// Use scope to ensure archive goes out of scope before stream.
+	{
+		// Create output archive.
+		boost::archive::text_oarchive oa(ofs);
+		
+		// Send close action to archive.
+		oa << close_action;
+
+		std::cout << "\nSaved close action!\n";
+		auto [s_addr, s_port] = close_action.get_sender();
+		auto [r_addr, r_port] = close_action.get_responder();
+		std::cout << " - sender: " << s_addr << ", " << s_port << "\n"
+			<< " - responder: " << r_addr << ", " << r_port << "\n";
+	}
+	
+	ofs.close();
+}
+
+void load_zed_close()
+{
+	namespace boost_ip = boost::asio::ip;
+	namespace io = boost::iostreams;
+
+	am::action::zed_close close_action;
+	boost_ip::tcp::endpoint ep(
+		boost_ip::address::from_string("129.1.1.5"),
+		1000);
+
+	std::ifstream ifs("zed_close.txt", std::ios::out | std::ios::binary);
+
+	// Use scope to ensure archive goes out of scope before stream.
+	{
+		// Create input archive
+		boost::archive::text_iarchive ia(ifs);
+
+		// Load matrix from archive.
+		ia >> close_action;
+
+		std::cout << "\nLoaded close action!\n";
+		auto [s_addr, s_port] = close_action.get_sender();
+		auto [r_addr, r_port] = close_action.get_responder();
+		std::cout << " - sender: " << s_addr << ":" << s_port << "\n"
+			<< " - responder: " << r_addr << ":" << r_port << "\n";
+		std::cout << "\nEndpoint: " << ep
+			<< "\n - is sender: " << close_action.is_sender(ep)
+			<< "\n - is responder: " << close_action.is_responder(ep)
+			<< "\n";
+	}
+	
+	ifs.close();
+}
+
 int main(int argc, char* argv[])
 {
 	// Test serialization for matrices.
@@ -123,5 +186,9 @@ int main(int argc, char* argv[])
 	// Test serialization for strings.
 	save_string();
 	load_string();
+
+	// Test serialization for zed_close action.
+	save_zed_close();
+	load_zed_close();
 	return 0;
 }

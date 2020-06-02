@@ -1,6 +1,7 @@
 #pragma once
 
 #include <zedutils/am/actions/hello_world.hpp>
+#include <zedutils/am/actions/invalid_request.hpp>
 #include <zedutils/am/actions/request.hpp>
 #include <zedutils/am/actions/response.hpp>
 #include <zedutils/am/actions/sleep.hpp>

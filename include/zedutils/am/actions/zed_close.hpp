@@ -14,20 +14,16 @@ class zed_close : public request
 private:
 	
 public:
+	// Default constructor.
 	zed_close() 
 		: request()
 	{}
 
-	zed_close(const boost::asio::ip::tcp::endpoint& sender)
-		: request(sender)
-	{}
-
-	zed_close(
-		const boost::asio::ip::tcp::endpoint& sender,
-		const boost::asio::ip::tcp::endpoint& responder
-		)
-		: request(sender, responder)
-	{}
+	// Copy constructor.
+	zed_close(const zed_close& other)
+		: request(other)
+	{
+	}
 
 	zed_close(
 		const std::string sender_addr,
@@ -45,7 +41,7 @@ public:
 		: request(sender_addr, sender_port, 
 			responder_addr, responder_port)
 	{}
-	
+
 	~zed_close()
 	{
 	}
@@ -67,7 +63,7 @@ public:
 	// Clone function. TODO: Implement proper cloning.
 	base_action* clone() const
 	{
-		return new zed_close();
+		return new zed_close(*this);
 	}
 
 	// Function for serializing with Boost.Serialization.

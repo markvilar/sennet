@@ -34,8 +34,7 @@ To build zedutils docs:
 cmaek --build build --target docs
 ```
 
-## Planned features
-- [] Error handling functions
-- [] ZED camera controller
-- [] ZED camera calibration
-- [] ZED data recorder
+## TODOs
+- Implement serialization of boost::asio::ip::basic_endpoint.
+- Add sender/responder endpoints in requests and responses.
+- Add logging system.

@@ -19,23 +19,29 @@ private:
 	std::chrono::milliseconds m_duration;
 
 public:
+	// Default constructor.
 	sleep()
 		: m_duration(0)
+	{}
+
+	// Copy constructor.
+	sleep(const sleep& other)
+		: request(other)
 	{
+		m_duration = other.m_duration;
 	}
 
+	// Constructor.
 	template <class Rep, class Period>
 	sleep(std::chrono::duration<Rep, Period> duration)
 		: m_duration(
 			std::chrono::duration_cast<decltype(m_duration)>
 				(duration)
 			)
-	{
-	}
+	{}
 
 	~sleep()
-	{
-	}
+	{}
 
 	void operator()(runtime& rt)
 	{

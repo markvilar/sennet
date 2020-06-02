@@ -16,7 +16,9 @@ target_link_libraries(node_zed PRIVATE zedutils_library)
 # Sandbox
 add_executable(sandbox sandbox.cpp)
 target_compile_features(sandbox PRIVATE cxx_std_17)
-target_link_libraries(sandbox PRIVATE zedutils_library)
+target_link_libraries(sandbox PRIVATE 
+	zedutils_library 
+	glad_library)
 
 # Test - Hello world
 add_executable(test_hello_world test_hello_world.cpp)

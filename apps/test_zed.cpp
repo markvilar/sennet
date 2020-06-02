@@ -10,6 +10,15 @@
 #include <zedutils/am/actions.hpp>
 #include <zedutils/am/core.hpp>
 
+void write_open_zed(
+	am::runtime& rt, 
+	boost::asio::ip::address& addr,
+	unsigned short port
+	)
+{
+	auto conns = rt.get_connections();
+}
+
 void zed_main(am::runtime& rt)
 {
 	std::cout << "Executing zed_main!\n";
@@ -23,10 +32,13 @@ void zed_main(am::runtime& rt)
 	am::action::zed_close close_action;
 	am::action::sleep sleep_action(std::chrono::seconds(5));
 
-	auto conns = rt.get_connections();
+	// TODO: Implement wrapper functions for writing actions.
+	// write_open_zed();
+	// write_sleep_node();
+	// write_close_zed();
+	// write_invalid_request();
 
-	std::shared_ptr<boost::uint64_t> count(
-		new boost::uint64_t(conns.size()));
+	auto conns = rt.get_connections();
 
 	boost::asio::ip::address address;
 	unsigned short port;

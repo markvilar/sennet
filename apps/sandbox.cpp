@@ -1,6 +1,10 @@
 #include <iostream>
 #include <tuple>
 
+#include <boost/asio.hpp>
+
+#include <glad/glad.h>
+
 #include <zedutils/am/actions.hpp>
 #include <zedutils/am/core.hpp>
 
@@ -44,16 +48,13 @@ void test_constructor_3()
 
 void test_endpoint_comparison()
 {
-	am::action::zed_close close_action(
-		"127.0.0.1", 
-		6000,
-		"196.0.1.5",
-		5000);
+	am::action::zed_close close_action("127.0.0.1", 6000,
+		"196.0.1.5", 5000);
+		
 	// boost::asio::ip::address, unsigned short port_num
 	boost::asio::ip::tcp::endpoint ep(
 		boost::asio::ip::address::from_string("196.0.1.5"),
-		5000
-	);
+		5000);
 
 	std::cout << close_action.is_responder(ep) << "\n";
 }

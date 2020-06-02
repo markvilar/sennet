@@ -7,23 +7,41 @@ namespace action {
 
 class response : public base_action
 {
+	typedef boost::asio::ip::tcp boost_tcp;
 public:
+	// Default constructor.
 	response() 
 		: m_sender_addr(""),
 		m_sender_port(0)
 	{}
 
-	response(boost::asio::ip::tcp::endpoint& sender)
+	// Copy constructor.
+	response(const response& other)
 	{
-		m_sender_addr = sender.address().to_string();
-		m_sender_port = sender.port();
+		m_sender_addr = other.m_sender_addr;
+		m_sender_port = other.m_sender_port;
+	}
+
+	// Sender constructor.
+	response(
+		const std::string sender_addr, 
+		const unsigned short sender_port
+		)
+	{
+		m_sender_addr = sender_addr;
+		m_sender_port = sender_port;
 	}
 
 	// Virtual destructor due to this class being an interface.
 	virtual ~response() {}
 	
-	// TODO: Implement get functions.
+	// Gets the sender address and port.
+	std::tuple<std::string, unsigned short> get_sender() const
+	{
+		return { m_sender_addr, m_sender_port };
+	}
 
+	// Sets the sender address and port.
 	inline void set_sender(
 		const std::string addr, 
 		const unsigned short port
@@ -33,9 +51,12 @@ public:
 		m_sender_port = port;
 	}
 
-	inline void set_sender(boost::asio::ip::tcp::endpoint& sender)
+	// Checks if the given endpoint has the same address and port as the 
+	// sender.
+	bool is_sender(const boost_tcp::endpoint& ep)
 	{
-		set_sender(sender.address().to_string(), sender.port());
+		return (ep.address().to_string() == m_sender_addr) and
+			(ep.port() == m_sender_port);
 	}
 
 	template <typename Archive>
@@ -48,7 +69,7 @@ public:
 
 private:
 	std::string m_sender_addr;
-	unsigned short m_sender_port;	
+	unsigned short m_sender_port;
 };
 
 }
