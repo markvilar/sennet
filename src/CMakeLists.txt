@@ -16,12 +16,14 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/container_device.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/core.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/io.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/serialization.hpp")
 
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(zedutils_library 
 	am/core.cpp 
 	io.cpp 
+	log.cpp
 	${HEADER_LIST})
 	
 # We need these directories, and users of our library will need it too
@@ -34,6 +36,7 @@ target_include_directories(zedutils_library PUBLIC
 # This depends on ZED and Boost
 target_link_libraries(zedutils_library PRIVATE 
 	${ZED_LIBS} 
+	spdlog
 	Boost::serialization
 	Boost::thread) 
 

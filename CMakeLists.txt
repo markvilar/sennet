@@ -87,6 +87,7 @@ endif()
 
 # External libraries
 add_subdirectory(extern/glad)
+add_subdirectory(extern/spdlog)
 
 
 # Testing only available if this is the main app

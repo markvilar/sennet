@@ -18,7 +18,8 @@ add_executable(sandbox sandbox.cpp)
 target_compile_features(sandbox PRIVATE cxx_std_17)
 target_link_libraries(sandbox PRIVATE 
 	zedutils_library 
-	glad_library)
+	glad_library
+	spdlog)
 
 # Test - Hello world
 add_executable(test_hello_world test_hello_world.cpp)
