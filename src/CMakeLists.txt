@@ -17,34 +17,39 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/core.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/io.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/log.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/serialization.hpp")
+	"${PROJECT_SOURCE_DIR}/include/zedutils/serialization.hpp"
+	)
 
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(zedutils_library 
+add_library(zedutils
 	am/core.cpp 
 	io.cpp 
 	log.cpp
-	${HEADER_LIST})
+	${HEADER_LIST}
+	)
 	
-# We need these directories, and users of our library will need it too
-target_include_directories(zedutils_library PUBLIC 
-	../include
-	../extern/spdlog/include
+# Include headers and source code from other libraries in zedutils. This way we
+# won't have to link all of zedutils dependencies into targets that use
+# zedutils, but just zedutils library.
+target_include_directories(zedutils PUBLIC 
+	"${PROJECT_SOURCE_DIR}/include"
+	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	${Boost_INCLUDE_DIRS} 
 	${CUDA_INCLUDE_DIRS} 
-	${ZED_INCLUDE_DIRS}) 
+	${ZED_INCLUDE_DIRS}
+	) 
 		
-# This depends on ZED and Boost
-target_link_libraries(zedutils_library PRIVATE 
+# This depends on ZED and Boost features that needs to be linked to the library.
+target_link_libraries(zedutils PRIVATE 
 	Boost::serialization
 	Boost::thread
 	${ZED_LIBS}
-	spdlog
 	) 
 
 # All users of this will need at least C++17
-target_compile_features(zedutils_library PUBLIC 
-	cxx_std_17)
+target_compile_features(zedutils PUBLIC 
+	cxx_std_17
+	)
 
 # IDEs should put the headers in a nice place
 source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES
