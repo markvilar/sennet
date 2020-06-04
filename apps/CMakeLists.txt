@@ -19,13 +19,15 @@ target_compile_features(sandbox PRIVATE cxx_std_17)
 target_link_libraries(sandbox PRIVATE 
 	zedutils_library 
 	glad_library
-	spdlog)
+	)
 
 # Test - Hello world
 add_executable(test_hello_world test_hello_world.cpp)
 target_compile_features(test_hello_world PRIVATE cxx_std_17)
-target_link_libraries(test_hello_world PRIVATE zedutils_library 
-	Boost::program_options)
+target_link_libraries(test_hello_world PRIVATE 
+	zedutils_library 
+	Boost::program_options
+	)
 
 # Test - Serialization
 add_executable(test_serialization test_serialization.cpp)
