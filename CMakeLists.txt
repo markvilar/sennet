@@ -23,6 +23,7 @@ find_package(Threads)
 find_package(Boost COMPONENTS chrono program_options serialization system thread 
 	REQUIRED)
 find_package(ZED 3 REQUIRED)
+message(STATUS "Found ZED SDK ${ZED_VERSION} at ${ZED_DIR}")
 find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
 message(STATUS "Found CUDA ${CUDA_VERSION_STRING} at ${CUDA_TOOLKIT_ROOT_DIR}")
 
@@ -44,16 +45,30 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
     	endif()
 endif()
 
-# Git submodule - Boostnet
-#if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/boostnet/CMakeLists.txt")
-#    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
-#		"was turned off or failed. Please update submodules and try "
-#		"again.")
-#endif()
+# Git submodule - glad
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/glad/CMakeLists.txt")
+    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
+		"was turned off or failed. Please update submodules and try "
+		"again.")
+endif()
+
+# Git submodule - imgui
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/imgui/CMakeLists.txt")
+    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
+		"was turned off or failed. Please update submodules and try "
+		"again.")
+endif()
+
+# Git submodule - spdlog
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/spdlog/CMakeLists.txt")
+    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
+		"was turned off or failed. Please update submodules and try "
+		"again.")
+endif()
 
 # Package options
 option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
-option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
+option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" OFF)
 
 if(NOT LINK_SHARED_ZED AND MSVC)
     message(FATAL_ERROR "LINK_SHARED_ZED OFF : ZED SDK static libraries not available on Windows")
