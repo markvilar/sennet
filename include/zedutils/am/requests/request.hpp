@@ -1,30 +1,36 @@
 #pragma once
 
+#include <string>
+#include <tuple>
+
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/export.hpp>
+
 #include <zedutils/am/core.hpp>
 
-namespace am {
+namespace am { 
 namespace action {
 
-class response : public base_action
+class request : public base_action
 {
 	typedef boost::asio::ip::tcp boost_tcp;
 public:
 	// Default constructor.
-	response() 
-		: m_sender_addr(""),
+	request()
+		: m_sender_addr("0.0.0.0"),
 		m_sender_port(0)
 	{}
 
 	// Copy constructor.
-	response(const response& other)
+	request(const request& other)
 	{
 		m_sender_addr = other.m_sender_addr;
 		m_sender_port = other.m_sender_port;
 	}
 
 	// Sender constructor.
-	response(
-		const std::string sender_addr, 
+	request(
+		const std::string& sender_addr, 
 		const unsigned short sender_port
 		)
 	{
@@ -33,8 +39,8 @@ public:
 	}
 
 	// Virtual destructor due to this class being an interface.
-	virtual ~response() {}
-	
+	virtual ~request() {}
+
 	// Gets the sender address and port.
 	std::tuple<std::string, unsigned short> get_sender() const
 	{
@@ -43,15 +49,15 @@ public:
 
 	// Sets the sender address and port.
 	inline void set_sender(
-		const std::string addr, 
-		const unsigned short port
+		const std::string& sender_addr,
+		const unsigned short sender_port
 		)
 	{
-		m_sender_addr = addr;
-		m_sender_port = port;
+		m_sender_addr = sender_addr;
+		m_sender_port = sender_port;
 	}
 
-	// Checks if the given endpoint has the same address and port as the 
+	// Checks if the given endpoint has the same address and port as the
 	// sender.
 	bool is_sender(const boost_tcp::endpoint& ep)
 	{

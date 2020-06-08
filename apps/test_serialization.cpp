@@ -121,7 +121,7 @@ void save_zed_close()
 {
 	namespace io = boost::iostreams;
 
-	am::action::zed_close close_action("127.0.0.1", 3000, "129.1.1.5", 1000);
+	am::action::zed_close close_action("127.0.0.1", 3000);
 
 	std::ofstream ofs("zed_close.txt", std::ios::out | std::ios::binary);
 
@@ -135,9 +135,7 @@ void save_zed_close()
 
 		std::cout << "\nSaved close action!\n";
 		auto [s_addr, s_port] = close_action.get_sender();
-		auto [r_addr, r_port] = close_action.get_responder();
-		std::cout << " - sender: " << s_addr << ", " << s_port << "\n"
-			<< " - responder: " << r_addr << ", " << r_port << "\n";
+		std::cout << " - sender: " << s_addr << ", " << s_port << "\n";
 	}
 	
 	ofs.close();
@@ -165,12 +163,9 @@ void load_zed_close()
 
 		std::cout << "\nLoaded close action!\n";
 		auto [s_addr, s_port] = close_action.get_sender();
-		auto [r_addr, r_port] = close_action.get_responder();
-		std::cout << " - sender: " << s_addr << ":" << s_port << "\n"
-			<< " - responder: " << r_addr << ":" << r_port << "\n";
+		std::cout << " - sender: " << s_addr << ":" << s_port << "\n";
 		std::cout << "\nEndpoint: " << ep
 			<< "\n - is sender: " << close_action.is_sender(ep)
-			<< "\n - is responder: " << close_action.is_responder(ep)
 			<< "\n";
 	}
 	

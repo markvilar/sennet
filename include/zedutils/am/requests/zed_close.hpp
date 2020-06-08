@@ -3,8 +3,8 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
-#include <zedutils/am/actions/request.hpp>
 #include <zedutils/am/core.hpp>
+#include <zedutils/am/requests/request.hpp>
 
 namespace am { 
 namespace action {
@@ -32,16 +32,6 @@ public:
 		: request(sender_addr, sender_port)
 	{}
 
-	zed_close(
-		const std::string sender_addr,
-		const unsigned short sender_port,
-		const std::string responder_addr,
-		const unsigned short responder_port
-		)
-		: request(sender_addr, sender_port, 
-			responder_addr, responder_port)
-	{}
-
 	~zed_close()
 	{
 	}
@@ -49,14 +39,14 @@ public:
 	// Action for base runtime instances.
 	void operator()(runtime& rt)
 	{
-		std::cout << "This is a regular runtime. Cannot close zed...\n";
+		std::cout << "[AM] Cannot close zed...\n";
 		// TODO: Implement sending of invalid request.
 	}
 
 	// Action for zed_runtime instances.
 	void operator()(zed_runtime& rt)
 	{
-		std::cout << "This is a zed_runtime. Closing zed...\n";
+		std::cout << "[AM] Closing zed...\n";
 		rt.close_zed();
 	}
 

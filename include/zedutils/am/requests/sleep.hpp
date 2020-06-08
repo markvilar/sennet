@@ -6,8 +6,8 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
-#include <zedutils/am/actions/request.hpp>
 #include <zedutils/am/core.hpp>
+#include <zedutils/am/requests/request.hpp>
 #include <zedutils/serialization.hpp>
 
 namespace am { 
@@ -21,7 +21,8 @@ private:
 public:
 	// Default constructor.
 	sleep()
-		: m_duration(0)
+		: request(),
+		m_duration(0)
 	{}
 
 	// Copy constructor.
@@ -33,11 +34,14 @@ public:
 
 	// Constructor.
 	template <class Rep, class Period>
-	sleep(std::chrono::duration<Rep, Period> duration)
-		: m_duration(
-			std::chrono::duration_cast<decltype(m_duration)>
-				(duration)
-			)
+	sleep(
+		const std::string& sender_addr,
+		const unsigned short sender_port,
+		std::chrono::duration<Rep, Period> duration
+		)
+		: request(sender_addr, sender_port),
+		m_duration(std::chrono::duration_cast<decltype(m_duration)>
+			(duration))
 	{}
 
 	~sleep()
@@ -57,7 +61,7 @@ public:
 
 	base_action* clone() const
 	{
-		return new sleep(m_duration);
+		return new sleep(*this);
 	}
 
 	template <typename Archive>

@@ -6,7 +6,6 @@
 #include <zedutils/am/actions.hpp>
 #include <zedutils/am/core.hpp>
 
-
 void hello_world_main(am::runtime& rt)
 {
 	am::action::hello_world t;

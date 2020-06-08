@@ -3,8 +3,8 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
-#include <zedutils/am/actions/response.hpp>
 #include <zedutils/am/core.hpp>
+#include <zedutils/am/responses/response.hpp>
 
 namespace am {
 namespace action {
@@ -14,29 +14,26 @@ class invalid_request : public response
 public:
 	// Default constructor.
 	invalid_request() 
-		: response()
+		: response(),
+		m_request(0)
 	{}
 
 	// Copy constructor.
 	invalid_request(const invalid_request& other)
 		: response(other)
-	{}
+	{
+		m_request = other.get_request();
+	}
 
 	// Constructor.
 	invalid_request(
 		const std::string sender_addr,
 		const unsigned short sender_port,
-		const std::string request_sender_addr,
-		const unsigned short request_sender_port,
-		const std::string request_type,
-		const std::string message = ""
+		const base_action& request
 		)
 		: response(sender_addr, sender_port)
 	{
-		m_request_sender_addr = request_sender_addr;
-		m_request_sender_port = request_sender_port;
-		m_request_type = request_type;
-		m_message = message;
+		m_request = request.clone();
 	}
 
 	// Destructor.
@@ -46,28 +43,37 @@ public:
 	// Prints the information of the invalid request.
 	void print_to_console()
 	{
-		auto [receiver_addr, receiver_port] = get_sender();
-		std::cout << "[INVALID REQUEST] "
-			<< "Sender: " << m_request_sender_addr << ":" 
-			<< m_request_sender_port << "\n"
-			<< "Receiver: " << receiver_addr
-			<< receiver_port << "\n"
-			<< " - request type: " << m_request_type << "\n";
-		if (!m_message.compare(""))
-		{
-			std::cout << " - message: " << m_message << "\n";
-		}
+		auto [addr, port] = get_sender();
+		std::cout << "[AM] Invalid request. Receiver: " 
+			<< addr << ":" << port << "\n";
+	}
+
+	// Gets the invalid request.
+	base_action* get_request() const
+	{
+		if (m_request)
+			return m_request->clone();
+		else
+			return nullptr;
+	}
+
+	// Sets the invalid request.
+	inline void set_request(const base_action& r)
+	{
+		m_request = r.clone();
 	}
 
 	// Action for runtime.
 	void operator()(runtime& rt)
 	{
+		// TODO: Add logging.
 		print_to_console();
 	}
 
 	// Action for zed_runtime.
 	void operator()(zed_runtime& rt)
 	{
+		// TODO: Add logging.
 		print_to_console();
 	}
 
@@ -80,17 +86,16 @@ public:
 	void serialize(Archive& ar, const unsigned int version)
 	{
 		ar & boost::serialization::base_object<response>(*this);
-		ar & m_request_sender_addr;
-		ar & m_request_sender_port;
-		ar & m_message;
+		ar & m_request;
 	}
 
 private:
-	std::string m_request_sender_addr;
-	unsigned short m_request_sender_port;
-	std::string m_request_type;
-	std::string m_message;
+	// TODO: Possibly add error message.
+	base_action* m_request;
 };
 
 }
 };
+
+BOOST_CLASS_EXPORT_GUID(am::action::invalid_request,
+	"am::action::invalid_request");

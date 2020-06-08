@@ -1,7 +1,6 @@
 // Boost documentation references:
 // https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/reference.html
 // https://www.boost.org/doc/libs/1_67_0/libs/assert/doc/html/assert.html
-
 #pragma once
 
 #include <atomic>
@@ -78,6 +77,9 @@ public:
 
 	// Returns the remote endpoint of the connection socket.
 	boost::asio::ip::tcp::endpoint get_remote_endpoint() const;
+
+	// Retruns the local endpoint of the connection socket.
+	boost::asio::ip::tcp::endpoint get_local_endpoint() const;
 
 	// Asynchronously read a parcel from the socket.
 	void async_read();
@@ -160,12 +162,12 @@ public:
 		stop(); 
 	}
 	
-	boost::asio::io_service& get_io_service() 
+	boost::asio::io_service& get_io_service()
 	{ 
 		return m_io_service; 
 	}
 
-	boost::lockfree::queue<std::vector<char>*>& get_parcel_queue() 
+	boost::lockfree::queue<std::vector<char>*>& get_parcel_queue()
 	{ 
 		return m_parcel_queue;
 	}
@@ -181,6 +183,17 @@ public:
 	{
 		return m_connections;
 	}
+
+	// Finds connection based on address.
+	std::shared_ptr<connection> find_connection(
+		const std::string& addr
+		);
+
+	// Finds connection based on address and port.
+	std::shared_ptr<connection> find_connection(
+		const std::string& addr,
+		const unsigned short port
+		);
 
 	// Launch the execution thread and the start accepting connections.
 	void start();
@@ -268,6 +281,17 @@ public:
 
 	// Disables recording for the ZED.
 	void disable_zed_recording();
+
+	// Retrieves image from the ZED.
+	sl::ERROR_CODE retrieve_zed_image(
+		sl::Mat& m, 
+		sl::VIEW view = sl::VIEW::LEFT, 
+		sl::MEM mem = sl::MEM::CPU,
+		sl::Resolution res = sl::Resolution(0, 0)
+		);
+
+	// Gets timestamp from the ZED.
+	sl::Timestamp get_zed_timestamp(sl::TIME_REFERENCE& ref);
 
 private:
 	// Deserializes parcels and executes actions.

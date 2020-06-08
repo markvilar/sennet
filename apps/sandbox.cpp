@@ -11,8 +11,8 @@
 
 int main()
 {
-	am::log::init("Sandbox logger");
-	AM_WARN("Initialized log!");
+	am::log::init("Logger 1");
+	AM_WARN("Initialized log 1!");
 	int a = 5;
 	AM_INFO("Hello! Var={0}", a);
 	return 0;

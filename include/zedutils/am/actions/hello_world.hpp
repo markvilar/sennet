@@ -6,6 +6,7 @@
 #include <boost/serialization/export.hpp>
 
 #include <zedutils/am/core.hpp>
+#include <zedutils/log.hpp>
 
 namespace am { namespace action {
 

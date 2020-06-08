@@ -6,6 +6,7 @@
 #include <sl/Camera.hpp>
 
 #include <zedutils/am/core.hpp>
+#include <zedutils/am/requests/request.hpp>
 #include <zedutils/serialization.hpp>
 
 namespace am { 
@@ -15,16 +16,27 @@ class zed_open : public request
 {
 
 public:
-	// Basic constructor.
+	// Default constructor.
 	zed_open()
 		: request(),
 		m_init_params()
 	{
 	}
 
-	// Overloaded constructor.
-	zed_open(sl::InitParameters ip)
-		: request(),
+	// Copy constructor.
+	zed_open(const zed_open& other)
+		: request(other)
+	{
+		m_init_params = other.m_init_params;
+	}
+
+	// Constructor.
+	zed_open(
+		const std::string sender_addr,
+		const unsigned short sender_port,
+		const sl::InitParameters& ip
+		)
+		: request(sender_addr, sender_port),
 		m_init_params(ip)
 	{
 	}
@@ -48,20 +60,20 @@ public:
 	// Action for runtime instances.
 	void operator()(runtime& rt)
 	{
-		std::cout << "This is a regular runtime. Cannot open zed...\n";
+		std::cout << "[AM] Cannot open zed...\n";
 	}
 
 	// Action for zed_runtime instances.
 	void operator()(zed_runtime& rt)
 	{
-		std::cout << "This is a zed_runtime. Opening zed...\n";
+		std::cout << "[AM] Opening zed...\n";
 		sl::ERROR_CODE error = rt.open_zed(m_init_params);
 	}
 
 	// Clone function.
 	base_action* clone() const
 	{
-		return new zed_open(m_init_params);
+		return new zed_open(*this);
 	}
 
 	template <typename Archive>

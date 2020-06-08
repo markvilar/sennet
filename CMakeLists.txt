@@ -68,7 +68,7 @@ endif()
 
 # Package options
 option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
-option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" OFF)
+option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
 
 if(NOT LINK_SHARED_ZED AND MSVC)
     message(FATAL_ERROR "LINK_SHARED_ZED OFF : ZED SDK static libraries not available on Windows")

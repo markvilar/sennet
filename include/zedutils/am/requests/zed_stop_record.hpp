@@ -3,6 +3,7 @@
 #include <sl/Camera.hpp>
 
 #include <zedutils/am/core.hpp>
+#include <zedutils/am/requests/request.hpp>
 
 namespace am { 
 namespace action {
@@ -28,6 +29,8 @@ public:
 
 	base_action* clone() const
 	{
+		// TODO: Implement.
+		return new zed_stop_record();
 	}
 
 	template <typename Archive>

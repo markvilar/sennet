@@ -1,24 +1,29 @@
 # Headers
 set(HEADER_LIST 
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/hello_world.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/request.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/response.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/sleep.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_close.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_get_settings.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_image.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_open.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_retrieve.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_settings.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_start_record.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/zed_stop_record.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/container_device.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/core.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/hello_world.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/list_connections.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/request.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/sleep.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_close.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_get_settings.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_open.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_retrieve.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_start_record.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_stop_record.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/invalid_request.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/message.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/response.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/zed_image.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/zed_settings.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/io.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/serialization.hpp"
 	)
+
+
 
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(zedutils

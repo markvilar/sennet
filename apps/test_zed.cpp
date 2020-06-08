@@ -10,103 +10,169 @@
 #include <zedutils/am/actions.hpp>
 #include <zedutils/am/core.hpp>
 
-void write_open_zed(
-	am::runtime& rt, 
-	boost::asio::ip::address& addr,
-	unsigned short port
-	)
+void write_zed_open_action(std::shared_ptr<am::connection> conn)
 {
-	auto conns = rt.get_connections();
+	// Initialize ZED parameters.
+	sl::InitParameters ips;
+	ips.sdk_verbose = true;
+
+	auto local_ep = conn->get_local_endpoint();
+
+	// Initialize ZED open action.
+	am::action::zed_open action(
+		local_ep.address().to_string(),
+		local_ep.port(),
+		ips
+		);
+
+	// Send request to open ZED.
+	conn->async_write(action,
+		[](boost::system::error_code const& ec)
+		{
+			if (ec)
+			{
+				std::cout << "[ERROR] action: open\n"
+					<< ec.message();
+			}
+			else
+			{
+				std::cout << "Open action written!\n";
+			}
+		});
+}
+
+void write_sleep_action(std::shared_ptr<am::connection> conn)
+{
+	auto local_ep = conn->get_local_endpoint();
+
+	// Initialize ZED sleep action.
+	am::action::sleep action(
+		local_ep.address().to_string(),
+		local_ep.port(),
+		std::chrono::seconds(5)
+		);
+
+	conn->async_write(action,
+		[](boost::system::error_code const& ec)
+		{
+			if (ec)
+			{
+				std::cout << "[ERROR] action: sleep\n"
+					<< ec.message();
+			}
+			else
+			{
+				std::cout << "Sleep action written!\n";
+			}
+		});
+}
+
+void write_zed_retrieve_action(std::shared_ptr<am::connection> conn)
+{
+	auto local_ep = conn->get_local_endpoint();
+
+	am::action::zed_retrieve action(
+		local_ep.address().to_string(),
+		local_ep.port(),
+		sl::TIME_REFERENCE::IMAGE,
+		sl::VIEW::LEFT
+		);
+
+	conn->async_write(action,
+		[](boost::system::error_code const& ec)
+		{
+			if (ec)
+			{
+				std::cout << "[ERROR] action: retrieve\n"
+					<< ec.message();
+			}
+			else
+			{
+				std::cout << "Retrieve action written!\n";
+				std::cout << "Sleeping a bit...\n";
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+			}
+		});
+}
+
+void write_zed_close_action(std::shared_ptr<am::connection> conn)
+{
+	// Initialize ZED close action.
+	auto local_ep = conn->get_local_endpoint();
+	am::action::zed_close action(
+		local_ep.address().to_string(),
+		local_ep.port()
+		);
+
+	conn->async_write(action,
+		[](boost::system::error_code const& ec)
+		{
+			if (ec)
+			{
+				std::cout << "[ERROR] action: close\n"
+					<< ec.message();
+			}
+			else
+			{
+				std::cout << "Close action written!\n";
+			}
+		});
+}
+
+void write_invalid_request_action(std::shared_ptr<am::connection> conn)
+{
+	am::action::invalid_request action;
+	conn->async_write(action,
+		[](boost::system::error_code const& ec)
+		{
+			if (ec)
+			{
+				std::cout << "[ERROR] action: invalid request\n"
+					<< ec.message();
+			}
+		});
+}
+
+void write_list_connections_action(std::shared_ptr<am::connection> conn)
+{
+	auto local_ep = conn->get_local_endpoint();
+	am::action::list_connections action(
+		local_ep.address().to_string(),
+		local_ep.port()
+		);
+
+	conn->async_write(action,
+		[](boost::system::error_code const& ec)
+		{
+			if (ec)
+			{
+				std::cout << "[ERROR] action: invalid request\n"
+					<< ec.message();
+			}
+		});
+		
 }
 
 void zed_main(am::runtime& rt)
 {
+	namespace asio_ip = boost::asio::ip;
 	std::cout << "Executing zed_main!\n";
 
-	// ZED initialization parameters.
-	sl::InitParameters ips;
-	ips.sdk_verbose = true;
+	// We are searching for the server and therefore need the server side
+	// IP address.
+	std::string addr = "127.0.0.1";
 
-	// Actions.
-	am::action::zed_open open_action(ips);
-	am::action::zed_close close_action;
-	am::action::sleep sleep_action(std::chrono::seconds(5));
+	std::shared_ptr<am::connection> conn = rt.find_connection(addr);
 
-	// TODO: Implement wrapper functions for writing actions.
-	// write_open_zed();
-	// write_sleep_node();
-	// write_close_zed();
-	// write_invalid_request();
-
-	auto conns = rt.get_connections();
-
-	boost::asio::ip::address address;
-	unsigned short port;
-	for (auto node : conns)
+	if (conn)
 	{
-		// Node: std::map< endpoint, shared_ptr<connection> >
-		address = node.first.address();
-		port = node.first.port();
-
-		std::cout << "\nNode " << --(*count) << "\n";
-		std::cout << "- Address: " << address << "\n";
-		std::cout << "- Port: " << port << "\n";
-
-		// Send request to open ZED.
-		node.second->async_write(open_action,
-			[&address, &port](
-				boost::system::error_code const& ec
-				)
-			{
-				if (ec)
-				{
-					std::cout << "Error when writing ZED "
-						<< "open action to address "
-						<< address << " on port " 
-						<< port << ".\n"
-						<< " - " << ec.value() << "\n";
-				}
-			});
-	}
-
-	for (auto node: conns)
-	{
-		address = node.first.address();
-		port = node.first.port();
-		
-		// Send request to close ZED.
-		node.second->async_write(sleep_action,
-			[&address, &port](boost::system::error_code const& ec)
-			{
-				if (ec)
-				{
-					std::cout << "Error when writing "
-						<< "sleep close action to "
-						<< "address" << address
-						<< " on port " << port << ".\n"
-						<< " - " << ec.value() << "\n";
-				}
-			});
-	}
-
-	for (auto node: conns)
-	{
-		address = node.first.address();
-		port = node.first.port();
-		
-		// Send request to close ZED.
-		node.second->async_write(close_action,
-			[&address, &port](boost::system::error_code const& ec)
-			{
-				if (ec)
-				{
-					std::cout << "Error when writing ZED "
-						<< "close action to address "
-						<< address << " on port " 
-						<< port << ".\n"
-						<< " - " << ec.value() << "\n";
-				}
-			});
+		std::cout << "Found connection: " << addr << "\n";
+		write_zed_open_action(conn);
+		//write_sleep_action(conn);
+		write_list_connections_action(conn);
+		write_zed_retrieve_action(conn);
+		write_zed_close_action(conn);
+		//write_invalid_request_action(conn);
 	}
 }
 

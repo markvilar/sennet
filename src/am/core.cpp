@@ -30,6 +30,11 @@ boost::asio::ip::tcp::endpoint connection::get_remote_endpoint() const
 	return m_socket.remote_endpoint();
 }
 
+boost::asio::ip::tcp::endpoint connection::get_local_endpoint() const
+{
+	return m_socket.local_endpoint();
+}
+
 void connection::async_read()
 {
 	// Check that the in buffer is NULL.
@@ -173,6 +178,39 @@ runtime::runtime(
 	BOOST_ASSERT(wait_for != 0);
 }
 
+std::shared_ptr<connection> runtime::find_connection(
+	const std::string& addr
+	)
+{
+	// Get the runtime connections.
+	auto conns = get_connections();
+	auto it = conns.begin();
+	while (it != conns.end())
+	{
+		if (it->first.address().to_string() == addr)
+			return it->second;
+		++it;
+	}
+	return nullptr;
+}
+
+std::shared_ptr<connection> runtime::find_connection(
+	const std::string& addr,
+	const unsigned short port
+	)
+{
+	auto conns = get_connections();
+	auto it = conns.begin();
+	while (it != conns.end())
+	{
+		if (it->first.address().to_string() == addr and 
+			it->first.port() == port)
+			return it->second;
+		++it;
+	}
+	return nullptr;
+}
+
 void runtime::start()
 {
 	// Set up acceptor. 
@@ -280,8 +318,6 @@ void runtime::async_accept()
 	std::shared_ptr<connection> conn;
 	conn.reset(new connection(*this));
 
-	// TODO: This might be an issue if handle_accept becomes a virtual
-	// function!
 	// Set up async. accept operation with handle_accept() as completion
 	// handler.
 	m_acceptor.async_accept(conn->get_socket(),
@@ -429,6 +465,9 @@ action::base_action* runtime::deserialize_parcel(std::vector<char>& raw_msg)
 	return act_ptr;
 }
 
+
+// -------------------------------- zed_runtime --------------------------------
+
 zed_runtime::zed_runtime(
 	std::string port,
 	std::string root,
@@ -499,6 +538,21 @@ void zed_runtime::disable_zed_recording()
 {
 	// TODO: Assertions?
 	m_zed.disableRecording();
+}
+
+sl::ERROR_CODE zed_runtime::retrieve_zed_image(
+	sl::Mat& m,
+	sl::VIEW view,
+	sl::MEM mem,
+	sl::Resolution res
+	)
+{
+	return m_zed.retrieveImage(m, view, mem, res);
+}
+
+sl::Timestamp zed_runtime::get_zed_timestamp(sl::TIME_REFERENCE& ref)
+{
+	return m_zed.getTimestamp(ref);
 }
 
 void zed_runtime::exec_loop()
