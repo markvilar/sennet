@@ -362,8 +362,6 @@ void runtime::handle_accept(
 		// If main exists, do we have enough clients to run it?
 		if (m_main && (m_connections.size() >= m_wait_for))
 		{
-			// TODO: This is why this function might have to be
-			// virtual.
 			// Instead of running main directly, we will stick it in
 			// the action queue.
 			m_local_queue.push(

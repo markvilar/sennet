@@ -11,9 +11,10 @@
 
 int main()
 {
-	am::log::init("Logger 1");
-	AM_WARN("Initialized log 1!");
-	int a = 5;
-	AM_INFO("Hello! Var={0}", a);
+	am::log log("test logger", "logs/test.txt");
+	log.get_logger()->error("error");
+	log.get_logger()->warn("warn");
+	log.get_logger()->info("info");
+	log.get_logger()->trace("trace");
 	return 0;
 }
