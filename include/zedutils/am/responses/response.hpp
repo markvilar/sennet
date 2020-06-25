@@ -17,7 +17,7 @@ class response : public base_action
 public:
 	// Default constructor.
 	response() 
-		: m_sender_addr("0.0.0.0"),
+		: m_sender_addr(""),
 		m_sender_port(0)
 	{}
 
@@ -28,7 +28,7 @@ public:
 		m_sender_port = other.m_sender_port;
 	}
 
-	// Sender constructor.
+	// Constructor.
 	response(
 		const std::string sender_addr, 
 		const unsigned short sender_port
@@ -36,6 +36,13 @@ public:
 	{
 		m_sender_addr = sender_addr;
 		m_sender_port = sender_port;
+	}
+
+	// Constructor.
+	response(const boost_tcp::endpoint& sender_ep)
+	{
+		m_sender_addr = sender_ep.address().to_string();
+		m_sender_port = sender_ep.port();
 	}
 
 	// Virtual destructor due to this class being an interface.

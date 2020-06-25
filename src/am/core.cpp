@@ -532,6 +532,11 @@ sl::ERROR_CODE zed_runtime::enable_zed_recording(
 	return m_zed.enableRecording(rec_params);
 }
 
+sl::ERROR_CODE zed_runtime::zed_grab(sl::RuntimeParameters run_params)
+{
+	return m_zed.grab();
+}
+
 void zed_runtime::disable_zed_recording()
 {
 	// TODO: Assertions?

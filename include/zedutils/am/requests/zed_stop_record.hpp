@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <sl/Camera.hpp>
 
 #include <zedutils/am/core.hpp>
@@ -10,14 +12,34 @@ namespace action {
 
 class zed_stop_record : public request
 {
+	typedef boost::asio::ip::tcp asio_tcp;
+
 public:
+	// Default constructor.
 	zed_stop_record()
-	{
-	}
+		: request()
+	{}
+
+	// Copy constructor.
+	zed_stop_record(const zed_stop_record& other)
+		: request(other)
+	{}
+
+	// Constructor.
+	zed_stop_record(
+		const std::string sender_addr,
+		const unsigned short sender_port
+		)
+		: request(sender_addr, sender_port)
+	{}
+
+	// Constructor.
+	zed_stop_record(const asio_tcp::endpoint& sender_ep)
+		: request(sender_ep)
+	{}
 
 	~zed_stop_record()
-	{
-	}
+	{}
 
 	void operator()(runtime& rt)
 	{
@@ -29,8 +51,7 @@ public:
 
 	base_action* clone() const
 	{
-		// TODO: Implement.
-		return new zed_stop_record();
+		return new zed_stop_record(*this);
 	}
 
 	template <typename Archive>
@@ -40,6 +61,7 @@ public:
 	}
 
 private:
+	// TODO: Add members.
 };
 
 }

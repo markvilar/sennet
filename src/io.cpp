@@ -1,8 +1,14 @@
 #include <zedutils/io.hpp>
 
+std::ostream& operator<<(std::ostream& os, const sl::String& s)
+{
+	os << s.get();
+	return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const sl::InitParameters& params)
 {
-	os << "\nInitParameters:\n";
+	os << "InitParameters:\n";
 	os << " - Resolution:              " << params.camera_resolution << "\n";
 	os << " - Fps:                     " << params.camera_fps << "\n";
 	os << " - Image flip:              " << params.camera_image_flip << "\n";
@@ -28,7 +34,7 @@ std::ostream& operator<<(std::ostream& os, const sl::InitParameters& params)
 
 std::ostream& operator<<(std::ostream& os, const sl::RuntimeParameters& params)
 {
-	os << "\nRuntimeParameters:\n";
+	os << "RuntimeParameters:\n";
 	os << " - Sensing mode:            " << params.sensing_mode << "\n";
 	os << " - 3D reference frame:      " 
 		<< params.measure3D_reference_frame << "\n";
@@ -40,9 +46,20 @@ std::ostream& operator<<(std::ostream& os, const sl::RuntimeParameters& params)
 	return os;
 }
 
+std::ostream& operator<<(
+	std::ostream& os, 
+	const sl::RecordingParameters& params
+	)
+{
+	os << "RecordingParamters:\n";
+	os << " - Filename: 		" << params.video_filename << "\n";
+	os << " - Compression mode:	" << params.compression_mode << "\n";
+	return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const sl::CameraInformation& params)
 {
-	os << "\nCameraInformation:\n";
+	os << "CameraInformation:\n";
 	os << " - Serial number:           " << params.serial_number << "\n";
 	os << " - Camera firmware version: " 
 		<< params.camera_firmware_version << "\n";

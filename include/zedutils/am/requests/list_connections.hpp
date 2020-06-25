@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
@@ -14,6 +16,7 @@ namespace action {
 
 class list_connections: public request
 {
+	typedef boost::asio::ip::tcp asio_tcp;
 
 public:
 	// Default constructor.
@@ -34,6 +37,12 @@ public:
 		const unsigned short sender_port
 		)
 		: request(sender_addr, sender_port)
+	{
+	}
+
+	// Constructor.
+	list_connections(const asio_tcp::endpoint& sender_ep)
+		: request(sender_ep)
 	{
 	}
 
@@ -78,7 +87,9 @@ public:
 	{
 		ar & boost::serialization::base_object<request>(*this);
 	}
+
 private:
+
 };
 
 }

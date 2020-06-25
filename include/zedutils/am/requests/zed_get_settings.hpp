@@ -11,18 +11,21 @@ namespace action {
 
 class zed_get_settings : public request
 {
+	typedef boost::asio::ip::tcp asio_tcp;
 public:
 
 	// Default constructor.
 	zed_get_settings()
 		: request()
-	{}
+	{
+		// TODO: Initialize setting members.
+	}
 
 	// Copy constructor.
 	zed_get_settings(const zed_get_settings& other)
 		: request(other)
 	{
-		// TODO: Implement.
+		// TODO: Implement copying of setting members.
 	}
 
 	// Constructor.
@@ -31,8 +34,16 @@ public:
 		const unsigned short sender_port
 		)
 		: request(sender_addr, sender_port)
-	{}
+	{
+		// TODO: Initialize setting members.
+	}
 	
+	// Constructor.
+	zed_get_settings(const asio_tcp::endpoint& sender_ep)
+		: request(sender_ep)
+	{
+		// TODO: Initialize setting members.
+	}
 
 	// Deconstructor.
 	~zed_get_settings()
@@ -56,7 +67,24 @@ public:
 	{
 		ar & boost::serialization::base_object<request>(*this);
 	}
+
 private:
+	// TODO: Add setting member.
+	// sl::VIDEO_SETTINGS
+	// BRIGHTNESS
+	// CONTRAST
+	// HUE
+	// SATURATION
+	// SHARPNESS
+	// GAMMA
+	// GAIN
+	// EXPOSURE
+	// AEC_AGC
+	// AEC_AGC_ROI
+	// WHITEBALANCE_TEMPERATURE
+	// WHITEBALANCE_AUTO
+	// LED_STATUS
+	// LAST
 };
 
 }

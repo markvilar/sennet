@@ -13,6 +13,8 @@ namespace action {
 
 class zed_image : public response
 {
+	typedef boost::asio::ip::tcp boost_tcp;
+
 public:
 	// Default constructor.
 	zed_image()
@@ -40,6 +42,20 @@ public:
 		const sl::VIEW& v
 		)
 		: response(sender_addr, sender_port)
+	{
+		m_image = m;
+		m_timestamp = t;
+		m_view = v;
+	}
+
+	// Constructor.
+	zed_image(
+		const boost_tcp::endpoint& sender_ep,
+		const sl::Mat& m,
+		const sl::Timestamp& t,
+		const sl::VIEW& v
+		)
+		: response(sender_ep)
 	{
 		m_image = m;
 		m_timestamp = t;

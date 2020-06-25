@@ -1,9 +1,12 @@
 #pragma once
 
+#include <string>
+
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
 #include <zedutils/am/core.hpp>
+#include <zedutils/am/requests/request.hpp>
 #include <zedutils/am/responses/response.hpp>
 
 namespace am {
@@ -11,6 +14,8 @@ namespace action {
 
 class invalid_request : public response
 {
+	typedef boost::asio::ip::tcp asio_tcp;
+
 public:
 	// Default constructor.
 	invalid_request() 
@@ -29,9 +34,18 @@ public:
 	invalid_request(
 		const std::string sender_addr,
 		const unsigned short sender_port,
-		const base_action& request
+		const request& request
 		)
 		: response(sender_addr, sender_port)
+	{
+		m_request = request.clone();
+	}
+
+	invalid_request(
+		const asio_tcp::endpoint& sender_ep,
+		const request& request
+		)
+		: response(sender_ep)
 	{
 		m_request = request.clone();
 	}
@@ -55,12 +69,6 @@ public:
 			return m_request->clone();
 		else
 			return nullptr;
-	}
-
-	// Sets the invalid request.
-	inline void set_request(const base_action& r)
-	{
-		m_request = r.clone();
 	}
 
 	// Action for runtime.

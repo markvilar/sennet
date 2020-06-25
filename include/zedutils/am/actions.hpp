@@ -7,6 +7,7 @@
 #include <zedutils/am/requests/sleep.hpp>
 #include <zedutils/am/requests/zed_close.hpp>
 #include <zedutils/am/requests/zed_get_settings.hpp>
+#include <zedutils/am/requests/zed_grab.hpp>
 #include <zedutils/am/requests/zed_open.hpp>
 #include <zedutils/am/requests/zed_retrieve.hpp>
 #include <zedutils/am/requests/zed_start_record.hpp>

@@ -279,6 +279,9 @@ public:
 	// Enables recording for the ZED.
 	sl::ERROR_CODE enable_zed_recording(sl::RecordingParameters rec_params);
 
+	// Grabs the current frame from the ZED.
+	sl::ERROR_CODE zed_grab(sl::RuntimeParameters run_params);
+
 	// Disables recording for the ZED.
 	void disable_zed_recording();
 

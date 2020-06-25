@@ -4,9 +4,16 @@
 
 #include <sl/Camera.hpp>
 
+std::ostream& operator<<(std::ostream& os, const sl::String& s);
+
 std::ostream& operator<<(std::ostream& os, const sl::InitParameters& params);
 
 std::ostream& operator<<(std::ostream& os, const sl::RuntimeParameters& params);
+
+std::ostream& operator<<(
+	std::ostream& os, 
+	const sl::RecordingParameters& params
+	);
 
 std::ostream& operator<<(std::ostream& os, const sl::CameraInformation& params);
 

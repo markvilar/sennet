@@ -20,9 +20,8 @@ namespace serialization {
 // ----------------------------------- sl::Mat ---------------------------------
 
 template <class Archive>
-void save(Archive& ar, const sl::Mat& m, const unsigned int version)
+void save(Archive& ar, const sl::Mat& m, const unsigned int)
 {
-	(void)version;
 	size_t width = m.getWidth();
 	size_t height = m.getHeight();
 	size_t pixel_bytes = m.getPixelBytes();
@@ -40,9 +39,8 @@ void save(Archive& ar, const sl::Mat& m, const unsigned int version)
 }
 
 template <class Archive>
-void load(Archive& ar, sl::Mat& m, const unsigned int version)
+void load(Archive& ar, sl::Mat& m, const unsigned int)
 {
-	(void)version;
 	size_t width, height, pixel_bytes;
 	sl::MAT_TYPE type;
 
@@ -66,7 +64,7 @@ template <class Archive>
 void serialize(
 	Archive& ar, 
 	sl::InitParameters& ips, 
-	const unsigned int version
+	const unsigned int
 	)
 {
 	ar & ips.camera_resolution;
@@ -100,7 +98,7 @@ template <class Archive>
 void serialize(
 	Archive& ar, 
 	sl::InputType& it, 
-	const unsigned int version
+	const unsigned int
 	)
 {
 	// TODO: InputType doesn't seem to have any attributes, so it
@@ -111,10 +109,8 @@ void serialize(
 // --------------------------------- sl::String --------------------------------
 
 template <class Archive>
-void save(Archive& ar, const sl::String& s, const unsigned int version)
+void save(Archive& ar, const sl::String& s, const unsigned int)
 {
-	(void)version;
-
 	// TODO: This implementation is ineffective. Look to improve
 	// later!
 	sl::String z = s; // Copy the sl::String.
@@ -125,10 +121,8 @@ void save(Archive& ar, const sl::String& s, const unsigned int version)
 }
 
 template <class Archive>
-void load(Archive& ar, sl::String& s, const unsigned int version)
+void load(Archive& ar, sl::String& s, const unsigned int)
 {
-	(void)version;
-
 	std::string ss;
 	ar & ss;
 	const char* ptr = ss.data();
@@ -151,7 +145,7 @@ template <class Archive, class Rep, class Period>
 inline void save(
 	Archive& ar,
 	std::chrono::duration<Rep, Period> const& d,
-	const unsigned int version
+	const unsigned int
 	)
 {
 	ar << d.count();
@@ -161,7 +155,7 @@ template <class Archive, class Rep, class Period>
 inline void load(
 	Archive& ar,
 	std::chrono::duration<Rep, Period>& d,
-	const unsigned int version
+	const unsigned int
 	)
 {
 	Rep rep;
@@ -175,7 +169,7 @@ template <class Archive>
 inline void serialize(
 	Archive& ar,
 	sl::Timestamp& t,
-	const unsigned int version
+	const unsigned int
 	)
 {
 	ar & t.data_ns;
@@ -186,8 +180,8 @@ inline void serialize(
 template <class Archive>
 inline void serialize(
 	Archive& ar,
-	sl::RuntimeParameters rt,
-	const unsigned int version
+	sl::RuntimeParameters& rt,
+	const unsigned int
 	)
 {
 	// TODO: As of version 3.1 the sl::RuntimeParameters has an additional
@@ -198,6 +192,19 @@ inline void serialize(
 	ar & rt.enable_depth;
 	ar & rt.confidence_threshold;
 	ar & rt.textureness_confidence_threshold;
+}
+
+// --------------------------- sl::RecordingParameters --------------------------
+
+template <class Archive>
+inline void serialize(
+	Archive& ar,
+	sl::RecordingParameters& rt,
+	const unsigned int
+	)
+{
+	ar & rt.video_filename;
+	ar & rt.compression_mode;
 }
 
 }

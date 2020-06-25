@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
@@ -11,8 +13,8 @@ namespace action {
 
 class zed_close : public request
 {
-private:
-	
+	typedef boost::asio::ip::tcp asio_tcp;
+
 public:
 	// Default constructor.
 	zed_close() 
@@ -22,9 +24,9 @@ public:
 	// Copy constructor.
 	zed_close(const zed_close& other)
 		: request(other)
-	{
-	}
+	{}
 
+	// Constructor.
 	zed_close(
 		const std::string sender_addr,
 		const unsigned short sender_port
@@ -32,9 +34,14 @@ public:
 		: request(sender_addr, sender_port)
 	{}
 
+	// Constructor.
+	zed_close(const asio_tcp::endpoint& sender_ep)
+		: request(sender_ep)
+	{}
+
+	// Destructor.
 	~zed_close()
-	{
-	}
+	{}
 
 	// Action for base runtime instances.
 	void operator()(runtime& rt)
@@ -46,11 +53,23 @@ public:
 	// Action for zed_runtime instances.
 	void operator()(zed_runtime& rt)
 	{
-		std::cout << "[AM] Closing zed...\n";
-		rt.close_zed();
+		if (rt.is_zed_opened() and rt.is_zed_recording())
+		{
+			std::cout << "[AM] ZED is recording. Not closing.\n";
+		}
+		else if (rt.is_zed_opened() and not rt.is_zed_recording())
+		{
+			rt.close_zed();
+			std::cout << "[AM] Closed ZED.\n";
+			// TODO: Implement sending of successful request.
+		}
+		else if (not rt.is_zed_opened())
+		{
+			std::cout << "[AM] ZED already close.\n";
+		}
 	}
 
-	// Clone function. TODO: Implement proper cloning.
+	// Clone function.
 	base_action* clone() const
 	{
 		return new zed_close(*this);
@@ -62,6 +81,9 @@ public:
 	{
 		ar & boost::serialization::base_object<request>(*this);
 	}
+
+private:
+	
 }; 
 
 }

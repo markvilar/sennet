@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <thread>
+#include <string>
 
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
@@ -15,9 +16,8 @@ namespace action {
 
 class sleep : public request
 {
-private:
-	std::chrono::milliseconds m_duration;
-
+	typedef boost::asio::ip::tcp asio_tcp;
+	
 public:
 	// Default constructor.
 	sleep()
@@ -29,6 +29,7 @@ public:
 	sleep(const sleep& other)
 		: request(other)
 	{
+		// TODO: Check that this is deep copy.
 		m_duration = other.m_duration;
 	}
 
@@ -40,6 +41,17 @@ public:
 		std::chrono::duration<Rep, Period> duration
 		)
 		: request(sender_addr, sender_port),
+		m_duration(std::chrono::duration_cast<decltype(m_duration)>
+			(duration))
+	{}
+
+	// Constructor.
+	template <class Rep, class Period>
+	sleep(
+		const asio_tcp::endpoint& sender_ep,
+		std::chrono::duration<Rep, Period> duration
+		)
+		: request(sender_ep),
 		m_duration(std::chrono::duration_cast<decltype(m_duration)>
 			(duration))
 	{}
@@ -81,6 +93,10 @@ public:
 	{
 		std::this_thread::sleep_for(m_duration);
 	}
+
+private:
+	std::chrono::milliseconds m_duration;
+
 };
 
 }

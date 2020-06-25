@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
@@ -14,14 +16,14 @@ namespace action {
 
 class zed_open : public request
 {
+	typedef boost::asio::ip::tcp asio_tcp;
 
 public:
 	// Default constructor.
 	zed_open()
 		: request(),
 		m_init_params()
-	{
-	}
+	{}
 
 	// Copy constructor.
 	zed_open(const zed_open& other)
@@ -34,12 +36,20 @@ public:
 	zed_open(
 		const std::string sender_addr,
 		const unsigned short sender_port,
-		const sl::InitParameters& ip
+		const sl::InitParameters& params
 		)
 		: request(sender_addr, sender_port),
-		m_init_params(ip)
-	{
-	}
+		m_init_params(params)
+	{}
+
+	// Constructor.
+	zed_open(
+		const asio_tcp::endpoint& sender_ep,
+		const sl::InitParameters& params
+		)
+		: request(sender_ep),
+		m_init_params(params)
+	{}
 
 	// Destructor.
 	~zed_open()
@@ -51,8 +61,9 @@ public:
 	{
 		return m_init_params;
 	}
+
 	// Sets the initialization parameters.
-	void set_params(sl::InitParameters params)
+	void set_params(sl::InitParameters& params)
 	{
 		m_init_params = params;
 	}

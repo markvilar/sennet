@@ -9,6 +9,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/sleep.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_close.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_get_settings.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_grab.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_open.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_retrieve.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_start_record.hpp"

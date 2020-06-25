@@ -13,11 +13,11 @@ namespace action {
 
 class request : public base_action
 {
-	typedef boost::asio::ip::tcp boost_tcp;
+	typedef boost::asio::ip::tcp asio_tcp;
 public:
 	// Default constructor.
 	request()
-		: m_sender_addr("0.0.0.0"),
+		: m_sender_addr(""),
 		m_sender_port(0)
 	{}
 
@@ -38,6 +38,12 @@ public:
 		m_sender_port = sender_port;
 	}
 
+	request(const asio_tcp::endpoint& sender_ep)
+	{
+		m_sender_addr = sender_ep.address().to_string();
+		m_sender_port = sender_ep.port();
+	}
+
 	// Virtual destructor due to this class being an interface.
 	virtual ~request() {}
 
@@ -47,19 +53,9 @@ public:
 		return { m_sender_addr, m_sender_port };
 	}
 
-	// Sets the sender address and port.
-	inline void set_sender(
-		const std::string& sender_addr,
-		const unsigned short sender_port
-		)
-	{
-		m_sender_addr = sender_addr;
-		m_sender_port = sender_port;
-	}
-
 	// Checks if the given endpoint has the same address and port as the
 	// sender.
-	bool is_sender(const boost_tcp::endpoint& ep)
+	bool is_sender(const asio_tcp::endpoint& ep)
 	{
 		return (ep.address().to_string() == m_sender_addr) and
 			(ep.port() == m_sender_port);

@@ -9,19 +9,57 @@
 
 #include <zedutils/am/actions.hpp>
 #include <zedutils/am/core.hpp>
+#include <zedutils/io.hpp>
+
+void write_zed_grab_action(std::shared_ptr<am::connection> conn)
+{
+	if (not conn)
+	{
+		return;
+	}
+
+	// Initialize ZED runtime parameters.
+	sl::RuntimeParameters run_params(
+		sl::SENSING_MODE::STANDARD,
+		false
+		);
+
+	// Initialize ZED grab action.
+	am::action::zed_grab action(
+		conn->get_local_endpoint(),
+		run_params,
+		100
+		);
+
+	conn->async_write(action,
+		[](boost::system::error_code const& ec)
+		{
+			if (ec)
+			{
+				std::cout << "[ERROR] action: grab\n"
+					<< ec.message();
+			}
+			else
+			{
+				std::cout << "Grab action written!\n";
+			}
+		});
+}
 
 void write_zed_open_action(std::shared_ptr<am::connection> conn)
 {
+	if (not conn)
+	{
+		return;
+	}
+
 	// Initialize ZED parameters.
 	sl::InitParameters ips;
 	ips.sdk_verbose = true;
 
-	auto local_ep = conn->get_local_endpoint();
-
 	// Initialize ZED open action.
 	am::action::zed_open action(
-		local_ep.address().to_string(),
-		local_ep.port(),
+		conn->get_local_endpoint(),
 		ips
 		);
 
@@ -43,12 +81,14 @@ void write_zed_open_action(std::shared_ptr<am::connection> conn)
 
 void write_sleep_action(std::shared_ptr<am::connection> conn)
 {
-	auto local_ep = conn->get_local_endpoint();
+	if (not conn)
+	{
+		return;
+	}
 
 	// Initialize ZED sleep action.
 	am::action::sleep action(
-		local_ep.address().to_string(),
-		local_ep.port(),
+		conn->get_local_endpoint(),
 		std::chrono::seconds(5)
 		);
 
@@ -69,11 +109,14 @@ void write_sleep_action(std::shared_ptr<am::connection> conn)
 
 void write_zed_retrieve_action(std::shared_ptr<am::connection> conn)
 {
-	auto local_ep = conn->get_local_endpoint();
+	if (not conn)
+	{
+		return;
+	}
 
+	// Initialize ZED retrieve action.
 	am::action::zed_retrieve action(
-		local_ep.address().to_string(),
-		local_ep.port(),
+		conn->get_local_endpoint(),
 		sl::TIME_REFERENCE::IMAGE,
 		sl::VIEW::LEFT
 		);
@@ -97,12 +140,13 @@ void write_zed_retrieve_action(std::shared_ptr<am::connection> conn)
 
 void write_zed_close_action(std::shared_ptr<am::connection> conn)
 {
+	if (not conn)
+	{
+		return;
+	}
+
 	// Initialize ZED close action.
-	auto local_ep = conn->get_local_endpoint();
-	am::action::zed_close action(
-		local_ep.address().to_string(),
-		local_ep.port()
-		);
+	am::action::zed_close action(conn->get_local_endpoint());
 
 	conn->async_write(action,
 		[](boost::system::error_code const& ec)
@@ -115,6 +159,42 @@ void write_zed_close_action(std::shared_ptr<am::connection> conn)
 			else
 			{
 				std::cout << "Close action written!\n";
+			}
+		});
+}
+
+void write_zed_start_record_action(std::shared_ptr<am::connection> conn)
+{
+	if (not conn)
+	{
+		return;
+	}
+
+	// Initialize recording parameters.
+	sl::RecordingParameters rec_params(
+		"remote_recording.svo",
+		sl::SVO_COMPRESSION_MODE::H264
+		);
+
+	// Initialize ZED start record action.
+	am::action::zed_start_record action(
+		conn->get_local_endpoint(),
+		rec_params
+		);
+
+	std::cout << "Recording parameters: " << action.get_rec_params() << "\n";
+
+	conn->async_write(action,
+		[](boost::system::error_code const& ec)
+		{
+			if (ec)
+			{
+				std::cout << "[ERROR] action: start record\n"
+					<< ec.message();
+			}
+			else
+			{
+				std::cout << "Start record action written!\n";
 			}
 		});
 }
@@ -168,10 +248,19 @@ void zed_main(am::runtime& rt)
 	{
 		std::cout << "Found connection: " << addr << "\n";
 		write_zed_open_action(conn);
+
 		//write_sleep_action(conn);
-		write_list_connections_action(conn);
-		write_zed_retrieve_action(conn);
+
+		write_zed_start_record_action(conn);
+
+		write_zed_grab_action(conn);
+
+		//write_list_connections_action(conn);
+
+		//write_zed_retrieve_action(conn);
+
 		write_zed_close_action(conn);
+
 		//write_invalid_request_action(conn);
 	}
 }

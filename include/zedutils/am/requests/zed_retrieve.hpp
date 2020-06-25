@@ -18,12 +18,15 @@ namespace action {
 
 class zed_retrieve : public request
 {
+	typedef boost::asio::ip::tcp asio_tcp;
+
 public:
 	// Default constructor.
 	zed_retrieve()
 		: request()
 	{
-		// TODO: Implement.
+		m_time_ref = sl::TIME_REFERENCE::IMAGE;
+		m_view = sl::VIEW::LEFT;
 	}
 
 	// Copy constructor.
@@ -47,10 +50,20 @@ public:
 		m_view = view;
 	}
 
-	~zed_retrieve()
+	// Constructor.
+	zed_retrieve(
+		const asio_tcp::endpoint& sender_ep,
+		const sl::TIME_REFERENCE& time_ref,
+		const sl::VIEW view
+		)
+		: request(sender_ep)
 	{
-		// TODO: Implement.
+		m_time_ref = time_ref;
+		m_view = view;
 	}
+
+	~zed_retrieve()
+	{}
 
 	// Gets the stereo view.
 	sl::VIEW get_view() const { return m_view; }
@@ -71,28 +84,10 @@ public:
 
 		// Get IP address and port to send image to.
 		auto [addr, port] = get_sender();
-
-		// TODO: Improve code for finding connection.
-		// Find connection based on address and port.
 		auto conn = rt.find_connection(addr, port);
-
-		// Find connection based on address.
-		if (!conn)
-		{
-			conn = rt.find_connection(addr);
-		}
-
-		// If connection is not found, we return.
-		if (!conn)
-		{
-			return;
-		}
-
-		// Get local endpoint.
-		auto local_ep = conn->get_local_endpoint();
-
-		// If ZED is opened and recording.
-		if (rt.is_zed_opened() && rt.is_zed_recording())
+		
+		// If we found connection, ZED is opened and recording.
+		if (conn and rt.is_zed_opened() and rt.is_zed_recording())
 		{
 			// TODO: Add assertions for ZED error code.
 			sl::Mat img; 
@@ -104,16 +99,22 @@ public:
 				std::cout << sl::toVerbose(ec) << "\n";
 
 			// Create image response and write over connection.
-			zed_image response(local_ep.address().to_string(), 
-				local_ep.port(), img, t_img, m_view);
+			zed_image response(
+				conn->get_local_endpoint(),
+				img, 
+				t_img, 
+				m_view
+				);
 			conn->async_write(response);
 		}
-		else
+		else if (conn)
 		{
 			// Create invalid request response and write over
 			// connection.
-			invalid_request response(local_ep.address().to_string(),
-				local_ep.port(), *this);
+			invalid_request response(
+				conn->get_local_endpoint(),
+				*this
+				);
 			conn->async_write(response);
 		}
 	}
