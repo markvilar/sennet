@@ -21,7 +21,9 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/zed_settings.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/io.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/log.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/sensor_handler.hpp"
 	"${PROJECT_SOURCE_DIR}/include/zedutils/serialization.hpp"
+	"${PROJECT_SOURCE_DIR}/include/zedutils/zed_handler.hpp"
 	)
 
 
@@ -31,6 +33,8 @@ add_library(zedutils
 	am/core.cpp 
 	io.cpp 
 	log.cpp
+	sensor_handler.cpp
+	zed_handler.cpp
 	${HEADER_LIST}
 	)
 	
