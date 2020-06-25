@@ -1,8 +1,3 @@
-# Node - UHI
-add_executable(node_uhi node_uhi.cpp)
-target_compile_features(node_uhi PRIVATE cxx_std_17)
-target_link_libraries(node_uhi PRIVATE zedutils)
-	
 # Node - User
 add_executable(node_user node_user.cpp)
 target_compile_features(node_user PRIVATE cxx_std_17)
@@ -34,11 +29,6 @@ add_executable(test_serialization test_serialization.cpp)
 target_compile_features(test_serialization PRIVATE cxx_std_17)
 target_link_libraries(test_serialization PRIVATE zedutils)
 
-# Test - UHI
-add_executable(test_uhi test_uhi.cpp)
-target_compile_features(test_uhi PRIVATE cxx_std_17)
-target_link_libraries(test_uhi PRIVATE zedutils)
-	
 # Test - User
 add_executable(test_user test_user.cpp)
 target_compile_features(test_user PRIVATE cxx_std_17)
