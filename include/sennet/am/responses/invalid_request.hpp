@@ -5,9 +5,9 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
-#include <zedutils/am/core.hpp>
-#include <zedutils/am/requests/request.hpp>
-#include <zedutils/am/responses/response.hpp>
+#include <sennet/am/core.hpp>
+#include <sennet/am/requests/request.hpp>
+#include <sennet/am/responses/response.hpp>
 
 namespace am {
 namespace action {

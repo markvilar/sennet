@@ -4,6 +4,9 @@
 #include <mutex>
 #include <thread>
 
+namespace sennet 
+{
+
 class sensor_handler
 {
 public:
@@ -27,4 +30,6 @@ private:
 
 	// The handler exec loop.
 	virtual void run_worker() = 0;
+};
+
 };

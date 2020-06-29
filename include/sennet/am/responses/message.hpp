@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include <zedutils/am/core.hpp>
-#include <zedutils/am/responses/response.hpp>
+#include <sennet/am/core.hpp>
+#include <sennet/am/responses/response.hpp>
 
 namespace am {
 namespace action {

@@ -7,11 +7,11 @@
 
 #include <sl/Camera.hpp>
 
-#include <zedutils/am/core.hpp>
-#include <zedutils/am/requests/request.hpp>
-#include <zedutils/am/responses/invalid_request.hpp>
-#include <zedutils/am/responses/zed_image.hpp>
-#include <zedutils/serialization.hpp>
+#include <sennet/am/core.hpp>
+#include <sennet/am/requests/request.hpp>
+#include <sennet/am/responses/invalid_request.hpp>
+#include <sennet/am/responses/zed_image.hpp>
+#include <sennet/serialization.hpp>
 
 namespace am { 
 namespace action {

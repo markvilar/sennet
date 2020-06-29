@@ -4,9 +4,9 @@
 
 #include <sl/Camera.hpp>
 
-#include <zedutils/am/core.hpp>
-#include <zedutils/am/responses/response.hpp>
-#include <zedutils/serialization.hpp>
+#include <sennet/am/core.hpp>
+#include <sennet/am/responses/response.hpp>
+#include <sennet/serialization.hpp>
 
 namespace am { 
 namespace action {

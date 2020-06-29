@@ -6,7 +6,7 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
 
-#include <zedutils/am/core.hpp>
+#include <sennet/am/core.hpp>
 
 namespace am {
 namespace action {

@@ -1,5 +1,5 @@
-#include <zedutils/am/container_device.hpp>
-#include <zedutils/am/core.hpp>
+#include <sennet/am/container_device.hpp>
+#include <sennet/am/core.hpp>
 
 namespace am {
 

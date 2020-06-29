@@ -11,10 +11,10 @@
 
 #include <sl/Camera.hpp>
 
-#include <zedutils/am/actions.hpp>
-#include <zedutils/am/core.hpp>
-#include <zedutils/io.hpp>
-#include <zedutils/serialization.hpp>
+#include <sennet/am/actions.hpp>
+#include <sennet/am/core.hpp>
+#include <sennet/io.hpp>
+#include <sennet/serialization.hpp>
 
 void save_string()
 {

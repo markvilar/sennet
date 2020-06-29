@@ -4,9 +4,10 @@
 
 #include <spdlog/spdlog.h>
 
-#include <zedutils/am/core.hpp>
+#include <sennet/am/core.hpp>
 
-namespace am {
+namespace sennet 
+{
 
 class log
 {

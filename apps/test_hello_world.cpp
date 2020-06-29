@@ -3,8 +3,8 @@
 
 #include <boost/program_options.hpp> 		// program_options
 
-#include <zedutils/am/actions.hpp>
-#include <zedutils/am/core.hpp>
+#include <sennet/am/actions.hpp>
+#include <sennet/am/core.hpp>
 
 void hello_world_main(am::runtime& rt)
 {

@@ -1,9 +1,10 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-#include <zedutils/log.hpp>
+#include <sennet/log.hpp>
 
-namespace am {
+namespace sennet 
+{
 
 log::log(const std::string& name)
 {

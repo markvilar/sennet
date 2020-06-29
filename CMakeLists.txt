@@ -1,6 +1,6 @@
 # Project
 cmake_minimum_required(VERSION 3.13)
-project(zedutils VERSION 1.0 LANGUAGES CXX C)
+project(sennet VERSION 1.0 LANGUAGES CXX C)
 
 # If main project
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)

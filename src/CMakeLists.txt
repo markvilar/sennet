@@ -1,36 +1,38 @@
 # Headers
 set(HEADER_LIST 
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/container_device.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/core.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/actions/hello_world.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/list_connections.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/request.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/sleep.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_close.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_get_settings.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_grab.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_open.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_retrieve.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_start_record.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/requests/zed_stop_record.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/invalid_request.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/message.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/response.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/zed_image.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/am/responses/zed_settings.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/io.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/log.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/sensor_handler.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/serialization.hpp"
-	"${PROJECT_SOURCE_DIR}/include/zedutils/zed_handler.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/actions.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/container_device.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/core.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/actions/hello_world.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/list_connections.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/request.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/sleep.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_close.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_get_settings.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_grab.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_open.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_retrieve.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_start_record.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_stop_record.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/invalid_request.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/message.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/response.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/zed_image.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/zed_settings.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/application.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/io.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/log.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/sensor_handler.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/serialization.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/zed_handler.hpp"
 	)
 
 
 
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(zedutils
+add_library(sennet
 	am/core.cpp 
+	application.cpp
 	io.cpp 
 	log.cpp
 	sensor_handler.cpp
@@ -41,7 +43,7 @@ add_library(zedutils
 # Include headers and source code from other libraries in zedutils. This way we
 # won't have to link all of zedutils dependencies into targets that use
 # zedutils, but just zedutils library.
-target_include_directories(zedutils PUBLIC 
+target_include_directories(sennet PUBLIC 
 	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	${Boost_INCLUDE_DIRS} 
@@ -50,14 +52,14 @@ target_include_directories(zedutils PUBLIC
 	) 
 		
 # This depends on ZED and Boost features that needs to be linked to the library.
-target_link_libraries(zedutils PRIVATE 
+target_link_libraries(sennet PRIVATE 
 	Boost::serialization
 	Boost::thread
 	${ZED_LIBS}
 	) 
 
 # All users of this will need at least C++17
-target_compile_features(zedutils PUBLIC 
+target_compile_features(sennet PUBLIC 
 	cxx_std_17
 	)
 
