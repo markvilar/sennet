@@ -3,28 +3,12 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/am/actions.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/am/container_device.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/am/core.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/actions/hello_world.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/list_connections.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/request.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/sleep.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_close.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_get_settings.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_grab.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_open.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_retrieve.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_start_record.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/requests/zed_stop_record.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/invalid_request.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/message.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/response.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/zed_image.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/responses/zed_settings.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/handlers/handler.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/handlers/zed_recorder.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/application.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/io.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/log.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/sensor_handler.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/serialization.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed_handler.hpp"
 	)
 
 
@@ -32,11 +16,11 @@ set(HEADER_LIST
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(sennet
 	am/core.cpp 
+	handlers/handler.cpp
+	handlers/zed_recorder.cpp
 	application.cpp
 	io.cpp 
 	log.cpp
-	sensor_handler.cpp
-	zed_handler.cpp
 	${HEADER_LIST}
 	)
 	

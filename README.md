@@ -30,12 +30,13 @@ cmake --build build --target test
 ```
 To build docs:
 ```
-cmaek --build build --target docs
+cmake --build build --target docs
 ```
 
 ## TODOs
 - Integrate logger into system.
 - Implement sensor handler.
+- Implement error wrapper.
 - Revise message system.
 - Implement user interface.
 - Implement application class.
