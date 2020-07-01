@@ -16,7 +16,6 @@ set(HEADER_LIST
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(sennet
 	am/core.cpp 
-	handlers/handler.cpp
 	handlers/zed_recorder.cpp
 	application.cpp
 	io.cpp 
