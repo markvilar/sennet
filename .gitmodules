@@ -1,0 +1,6 @@
+[submodule "extern/spdlog"]
+	path = extern/spdlog
+	url = ../../gabime/spdlog.git
+[submodule "extern/imgui"]
+	path = extern/imgui
+	url = ../../markvilar/imgui
