@@ -192,6 +192,11 @@ sl::RuntimeParameters to_stereolabs(const zed::runtime_params& x)
 	// TODO: Implement.
 }
 
+sl::COORDINATE_SYSTEM to_stereolabs(const zed::coordinate_system& x)
+{
+	// TODO: Implement.
+}
+
 // To ZED conversion functions.
 
 zed::view to_sennet(const sl::VIEW& x)

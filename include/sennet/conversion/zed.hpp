@@ -21,6 +21,7 @@ sl::UNIT to_stereolabs(const zed::unit& x);
 sl::SVO_COMPRESSION_MODE to_stereolabs(const zed::svo_compression_mode& x);
 sl::SENSING_MODE to_stereolabs(const zed::sensing_mode& x);
 sl::REFERENCE_FRAME to_stereolabs(const zed::reference_frame& x);
+sl::COORDINATE_SYSTEM to_stereolabs(const zed::coordinate_system& x);
 
 // Conversion function from sennet::zed classes to sl classes.
 std::shared_ptr<sl::Mat> to_stereolabs(const zed::image& x);

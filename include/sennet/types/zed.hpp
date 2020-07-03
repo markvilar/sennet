@@ -3,9 +3,9 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include <stdexcept>
 #include <string>
-#include <sstream>
 
 namespace sennet
 {
@@ -13,23 +13,10 @@ namespace sennet
 namespace zed
 {
 
-enum class view 
-{ 
-	none = 0, left, right, left_gray, right_gray, left_unrectified,
-	right_unrectified, left_unrectified_gray, right_unrectified_gray,
-	side_by_side
-};
-
-enum class resolution 
-{ 
-	none = 0, hd2k, hd1080, hd720, vga 
-};
-
-enum class video_settings
-{ 
-	none = 0, brightness, contrast, hue, saturation, sharpness, gain, 
-	exposure, aec_agc, whitebalance_temperature, whitebalance_auto,
-	led_status
+enum class coordinate_system
+{
+	none = 0, image, left_handed_y_up, right_handed_y_up, right_handed_z_up,
+	left_handed_z_up, right_handed_z_up_x_fwd
 };
 
 enum class depth_mode 
@@ -37,9 +24,14 @@ enum class depth_mode
 	none = 0, performance, quality, ultra
 };
 
-enum class unit 
+enum class reference_frame 
 { 
-	none = 0, millimeter, centimeter, meter, inch, foot 
+	none = 0, world, camera 
+};
+
+enum class resolution 
+{ 
+	none = 0, hd2k, hd1080, hd720, vga 
 };
 
 enum class svo_compression_mode
@@ -52,9 +44,23 @@ enum class sensing_mode
 	none = 0, standard, fill 
 };
 
-enum class reference_frame 
+enum class unit 
 { 
-	none = 0, world, camera 
+	none = 0, millimeter, centimeter, meter, inch, foot 
+};
+
+enum class video_settings
+{ 
+	none = 0, brightness, contrast, hue, saturation, sharpness, gain, 
+	exposure, aec_agc, whitebalance_temperature, whitebalance_auto,
+	led_status
+};
+
+enum class view 
+{ 
+	none = 0, left, right, left_gray, right_gray, left_unrectified,
+	right_unrectified, left_unrectified_gray, right_unrectified_gray,
+	side_by_side
 };
 
 class image
@@ -95,27 +101,74 @@ private:
 	size_t m_channels;
 };
 
+class depth_init_params
+{
+	// Encapsulate of the parameters in sl::InitParameters related to depth
+	// measurement and the depth map computed by the ZED. 
+public:
+	depth_init_params(
+		const depth_mode depth_mode=depth_mode::ultra,
+		const unit coord_units=unit::millimeter,
+		const coordinate_system coord_sys=coordinate_system::image,
+		const int depth_stab=1,
+		const float depth_min=-1,
+		const float depth_max=-1,
+		const bool depth_right=false
+	);
+	~depth_init_params() = default;
+
+	inline depth_mode get_depth_mode() const { return m_depth_mode; }
+	inline unit get_coord_units() const { return m_coord_units; }
+	inline coordinate_system get_coord_sys() const { return m_coord_sys; }
+	inline int get_depth_stab() const { return m_depth_stab; }
+	inline float get_min_depth() const { return m_depth_min; }
+	inline float get_max_depth() const { return m_depth_max; }
+	inline bool right_depth_enabled() const { return m_depth_right; }
+
+	friend class init_params;
+
+private:
+	depth_mode m_depth_mode;
+	unit m_coord_units;
+	coordinate_system m_coord_sys;
+	int m_depth_stab;
+	float m_depth_min;
+	float m_depth_max;
+	bool m_depth_right;
+};
+
 class init_params
 {
 	// Wrapper for sl::InitParameters. Neglects functionality of the
 	// Stereolabs SDK that is considered unimportant for recording.
 public:
-	init_params();
+	init_params(
+		const depth_init_params depth_params,
+		const resolution resolution=resolution::hd720,
+		const int camera_fps=0,
+		const bool img_enhancement=true,
+		const bool disable_self_calib=false,
+		const bool sdk_verbose=false,
+		const bool sensor_required=false
+	);
+	~init_params() = default;
+
+	inline depth_init_params get_depth_params() const { return m_depth_params; }
+	inline resolution get_resolution() const { return m_resolution; }
+	inline int get_camera_fps() const { return m_camera_fps; }
+	inline bool img_enhance_enabled() const { return m_img_enhancement; }
+	inline bool self_calib_disabled() const { return m_disable_self_calib; }
+	inline bool is_sdk_verbose() const { return m_sdk_verbose; }
+	inline bool sensors_required() const { return m_sensors_required; }
 
 private:
+	depth_init_params m_depth_params;
 	resolution m_resolution;
-	int m_fps;
-	int m_image_flip;
+	int m_camera_fps;
+	bool m_img_enhancement;
 	bool m_disable_self_calib;
-	bool right_side_measure;
-	depth_mode m_depth_mode;
-	int m_depth_stab;
-	float m_depth_min_dist;
-	float m_depth_max_dist;
-	unit m_unit;
 	bool m_sdk_verbose;
 	bool m_sensors_required;
-	bool m_image_enhancement;
 };
 
 class recording_params

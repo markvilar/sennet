@@ -6,6 +6,33 @@ namespace sennet
 namespace zed
 {
 
+depth_init_params(
+		const depth_mode depth_mode=depth_mode::ultra,
+		const unit coord_units=unit::millimeter,
+		const coordinate_system coord_sys=coordinate_system::image,
+		const int depth_stab=1,
+		const float depth_min=-1,
+		const float depth_max=-1,
+		const bool depth_right=false
+	)
+{
+	// TODO: Implement.
+}
+
+init_params(
+		const depth_init_params depth_params,
+		const resolution resolution=resolution::hd720,
+		const int camera_fps=0,
+		const bool img_enhancement=true,
+		const bool disable_self_calib=false,
+		const bool sdk_verbose=false,
+		const bool sensor_required=false
+	)
+{
+	// TODO: Implement. Also implement conversion function to
+	// sl::InitParameters.
+}
+
 image::image()
 	: m_buffer(),
 	m_width(0),
