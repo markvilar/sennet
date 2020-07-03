@@ -23,10 +23,9 @@ enum class handler_type
 
 class handler
 {
-public:
-	// Constructor.
-	handler();
+	// Basic handler interface class.
 
+public:
 	// Deconstructor.
 	virtual ~handler() = default;
 
@@ -35,6 +34,9 @@ public:
 
 	// Closes the handle.
 	virtual void close() = 0;
+
+	// Checks if the handle is open.
+	virtual bool is_opened() const = 0;
 	
 	// Returns the name of the handler.
 	virtual const char* get_name() const = 0;
@@ -44,13 +46,6 @@ public:
 
 	// Returns a string representation of the handler.
 	virtual std::string to_string() const { return get_name(); }
-
-	// Checks if the handle is open.
-	virtual bool is_opened() const { return m_opened; };
-
-protected:
-	bool m_opened = false;
-
 };
 
 };

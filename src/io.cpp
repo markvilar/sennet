@@ -86,9 +86,9 @@ std::ostream& operator<<(std::ostream& os, const sl::Mat& m)
 		<< ", type: " << m.getDataType()
 		<< ", memory: " << m.getMemoryType()
 		<< ", step: " << m.getStep() << "\n"
-		<< "step bytes: " << m.getStepBytes()
-		<< ", width bytes: " << m.getWidthBytes()
-		<< ", pixel bytes: " << m.getPixelBytes();
+		<< "width bytes: " << m.getWidthBytes()
+		<< ", pixel bytes: " << m.getPixelBytes()
+		<< ", step bytes: " << m.getStepBytes();
 	return os;
 }
 

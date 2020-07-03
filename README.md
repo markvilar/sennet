@@ -34,9 +34,11 @@ cmake --build build --target docs
 ```
 
 ## TODOs
-- Integrate logger into system.
 - Implement sensor handler.
 - Implement error wrapper.
 - Revise message system.
 - Implement user interface.
 - Implement application class.
+
+## DONEs
+- Integrate logger into system.
