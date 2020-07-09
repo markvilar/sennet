@@ -1,36 +1,53 @@
 #include <sennet/types/zed.hpp>
 
+
+
+
 namespace sennet
 {
 
 namespace zed
 {
 
-depth_init_params(
-		const depth_mode depth_mode=depth_mode::ultra,
-		const unit coord_units=unit::millimeter,
-		const coordinate_system coord_sys=coordinate_system::image,
-		const int depth_stab=1,
-		const float depth_min=-1,
-		const float depth_max=-1,
-		const bool depth_right=false
+depth_init_params::depth_init_params(
+		const depth_mode mode,
+		const unit coord_units,
+		const coordinate_system coord_sys,
+		const int depth_stab,
+		const float depth_min,
+		const float depth_max,
+		const bool depth_right
 	)
+	: m_depth_mode(mode), m_coord_units(coord_units), 
+	m_coord_sys(coord_sys), m_depth_stab(depth_stab),
+	m_depth_min(depth_min), m_depth_max(depth_max),
+	m_depth_right(depth_right)
 {
 	// TODO: Implement.
 }
 
-init_params(
+std::string depth_init_params::to_string() const
+{
+	// TODO: Implement.
+}
+
+init_params::init_params(
 		const depth_init_params depth_params,
-		const resolution resolution=resolution::hd720,
-		const int camera_fps=0,
-		const bool img_enhancement=true,
-		const bool disable_self_calib=false,
-		const bool sdk_verbose=false,
-		const bool sensor_required=false
+		const resolution resolution,
+		const int camera_fps,
+		const bool img_enhancement,
+		const bool disable_self_calib,
+		const bool sdk_verbose,
+		const bool sensor_required
 	)
 {
 	// TODO: Implement. Also implement conversion function to
 	// sl::InitParameters.
+}
+
+std::string init_params::to_string() const
+{
+	// TODO: Implement.
 }
 
 image::image()
@@ -143,3 +160,241 @@ std::ostream& operator<<(std::ostream& os, const image& img)
 
 }
 };
+
+std::string to_string(const sennet::zed::coordinate_system& sys)
+{
+	switch (sys)
+	{
+		case sennet::zed::coordinate_system::image: 
+			return std::string("image");
+		case sennet::zed::coordinate_system::left_handed_y_up: 
+			return std::string("left_handed_y_up");
+		case sennet::zed::coordinate_system::right_handed_y_up:
+			return std::string("right_handed_y_up");
+		case sennet::zed::coordinate_system::right_handed_z_up:
+			return std::string("right_handed_z_up");
+		case sennet::zed::coordinate_system::left_handed_z_up:
+			return std::string("left_handed_z_up");
+		case sennet::zed::coordinate_system::right_handed_z_up_x_fwd:
+			return std::string("right_handed_z_up_x_fwd");
+		default: 
+			return std::string("none");
+	}
+}
+
+std::string to_string(const sennet::zed::depth_mode& mode)
+{
+	switch (mode)
+	{
+		case sennet::zed::depth_mode::performance:
+			return std::string("performance");
+		case sennet::zed::depth_mode::quality:
+			return std::string("quality");
+		case sennet::zed::depth_mode::ultra:
+			return std::string("ultra");
+		default:
+			return std::string("none");
+	}
+}
+
+std::string to_string(const sennet::zed::reference_frame& ref)
+{
+	switch (ref)
+	{
+		case sennet::zed::reference_frame::world:
+			return std::string("world");
+		case sennet::zed::reference_frame::camera:
+			return std::string("camera");
+		default:
+			return std::string("none");
+	}
+}
+
+std::string to_string(const sennet::zed::resolution& res)
+{
+	switch (res)
+	{
+		case sennet::zed::resolution::hd2k:
+			return std::string("hd2k");
+		case sennet::zed::resolution::hd1080:
+			return std::string("hd1080");
+		case sennet::zed::resolution::hd720:
+			return std::string("hd720");
+		case sennet::zed::resolution::vga:
+			return std::string("vga");
+		default:
+			return std::string("none");
+	}
+}
+
+std::string to_string(const sennet::zed::svo_compression_mode& scm)
+{
+	switch (scm)
+	{
+		case sennet::zed::svo_compression_mode::lossless:
+			return std::string("lossless");
+		case sennet::zed::svo_compression_mode::h264:
+			return std::string("h264");
+		case sennet::zed::svo_compression_mode::h265:
+			return std::string("h265");
+		default:
+			return std::string("none");
+	}
+}
+
+std::string to_string(const sennet::zed::sensing_mode& sm)
+{
+	switch (sm)
+	{
+		case sennet::zed::sensing_mode::standard:
+			return std::string("standard");
+		case sennet::zed::sensing_mode::fill:
+			return std::string("fill");
+		default:
+			return std::string("none");
+	}
+}
+
+std::string to_string(const sennet::zed::unit& u)
+{
+	switch (u)
+	{
+		case sennet::zed::unit::millimeter:
+			return std::string("millimeter");
+		case sennet::zed::unit::centimeter:
+			return std::string("centimeter");
+		case sennet::zed::unit::meter:
+			return std::string("meter");
+		case sennet::zed::unit::inch:
+			return std::string("inch");
+		case sennet::zed::unit::foot:
+			return std::string("foot");
+		default:
+			return std::string("none");
+	}
+}
+
+std::string to_string(const sennet::zed::video_settings& vs)
+{
+	switch (vs)
+	{
+		case sennet::zed::video_settings::brightness:
+			return std::string("brightness");
+		case sennet::zed::video_settings::contrast:
+			return std::string("contrast");
+		case sennet::zed::video_settings::hue:
+			return std::string("hue");
+		case sennet::zed::video_settings::saturation:
+			return std::string("saturation");
+		case sennet::zed::video_settings::sharpness:
+			return std::string("sharpness");
+		case sennet::zed::video_settings::gain:
+			return std::string("gain");
+		case sennet::zed::video_settings::exposure:
+			return std::string("exposure");
+		case sennet::zed::video_settings::aec_agc:
+			return std::string("aec_agc");
+		case sennet::zed::video_settings::whitebalance_temperature:
+			return std::string("whitebalance_temperature");
+		case sennet::zed::video_settings::whitebalance_auto:
+			return std::string("whitebalance_auto");
+		case sennet::zed::video_settings::led_status:
+			return std::string("led_status");
+		default:
+			return std::string("none");
+	}
+}
+
+std::string to_string(const sennet::zed::view& v)
+{
+	switch (v)
+	{
+		case sennet::zed::view::left:
+			return std::string("left");
+		case sennet::zed::view::right:
+			return std::string("right");
+		case sennet::zed::view::left_gray:
+			return std::string("left_gray");
+		case sennet::zed::view::right_gray:
+			return std::string("right_gray");
+		case sennet::zed::view::left_unrectified:
+			return std::string("left_unrectified");
+		case sennet::zed::view::right_unrectified:
+			return std::string("right_unrectified");
+		case sennet::zed::view::left_unrectified_gray:
+			return std::string("left_unrectified_gray");
+		case sennet::zed::view::right_unrectified_gray:
+			return std::string("right_unrectified_gray");
+		case sennet::zed::view::side_by_side:
+			return std::string("side_by_side");
+		default:
+			return std::string("none");
+	}
+}
+
+std::ostream& operator<<(
+	std::ostream& os, 
+	const sennet::zed::coordinate_system& sys
+	)
+{
+	os << to_string(sys);
+	return os;
+}
+
+std::ostream& operator<<(
+	std::ostream& os, 
+	const sennet::zed::depth_mode& mode
+	)
+{
+	os << to_string(mode);
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::reference_frame& ref)
+{
+	os << to_string(ref);
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::resolution& res)
+{
+	os << to_string(res);
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::svo_compression_mode& scm)
+{
+	os << to_string(scm);
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::sensing_mode& sm)
+{
+	os << to_string(sm);
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::unit& u)
+{
+	os << to_string(u);
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::video_settings& vs)
+{
+	os << to_string(vs);
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::view& v)
+{
+	os << to_string(v);
+	return os;
+}

@@ -5,6 +5,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/am/core.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/handlers/handler.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/handlers/zed_recorder.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/types/basic_types.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/zed.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/conversion/zed.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/application.hpp"
@@ -19,6 +20,7 @@ set(HEADER_LIST
 add_library(sennet
 	am/core.cpp 
 	handlers/zed_recorder.cpp
+	types/basic_types.cpp
 	types/zed.cpp
 	conversion/zed.cpp
 	application.cpp

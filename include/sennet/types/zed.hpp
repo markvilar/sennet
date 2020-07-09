@@ -24,6 +24,7 @@ enum class depth_mode
 	none = 0, performance, quality, ultra
 };
 
+
 enum class reference_frame 
 { 
 	none = 0, world, camera 
@@ -62,6 +63,9 @@ enum class view
 	right_unrectified, left_unrectified_gray, right_unrectified_gray,
 	side_by_side
 };
+
+
+
 
 class image
 {
@@ -107,7 +111,7 @@ class depth_init_params
 	// measurement and the depth map computed by the ZED. 
 public:
 	depth_init_params(
-		const depth_mode depth_mode=depth_mode::ultra,
+		const depth_mode mode=depth_mode::ultra,
 		const unit coord_units=unit::millimeter,
 		const coordinate_system coord_sys=coordinate_system::image,
 		const int depth_stab=1,
@@ -118,7 +122,7 @@ public:
 	~depth_init_params() = default;
 
 	inline depth_mode get_depth_mode() const { return m_depth_mode; }
-	inline unit get_coord_units() const { return m_coord_units; }
+		inline unit get_coord_units() const { return m_coord_units; }
 	inline coordinate_system get_coord_sys() const { return m_coord_sys; }
 	inline int get_depth_stab() const { return m_depth_stab; }
 	inline float get_min_depth() const { return m_depth_min; }
@@ -126,6 +130,9 @@ public:
 	inline bool right_depth_enabled() const { return m_depth_right; }
 
 	friend class init_params;
+
+	// TODO: Implement.
+	std::string to_string() const;
 
 private:
 	depth_mode m_depth_mode;
@@ -160,6 +167,8 @@ public:
 	inline bool self_calib_disabled() const { return m_disable_self_calib; }
 	inline bool is_sdk_verbose() const { return m_sdk_verbose; }
 	inline bool sensors_required() const { return m_sensors_required; }
+
+	std::string to_string() const;
 
 private:
 	depth_init_params m_depth_params;
@@ -221,5 +230,36 @@ private:
 	int m_text_conf_threshold;
 };
 
+
+
+}
 };
-};
+
+std::string to_string(const sennet::zed::coordinate_system& sys);
+std::string to_string(const sennet::zed::depth_mode& mode);
+std::string to_string(const sennet::zed::reference_frame& ref);
+std::string to_string(const sennet::zed::resolution& res);
+std::string to_string(const sennet::zed::svo_compression_mode& scm);
+std::string to_string(const sennet::zed::sensing_mode& sm);
+std::string to_string(const sennet::zed::unit& u);
+std::string to_string(const sennet::zed::video_settings& vs);
+std::string to_string(const sennet::zed::view& v);
+
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::coordinate_system& sys);
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::depth_mode& mode);
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::reference_frame& ref);
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::resolution& res);
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::svo_compression_mode& scm);
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::sensing_mode& sm);
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::unit& u);
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::video_settings& vs);
+std::ostream& operator<<(std::ostream& os, 
+	const sennet::zed::view& v);
