@@ -64,8 +64,45 @@ enum class view
 	side_by_side
 };
 
+class depth_init_params
+{
+	// Encapsulate of the parameters in sl::InitParameters related to depth
+	// measurement and the depth map computed by the ZED. 
+public:
+	depth_init_params(
+		const depth_mode mode=depth_mode::ultra,
+		const unit coord_units=unit::millimeter,
+		const coordinate_system coord_sys=coordinate_system::image,
+		const int depth_stab=1,
+		const float depth_min=-1,
+		const float depth_max=-1,
+		const bool depth_right=false
+	);
+	~depth_init_params() = default;
 
+	inline depth_mode get_depth_mode() const { return m_depth_mode; }
+	inline unit get_coord_units() const { return m_coord_units; }
+	inline coordinate_system get_coord_sys() const { return m_coord_sys; }
+	inline int get_depth_stab() const { return m_depth_stab; }
+	inline float get_min_depth() const { return m_depth_min; }
+	inline float get_max_depth() const { return m_depth_max; }
+	inline bool right_depth_enabled() const { return m_depth_right; }
 
+	friend class init_params;
+
+	std::string to_string() const;
+	friend std::ostream& operator<<(std::ostream& os, 
+		const depth_init_params& dp);
+
+private:
+	depth_mode m_depth_mode;
+	unit m_coord_units;
+	coordinate_system m_coord_sys;
+	int m_depth_stab;
+	float m_depth_min;
+	float m_depth_max;
+	bool m_depth_right;
+};
 
 class image
 {
@@ -105,45 +142,6 @@ private:
 	size_t m_channels;
 };
 
-class depth_init_params
-{
-	// Encapsulate of the parameters in sl::InitParameters related to depth
-	// measurement and the depth map computed by the ZED. 
-public:
-	depth_init_params(
-		const depth_mode mode=depth_mode::ultra,
-		const unit coord_units=unit::millimeter,
-		const coordinate_system coord_sys=coordinate_system::image,
-		const int depth_stab=1,
-		const float depth_min=-1,
-		const float depth_max=-1,
-		const bool depth_right=false
-	);
-	~depth_init_params() = default;
-
-	inline depth_mode get_depth_mode() const { return m_depth_mode; }
-		inline unit get_coord_units() const { return m_coord_units; }
-	inline coordinate_system get_coord_sys() const { return m_coord_sys; }
-	inline int get_depth_stab() const { return m_depth_stab; }
-	inline float get_min_depth() const { return m_depth_min; }
-	inline float get_max_depth() const { return m_depth_max; }
-	inline bool right_depth_enabled() const { return m_depth_right; }
-
-	friend class init_params;
-
-	// TODO: Implement.
-	std::string to_string() const;
-
-private:
-	depth_mode m_depth_mode;
-	unit m_coord_units;
-	coordinate_system m_coord_sys;
-	int m_depth_stab;
-	float m_depth_min;
-	float m_depth_max;
-	bool m_depth_right;
-};
-
 class init_params
 {
 	// Wrapper for sl::InitParameters. Neglects functionality of the
@@ -156,7 +154,7 @@ public:
 		const bool img_enhancement=true,
 		const bool disable_self_calib=false,
 		const bool sdk_verbose=false,
-		const bool sensor_required=false
+		const bool sensors_required=false
 	);
 	~init_params() = default;
 
@@ -169,6 +167,7 @@ public:
 	inline bool sensors_required() const { return m_sensors_required; }
 
 	std::string to_string() const;
+	friend std::ostream& operator<<(std::ostream& os, const init_params& ip);
 
 private:
 	depth_init_params m_depth_params;
@@ -235,31 +234,31 @@ private:
 }
 };
 
-std::string to_string(const sennet::zed::coordinate_system& sys);
-std::string to_string(const sennet::zed::depth_mode& mode);
-std::string to_string(const sennet::zed::reference_frame& ref);
-std::string to_string(const sennet::zed::resolution& res);
-std::string to_string(const sennet::zed::svo_compression_mode& scm);
-std::string to_string(const sennet::zed::sensing_mode& sm);
-std::string to_string(const sennet::zed::unit& u);
-std::string to_string(const sennet::zed::video_settings& vs);
-std::string to_string(const sennet::zed::view& v);
+std::string to_string(const sennet::zed::coordinate_system sys);
+std::string to_string(const sennet::zed::depth_mode mode);
+std::string to_string(const sennet::zed::reference_frame ref);
+std::string to_string(const sennet::zed::resolution res);
+std::string to_string(const sennet::zed::svo_compression_mode scm);
+std::string to_string(const sennet::zed::sensing_mode sm);
+std::string to_string(const sennet::zed::unit u);
+std::string to_string(const sennet::zed::video_settings vs);
+std::string to_string(const sennet::zed::view v);
 
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::coordinate_system& sys);
+	const sennet::zed::coordinate_system sys);
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::depth_mode& mode);
+	const sennet::zed::depth_mode mode);
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::reference_frame& ref);
+	const sennet::zed::reference_frame ref);
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::resolution& res);
+	const sennet::zed::resolution res);
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::svo_compression_mode& scm);
+	const sennet::zed::svo_compression_mode scm);
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::sensing_mode& sm);
+	const sennet::zed::sensing_mode sm);
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::unit& u);
+	const sennet::zed::unit u);
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::video_settings& vs);
+	const sennet::zed::video_settings vs);
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::view& v);
+	const sennet::zed::view v);

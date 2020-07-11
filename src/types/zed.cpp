@@ -1,8 +1,5 @@
 #include <sennet/types/zed.hpp>
 
-
-
-
 namespace sennet
 {
 
@@ -28,27 +25,26 @@ depth_init_params::depth_init_params(
 
 std::string depth_init_params::to_string() const
 {
-	// TODO: Implement.
+	std::stringstream ss;
+	ss << "[depth_init_params] " 
+		<< "mode: " << ::to_string(get_depth_mode()) << ", "
+		<< "unit: " << ::to_string(get_coord_units()) << ", "
+		<< "sys.: " << ::to_string(get_coord_sys()) << ", "
+		<< "stab.: " << get_depth_stab() << ", "
+		<< "min. depth: " << get_min_depth() << ", "
+		<< "max. depth: " << get_max_depth() << ", "
+		<< "depth right: " << std::boolalpha << right_depth_enabled();
+	return ss.str();
 }
 
-init_params::init_params(
-		const depth_init_params depth_params,
-		const resolution resolution,
-		const int camera_fps,
-		const bool img_enhancement,
-		const bool disable_self_calib,
-		const bool sdk_verbose,
-		const bool sensor_required
-	)
+std::ostream& operator<<(std::ostream& os, 
+		const depth_init_params& dp)
 {
-	// TODO: Implement. Also implement conversion function to
-	// sl::InitParameters.
+	os << dp.to_string();
+	return os;
 }
 
-std::string init_params::to_string() const
-{
-	// TODO: Implement.
-}
+
 
 image::image()
 	: m_buffer(),
@@ -158,10 +154,52 @@ std::ostream& operator<<(std::ostream& os, const image& img)
 	return os;
 }
 
+init_params::init_params(
+		const depth_init_params depth_params,
+		const resolution resolution,
+		const int camera_fps,
+		const bool img_enhancement,
+		const bool disable_self_calib,
+		const bool sdk_verbose,
+		const bool sensors_required
+	)
+	: m_depth_params(depth_params), m_resolution(resolution),
+	m_camera_fps(camera_fps), m_img_enhancement(img_enhancement),
+	m_disable_self_calib(disable_self_calib), m_sdk_verbose(sdk_verbose),
+	m_sensors_required(sensors_required)
+{
+	// TODO: Implement. Also implement conversion function to
+	// sl::InitParameters.
+}
+
+std::string init_params::to_string() const
+{
+	std::stringstream ss;
+	ss << "[init_params]" << get_depth_params().to_string() << "\n" 
+		<< "[init_params] "
+		<< "res.: " << ::to_string(get_resolution()) << ", "
+		<< "fps: " << get_camera_fps() << ", "
+		<< "img. enh.: " << std::boolalpha 
+		<< img_enhance_enabled() << ", "
+		<< "disable self calib.: " << std::boolalpha 
+		<< self_calib_disabled() << ", "
+		<< "sdk verbose: " << std::boolalpha 
+		<< is_sdk_verbose() << ", "
+		<< "sensors req.: " << std::boolalpha
+		<< sensors_required();
+	return ss.str();
+}
+
+std::ostream& operator<<(std::ostream& os, const init_params& ip)
+{
+	os << ip.to_string();
+	return os;
+}
+
 }
 };
 
-std::string to_string(const sennet::zed::coordinate_system& sys)
+std::string to_string(const sennet::zed::coordinate_system sys)
 {
 	switch (sys)
 	{
@@ -182,7 +220,7 @@ std::string to_string(const sennet::zed::coordinate_system& sys)
 	}
 }
 
-std::string to_string(const sennet::zed::depth_mode& mode)
+std::string to_string(const sennet::zed::depth_mode mode)
 {
 	switch (mode)
 	{
@@ -197,7 +235,7 @@ std::string to_string(const sennet::zed::depth_mode& mode)
 	}
 }
 
-std::string to_string(const sennet::zed::reference_frame& ref)
+std::string to_string(const sennet::zed::reference_frame ref)
 {
 	switch (ref)
 	{
@@ -210,7 +248,7 @@ std::string to_string(const sennet::zed::reference_frame& ref)
 	}
 }
 
-std::string to_string(const sennet::zed::resolution& res)
+std::string to_string(const sennet::zed::resolution res)
 {
 	switch (res)
 	{
@@ -227,7 +265,7 @@ std::string to_string(const sennet::zed::resolution& res)
 	}
 }
 
-std::string to_string(const sennet::zed::svo_compression_mode& scm)
+std::string to_string(const sennet::zed::svo_compression_mode scm)
 {
 	switch (scm)
 	{
@@ -242,7 +280,7 @@ std::string to_string(const sennet::zed::svo_compression_mode& scm)
 	}
 }
 
-std::string to_string(const sennet::zed::sensing_mode& sm)
+std::string to_string(const sennet::zed::sensing_mode sm)
 {
 	switch (sm)
 	{
@@ -255,7 +293,7 @@ std::string to_string(const sennet::zed::sensing_mode& sm)
 	}
 }
 
-std::string to_string(const sennet::zed::unit& u)
+std::string to_string(const sennet::zed::unit u)
 {
 	switch (u)
 	{
@@ -274,7 +312,7 @@ std::string to_string(const sennet::zed::unit& u)
 	}
 }
 
-std::string to_string(const sennet::zed::video_settings& vs)
+std::string to_string(const sennet::zed::video_settings vs)
 {
 	switch (vs)
 	{
@@ -305,7 +343,7 @@ std::string to_string(const sennet::zed::video_settings& vs)
 	}
 }
 
-std::string to_string(const sennet::zed::view& v)
+std::string to_string(const sennet::zed::view v)
 {
 	switch (v)
 	{
@@ -334,7 +372,7 @@ std::string to_string(const sennet::zed::view& v)
 
 std::ostream& operator<<(
 	std::ostream& os, 
-	const sennet::zed::coordinate_system& sys
+	const sennet::zed::coordinate_system sys
 	)
 {
 	os << to_string(sys);
@@ -343,7 +381,7 @@ std::ostream& operator<<(
 
 std::ostream& operator<<(
 	std::ostream& os, 
-	const sennet::zed::depth_mode& mode
+	const sennet::zed::depth_mode mode
 	)
 {
 	os << to_string(mode);
@@ -351,49 +389,49 @@ std::ostream& operator<<(
 }
 
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::reference_frame& ref)
+	const sennet::zed::reference_frame ref)
 {
 	os << to_string(ref);
 	return os;
 }
 
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::resolution& res)
+	const sennet::zed::resolution res)
 {
 	os << to_string(res);
 	return os;
 }
 
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::svo_compression_mode& scm)
+	const sennet::zed::svo_compression_mode scm)
 {
 	os << to_string(scm);
 	return os;
 }
 
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::sensing_mode& sm)
+	const sennet::zed::sensing_mode sm)
 {
 	os << to_string(sm);
 	return os;
 }
 
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::unit& u)
+	const sennet::zed::unit u)
 {
 	os << to_string(u);
 	return os;
 }
 
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::video_settings& vs)
+	const sennet::zed::video_settings vs)
 {
 	os << to_string(vs);
 	return os;
 }
 
 std::ostream& operator<<(std::ostream& os, 
-	const sennet::zed::view& v)
+	const sennet::zed::view v)
 {
 	os << to_string(v);
 	return os;
