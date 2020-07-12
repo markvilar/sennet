@@ -88,11 +88,13 @@ public:
 	inline float get_max_depth() const { return m_depth_max; }
 	inline bool right_depth_enabled() const { return m_depth_right; }
 
-	friend class init_params;
+	// TODO: Implement set functions?
 
 	std::string to_string() const;
 	friend std::ostream& operator<<(std::ostream& os, 
 		const depth_init_params& dp);
+
+	friend class init_params;
 
 private:
 	depth_mode m_depth_mode;
@@ -158,7 +160,10 @@ public:
 	);
 	~init_params() = default;
 
-	inline depth_init_params get_depth_params() const { return m_depth_params; }
+	inline depth_init_params get_depth_params() const 
+	{ 
+		return m_depth_params; 
+	}
 	inline resolution get_resolution() const { return m_resolution; }
 	inline int get_camera_fps() const { return m_camera_fps; }
 	inline bool img_enhance_enabled() const { return m_img_enhancement; }
@@ -166,8 +171,13 @@ public:
 	inline bool is_sdk_verbose() const { return m_sdk_verbose; }
 	inline bool sensors_required() const { return m_sensors_required; }
 
+	// TODO: Implement set functions?
+
 	std::string to_string() const;
 	friend std::ostream& operator<<(std::ostream& os, const init_params& ip);
+
+	// TODO: Add conversion function to sl::InitParameters in 
+	// conversion/zed.
 
 private:
 	depth_init_params m_depth_params;
@@ -184,21 +194,37 @@ class recording_params
 	// Wrapper for sl::RecordingParameters. Neglects functionality of the
 	// Stereolabs SDK that is considered unimportant for recording.
 public:
-	recording_params();
+	recording_params(
+		const std::string filename="myRecording.svo", 
+		const svo_compression_mode comp_mode=svo_compression_mode::h264,
+		const unsigned int target_bit_rate=0,
+		const unsigned int target_frame_rate=0
+		);
 
 	inline std::string get_filename() const { return m_filename; }
 	inline svo_compression_mode get_compression_mode() const
 	{
 		return m_compression_mode;
 	}
-	inline unsigned int get_bit_rate() const { return m_bit_rate; }
-	inline unsigned int get_frame_rate() const { return m_frame_rate; }
+	inline unsigned int get_bit_rate() const { return m_target_bit_rate; }
+	inline unsigned int get_frame_rate() const 
+	{ 
+		return m_target_frame_rate; 
+	}
+
+	// TODO: Implement set functions?
+
+	std::string to_string() const;
+	friend std::ostream& operator<<(
+		std::ostream& os, 
+		const recording_params& rp
+		);
 
 private:
 	std::string m_filename;
 	svo_compression_mode m_compression_mode;
-	unsigned int m_bit_rate;
-	unsigned int m_frame_rate;
+	unsigned int m_target_bit_rate;
+	unsigned int m_target_frame_rate;
 };
 
 class runtime_params
@@ -206,25 +232,35 @@ class runtime_params
 	// Wrapper for sl::RuntimeParameters. Neglects functionality of the
 	// Stereolabs SDK that is considered unimportant for recording.
 public:
-	runtime_params();
+	runtime_params(
+		const sensing_mode mode=sensing_mode::standard,
+		const reference_frame ref_frame=reference_frame::camera,
+		const bool depth_enabled=true,
+		const int conf_threshold=100,
+		const int text_conf_threshold=100
+		);
 
 	inline sensing_mode get_sensing_mode() const { return m_sensing_mode; }
 	inline reference_frame get_reference_frame() const { return m_ref_frame; }
-	inline bool get_enable_depth() const { return m_enable_depth; }
+	inline bool is_depth_enabled() const { return m_depth_enabled; }
 	inline int get_confidence_threshold() const 
 	{ 
 		return m_conf_threshold; 
 	}
 	inline int get_texture_confidence_threshold() const 
-	{ 
-		return m_text_conf_threshold;
+	{ return m_text_conf_threshold;
 	}
 
+	// TODO: Add set methods?
+
+	std::string to_string() const;
+	friend std::ostream& operator<<(std::ostream& os, 
+		const runtime_params& rp);
 
 private:
 	sensing_mode m_sensing_mode;
 	reference_frame m_ref_frame;
-	bool m_enable_depth;
+	bool m_depth_enabled;
 	int m_conf_threshold;
 	int m_text_conf_threshold;
 };

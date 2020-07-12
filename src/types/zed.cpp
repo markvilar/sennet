@@ -168,8 +168,7 @@ init_params::init_params(
 	m_disable_self_calib(disable_self_calib), m_sdk_verbose(sdk_verbose),
 	m_sensors_required(sensors_required)
 {
-	// TODO: Implement. Also implement conversion function to
-	// sl::InitParameters.
+	// TODO: Add assertions?
 }
 
 std::string init_params::to_string() const
@@ -196,8 +195,73 @@ std::ostream& operator<<(std::ostream& os, const init_params& ip)
 	return os;
 }
 
+recording_params::recording_params(
+	const std::string filename,
+	const svo_compression_mode comp_mode,
+	const unsigned int target_bit_rate,
+	const unsigned int target_frame_rate
+	)
+	: m_filename(filename), m_compression_mode(comp_mode), 
+	m_target_bit_rate(target_bit_rate), 
+	m_target_frame_rate(target_frame_rate)
+{
+	// TODO: Add assertions?
+}
+
+std::string recording_params::to_string() const
+{
+	std::stringstream ss;
+	ss << "[recording_params] "
+		<< "file: " << get_filename() << ", "
+		<< "compr. mode: " << ::to_string(get_compression_mode()) << ", "
+		<< "target bit rate: " << get_bit_rate() << ", "
+		<< "target frame rate: " << get_frame_rate();
+	return ss.str();
+}
+
+std::ostream& operator<<(std::ostream& os, const recording_params& rp)
+{
+	os << rp.to_string();
+	return os;
+}
+
+runtime_params::runtime_params(
+	const sensing_mode mode,
+	const reference_frame ref_frame,
+	const bool depth_enabled,
+	const int conf_threshold,
+	const int text_conf_threshold
+	)
+	: m_sensing_mode(mode), m_ref_frame(ref_frame), 
+	m_depth_enabled(depth_enabled), m_conf_threshold(conf_threshold),
+	m_text_conf_threshold(text_conf_threshold)
+{
+	// TODO: Add assertions?
+}
+
+std::string runtime_params::to_string() const
+{
+	std::stringstream ss;
+	ss << "[runtime_params] "
+		<< "sensing mode: " << ::to_string(get_sensing_mode()) << ", "
+		<< "ref. frame: " << ::to_string(get_reference_frame()) << ", "
+		<< "depth enabled: " << std::boolalpha 
+		<< is_depth_enabled() << ", "
+		<< "conf. thres.: " << get_confidence_threshold() << ", "
+		<< "text. conf. thres.: " << get_texture_confidence_threshold();
+	return ss.str();
+}
+
+std::ostream& operator<<(std::ostream& os, const runtime_params& rp)
+{
+	os << rp.to_string();
+	return os;
+}
+
 }
 };
+
+
 
 std::string to_string(const sennet::zed::coordinate_system sys)
 {

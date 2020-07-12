@@ -10,7 +10,7 @@
 #include <sennet/handlers/zed_recorder.hpp>
 #include <sennet/types/zed.hpp>
 
-void test_zed_types()
+void test_types()
 {
 	std::cout << "[coordinate_system]\n";	
 	std::cout << sennet::zed::coordinate_system::none << "\n";
@@ -87,17 +87,16 @@ void test_zed_types()
 	std::cout << sennet::zed::view::side_by_side << "\n";
 }
 
-void test_depth_params()
+void test_params()
 {
-	sennet::zed::depth_init_params params;
-	std::cout << params << "\n";
-}
-
-void test_init_params()
-{
-	sennet::zed::depth_init_params d_params;
-	sennet::zed::init_params params(d_params);
-	std::cout << params << "\n";
+	sennet::zed::depth_init_params depth_params;
+	sennet::zed::init_params init_params(depth_params);
+	sennet::zed::recording_params rec_params;
+	sennet::zed::runtime_params run_params;
+	std::cout << depth_params << "\n";
+	std::cout << init_params << "\n";
+	std::cout << rec_params << "\n";
+	std::cout << run_params << "\n";
 }
 
 int main()
@@ -105,8 +104,7 @@ int main()
 	// Initialize log and handler.
 	sennet::log::init();
 
-	// test_zed_types();
-	test_depth_params();
-	test_init_params();
+	test_types();
+	test_params();
 	return 0;
 }
