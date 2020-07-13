@@ -20,7 +20,7 @@ depth_init_params::depth_init_params(
 	m_depth_min(depth_min), m_depth_max(depth_max),
 	m_depth_right(depth_right)
 {
-	// TODO: Implement.
+	// TODO: Add assertions?
 }
 
 std::string depth_init_params::to_string() const
@@ -86,15 +86,18 @@ unsigned char image::get_pixel(const size_t col, const size_t row,
 		size_t channels = get_channels();
 		if (col >= width)
 		{
-			throw std::out_of_range("zed::image : width of out range");
+			throw std::out_of_range("sennet::zed::image : "
+				"width of out range");
 		}
 		else if (row >= height)
 		{
-			throw std::out_of_range("zed::image : heigth of out range");
+			throw std::out_of_range("sennet::zed::image : "
+				"heigth of out range");
 		}
 		else if (channel >= channels)
 		{
-			throw std::out_of_range("zed::image : channel of out range");
+			throw std::out_of_range("sennet::zed::image : "
+				"channel of out range");
 		}
 		else
 		{
@@ -118,19 +121,23 @@ void image::set_pixel(const size_t col, const size_t row,
 		size_t channels = get_channels();
 		if (col >= width)
 		{
-			throw std::out_of_range("zed::image : width of out range");
+			throw std::out_of_range("sennet::zed::image : "
+				"width of out range");
 		}
 		else if (row >= height)
 		{
-			throw std::out_of_range("zed::image : heigth of out range");
+			throw std::out_of_range("sennet::zed::image : "
+				"heigth of out range");
 		}
 		else if (channel >= channels)
 		{
-			throw std::out_of_range("zed::image : channel of out range");
+			throw std::out_of_range("sennet::zed::image : "
+				"channel of out range");
 		}
 		else
 		{
-			m_buffer[col*channels+row*width*channels+channel] = value;
+			m_buffer[col*channels+row*width*channels+channel] = 
+				value;
 		}
 	}
 	catch (const std::out_of_range& oor)
