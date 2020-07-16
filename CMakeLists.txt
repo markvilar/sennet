@@ -52,6 +52,13 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/glad/CMakeLists.txt")
 		"again.")
 endif()
 
+# Git submodule - glfw
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/glfw/CMakeLists.txt")
+    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
+		"was turned off or failed. Please update submodules and try "
+		"again.")
+endif()
+
 # Git submodule - imgui
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/imgui/CMakeLists.txt")
     	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "

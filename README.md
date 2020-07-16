@@ -34,6 +34,8 @@ cmake --build build --target docs
 ```
 
 ## TODOs
+- Implement ZED wrappers.
+- Implement assertion macros.
 - Implement sensor handler.
 - Implement error wrapper.
 - Revise message system.

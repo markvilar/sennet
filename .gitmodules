@@ -4,3 +4,6 @@
 [submodule "extern/imgui"]
 	path = extern/imgui
 	url = ../../markvilar/imgui
+[submodule "extern/glfw"]
+	path = extern/glfw
+	url = ../../markvilar/glfw.git
