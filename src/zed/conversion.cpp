@@ -1,4 +1,4 @@
-#include <sennet/conversion/zed.hpp>
+#include <sennet/zed/conversion.hpp>
 
 sl::VIEW to_stereolabs(const sennet::zed::view& x)
 {

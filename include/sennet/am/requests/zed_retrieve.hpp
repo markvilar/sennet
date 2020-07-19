@@ -11,7 +11,7 @@
 #include <sennet/am/requests/request.hpp>
 #include <sennet/am/responses/invalid_request.hpp>
 #include <sennet/am/responses/zed_image.hpp>
-#include <sennet/serialization.hpp>
+#include <sennet/zed/serialization.hpp>
 
 namespace am { 
 namespace action {

@@ -1,4 +1,4 @@
-#include <sennet/application.hpp>
+#include <sennet/core/application.hpp>
 
 namespace sennet
 {

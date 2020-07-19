@@ -1,11 +1,6 @@
 #pragma once
 
-#include <algorithm>
-#include <iostream>
-#include <vector>
-#include <sstream>
-#include <stdexcept>
-#include <string>
+#include <sennet/snpch.hpp>
 
 namespace sennet
 {

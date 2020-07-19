@@ -1,17 +1,22 @@
 # Headers
 set(HEADER_LIST 
+	"${PROJECT_SOURCE_DIR}/include/sennet/sennet.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/am/actions.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/am/container_device.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/am/core.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/handlers/handler.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/handlers/zed_recorder.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/application.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/base.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/handler.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/log.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/window.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/events/event.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/platform/windows_window.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/basic_types.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/zed.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/conversion/zed.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/application.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/io.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/log.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/serialization.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/zed/conversion.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/zed/io.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/zed/serialization.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/zed/zed_recorder.hpp"
 	)
 
 
@@ -19,19 +24,23 @@ set(HEADER_LIST
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(sennet
 	am/core.cpp 
-	handlers/zed_recorder.cpp
+	core/application.cpp
+	core/log.cpp
+	core/window.cpp
+	events/event.cpp
+	platform/windows_window.cpp
 	types/basic_types.cpp
 	types/zed.cpp
-	conversion/zed.cpp
-	application.cpp
-	io.cpp 
-	log.cpp
+	zed/conversion.cpp
+	zed/io.cpp 
+	zed/zed_recorder.cpp
 	${HEADER_LIST}
 	)
 	
-# Include headers and source code from other libraries in zedutils. This way we
-# won't have to link all of zedutils dependencies into targets that use
-# zedutils, but just zedutils library.
+# Include headers and source code from other libraries in sennet. This way we
+# won't have to link all of sennet dependencies into targets that use
+# sennet, but just sennet library.
+# TODO: Add glfw and imgui include paths.
 target_include_directories(sennet PUBLIC 
 	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"

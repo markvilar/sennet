@@ -1,7 +1,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-#include <sennet/log.hpp>
+#include <sennet/core/log.hpp>
 
 namespace sennet 
 {

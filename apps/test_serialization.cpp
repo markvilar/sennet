@@ -13,8 +13,8 @@
 
 #include <sennet/am/actions.hpp>
 #include <sennet/am/core.hpp>
-#include <sennet/io.hpp>
-#include <sennet/serialization.hpp>
+#include <sennet/zed/io.hpp>
+#include <sennet/zed/serialization.hpp>
 
 void save_string()
 {

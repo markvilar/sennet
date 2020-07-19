@@ -1,4 +1,4 @@
-#include <sennet/handlers/zed_recorder.hpp>
+#include <sennet/zed/zed_recorder.hpp>
 
 namespace sennet
 {

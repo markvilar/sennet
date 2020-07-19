@@ -1,11 +1,10 @@
 #pragma once
 
-#include <atomic>
-
 #include <sl/Camera.hpp>
 
-#include <sennet/log.hpp>
-#include <sennet/handlers/handler.hpp>
+#include <sennet/snpch.hpp>
+
+#include <sennet/core/handler.hpp>
 #include <sennet/types/zed.hpp>
 
 namespace sennet

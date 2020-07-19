@@ -1,4 +1,4 @@
-#include <sennet/io.hpp>
+#include <sennet/zed/io.hpp>
 
 std::ostream& operator<<(std::ostream& os, const sl::String& s)
 {

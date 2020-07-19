@@ -9,7 +9,7 @@
 
 #include <sennet/am/actions.hpp>
 #include <sennet/am/core.hpp>
-#include <sennet/io.hpp>
+#include <sennet/zed/io.hpp>
 
 void write_zed_grab_action(std::shared_ptr<am::connection> conn)
 {
