@@ -7,6 +7,8 @@
 
 #include <sl/Camera.hpp>
 
+#include <imgui.h>
+
 #include <sennet/sennet.hpp>
 
 #include <sennet/zed/conversion.hpp>
@@ -33,8 +35,9 @@ int main()
 	auto window = sennet::window::create();
 
 	if (!window)
-		std::cout << "Window is null!\n";
+	{
+		SN_INFO("Window is null!");
+	}
 
-	//test_params();
 	return 0;
 }

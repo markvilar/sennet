@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <sennet/snpch.hpp>
 
 #include <spdlog/spdlog.h>
 

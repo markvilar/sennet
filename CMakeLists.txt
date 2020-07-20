@@ -1,6 +1,13 @@
 # Project
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.16)
 project(sennet VERSION 1.0 LANGUAGES CXX C)
+
+# Build modes
+
+
+# Package options
+option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
+option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
 
 # If main project
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -73,9 +80,6 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/spdlog/CMakeLists.txt")
 		"again.")
 endif()
 
-# Package options
-option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
-option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
 
 if(NOT LINK_SHARED_ZED AND MSVC)
     message(FATAL_ERROR "LINK_SHARED_ZED OFF : ZED SDK static libraries not available on Windows")
@@ -100,6 +104,7 @@ endif()
 
 # External libraries
 add_subdirectory(extern/glad)
+add_subdirectory(extern/glfw)
 add_subdirectory(extern/imgui)
 add_subdirectory(extern/spdlog)
 

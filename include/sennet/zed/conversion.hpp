@@ -1,10 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include <sl/Camera.hpp>
 
-#include <sennet/types/zed.hpp>
+#include <sennet/sennet.hpp>
 
 // Conversion function from sennet::zed types to sl types.
 sl::VIEW to_stereolabs(const sennet::zed::view& x);

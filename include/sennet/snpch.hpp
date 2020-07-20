@@ -1,11 +1,13 @@
 #pragma once
 
 #include <algorithm>
-#include <atomic>
 #include <iostream>
+#include <stdexcept>
+
+#include <atomic>
+#include <memory>
 #include <vector>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 
 #include <sennet/core/log.hpp>

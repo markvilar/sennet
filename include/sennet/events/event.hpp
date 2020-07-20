@@ -31,7 +31,7 @@ enum event_category
 	static event_type get_static_type()				\
 	{ return event_type::type; }					\
 	virtual event_type get_event_type() const override		\
-	{ return return get_static_type(); }				\
+	{ return get_static_type(); }					\
 	virtual const char* get_name() const override 			\
 	{ return #type; }						
 

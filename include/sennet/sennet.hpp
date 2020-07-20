@@ -6,3 +6,6 @@
 #include <sennet/core/handler.hpp>
 #include <sennet/core/log.hpp>
 #include <sennet/core/window.hpp>
+
+#include <sennet/types/basic_types.hpp>
+#include <sennet/types/zed.hpp>

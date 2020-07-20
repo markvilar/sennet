@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <sennet/snpch.hpp>
 
 #include <sennet/am/core.hpp>
 

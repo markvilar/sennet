@@ -7,10 +7,19 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/application.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/base.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/handler.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/input.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/key_codes.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/log.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/mouse_codes.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/window.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/events/application_event.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/event.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/platform/windows_window.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/sennet/events/key_event.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/events/mouse_event.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/opengl_context.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/platform/windows/windows_window.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/platform/linux/linux_window.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/renderer/graphics_context.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/basic_types.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/zed.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/zed/conversion.hpp"
@@ -19,16 +28,16 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/zed/zed_recorder.hpp"
 	)
 
-
-
 # Make an automatic library - will be static or dynamic based on user setting
 add_library(sennet
 	am/core.cpp 
 	core/application.cpp
 	core/log.cpp
 	core/window.cpp
-	events/event.cpp
-	platform/windows_window.cpp
+	platform/opengl/opengl_context.cpp
+	platform/windows/windows_window.cpp
+	platform/linux/linux_window.cpp
+	renderer/graphics_context.cpp
 	types/basic_types.cpp
 	types/zed.cpp
 	zed/conversion.cpp
@@ -36,13 +45,22 @@ add_library(sennet
 	zed/zed_recorder.cpp
 	${HEADER_LIST}
 	)
-	
+
+# Precompiled headers
+target_precompile_headers(sennet
+	PRIVATE
+	"${PROJECT_SOURCE_DIR}/include/sennet/snpch.hpp"
+	)
+
 # Include headers and source code from other libraries in sennet. This way we
 # won't have to link all of sennet dependencies into targets that use
-# sennet, but just sennet library.
-# TODO: Add glfw and imgui include paths.
-target_include_directories(sennet PUBLIC 
+# sennet, but just sennet library itself.
+target_include_directories(sennet 
+	PUBLIC 
 	"${PROJECT_SOURCE_DIR}/include"
+	"${PROJECT_SOURCE_DIR}/extern/glad/include"
+	"${PROJECT_SOURCE_DIR}/extern/glfw/include"
+	"${PROJECT_SOURCE_DIR}/extern/imgui"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	${Boost_INCLUDE_DIRS} 
 	${CUDA_INCLUDE_DIRS} 
@@ -50,14 +68,21 @@ target_include_directories(sennet PUBLIC
 	) 
 		
 # This depends on ZED and Boost features that needs to be linked to the library.
-target_link_libraries(sennet PRIVATE 
+target_link_libraries(sennet 
+	PRIVATE 
 	Boost::serialization
 	Boost::thread
 	${ZED_LIBS}
 	) 
 
+# Define macros.
+target_compile_definitions(sennet
+	PRIVATE
+	)
+
 # All users of this will need at least C++17
-target_compile_features(sennet PUBLIC 
+target_compile_features(sennet 
+	PUBLIC 
 	cxx_std_17
 	)
 

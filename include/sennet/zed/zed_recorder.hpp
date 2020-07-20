@@ -2,10 +2,7 @@
 
 #include <sl/Camera.hpp>
 
-#include <sennet/snpch.hpp>
-
-#include <sennet/core/handler.hpp>
-#include <sennet/types/zed.hpp>
+#include <sennet/sennet.hpp>
 
 namespace sennet
 {

@@ -10,14 +10,14 @@ namespace sennet
 
 struct window_props
 {
-	std::string m_title;
-	uint32_t m_width;
-	uint32_t m_height;
+	std::string title;
+	uint32_t width;
+	uint32_t height;
 
 	window_props(const std::string& title = "Sennet GUI",
 		uint32_t width = 1280,
 		uint32_t height = 720)
-		: m_title(title), m_width(width), m_height(height)
+		: title(title), width(width), height(height)
 	{
 	}
 };
