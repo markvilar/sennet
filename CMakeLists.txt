@@ -1,6 +1,14 @@
 # Project
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.16)
 project(sennet VERSION 1.0 LANGUAGES CXX C)
+
+# Build configurations
+# TODO: Look into setting up configurations with CMake.
+#include(SetUpConfigurations)
+
+# Package options
+option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
+option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
 
 # If main project
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -18,8 +26,8 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 
 # Find packages
-find_package(Git QUIET)
-find_package(Threads)
+find_package(Git QUIET REQUIRED)
+find_package(Threads REQUIRED)
 find_package(Boost COMPONENTS chrono program_options serialization system thread 
 	REQUIRED)
 find_package(ZED 3 REQUIRED)
@@ -52,6 +60,13 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/glad/CMakeLists.txt")
 		"again.")
 endif()
 
+# Git submodule - glfw
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/glfw/CMakeLists.txt")
+    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
+		"was turned off or failed. Please update submodules and try "
+		"again.")
+endif()
+
 # Git submodule - imgui
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/imgui/CMakeLists.txt")
     	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
@@ -66,9 +81,6 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/spdlog/CMakeLists.txt")
 		"again.")
 endif()
 
-# Package options
-option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
-option(LINK_SHARED_ZED "Link with the ZED SDK shared executable" ON)
 
 if(NOT LINK_SHARED_ZED AND MSVC)
     message(FATAL_ERROR "LINK_SHARED_ZED OFF : ZED SDK static libraries not available on Windows")
@@ -93,6 +105,7 @@ endif()
 
 # External libraries
 add_subdirectory(extern/glad)
+add_subdirectory(extern/glfw)
 add_subdirectory(extern/imgui)
 add_subdirectory(extern/spdlog)
 

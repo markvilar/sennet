@@ -6,7 +6,7 @@
 #include <boost/serialization/export.hpp>
 
 #include <sennet/am/core.hpp>
-#include <sennet/log.hpp>
+#include <sennet/core/log.hpp>
 
 namespace am { namespace action {
 

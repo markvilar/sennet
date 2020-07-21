@@ -34,9 +34,16 @@ cmake --build build --target docs
 ```
 
 ## TODOs
-- Integrate logger into system.
-- Implement sensor handler.
-- Implement error wrapper.
-- Revise message system.
-- Implement user interface.
+- Add Cmake build types.
+- Implement ZED record handler.
+- Implement error system (?).
+- Revise communication system (runtime, messages, callbacks).
 - Implement application class.
+- Implement file handler.
+
+## DONEs
+- Integrate logger into system.
+- Implement assertion macros.
+- Implement ZED wrappers (conversion functions).
+- Implement linux window.
+

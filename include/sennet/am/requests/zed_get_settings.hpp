@@ -4,7 +4,7 @@
 
 #include <sennet/am/core.hpp>
 #include <sennet/am/requests/request.hpp>
-#include <sennet/serialization.hpp>
+#include <sennet/zed/serialization.hpp>
 
 namespace am { 
 namespace action {
