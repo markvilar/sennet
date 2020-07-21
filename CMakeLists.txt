@@ -2,8 +2,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(sennet VERSION 1.0 LANGUAGES CXX C)
 
-# Build modes
-
+# Build configurations
+# TODO: Look into setting up configurations with CMake.
+#include(SetUpConfigurations)
 
 # Package options
 option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
