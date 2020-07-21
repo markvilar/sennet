@@ -35,13 +35,14 @@ cmake --build build --target docs
 
 ## TODOs
 - Add Cmake build types.
-- Implement ZED wrappers.
-- Implement sensor handler.
-- Implement error wrapper.
-- Revise message system.
-- Implement user interface.
+- Implement ZED record handler.
+- Implement error system (?).
+- Revise communication system (runtime, messages, callbacks).
+- Implement linux window.
 - Implement application class.
+- Implement file handler.
 
 ## DONEs
 - Integrate logger into system.
 - Implement assertion macros.
+- Implement ZED wrappers (conversion functions).

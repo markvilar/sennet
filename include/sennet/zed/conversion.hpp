@@ -31,6 +31,7 @@ sennet::zed::unit to_sennet(const sl::UNIT& x);
 sennet::zed::svo_compression_mode to_sennet(const sl::SVO_COMPRESSION_MODE& x);
 sennet::zed::sensing_mode to_sennet(const sl::SENSING_MODE& x);
 sennet::zed::reference_frame to_sennet(const sl::REFERENCE_FRAME& x);
+sennet::zed::coordinate_system to_sennet(const sl::COORDINATE_SYSTEM& x);
 
 // Conversion function from sl classes to sennet::zed classes.
 std::shared_ptr<sennet::zed::image> to_sennet(const sl::Mat& x);
