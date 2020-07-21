@@ -1,13 +1,14 @@
+#include <sennet/snpch.hpp>
+#include <sennet/core/log.hpp>
+
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-
-#include <sennet/core/log.hpp>
 
 namespace sennet 
 {
 
-std::shared_ptr<spdlog::logger> log::s_core_logger;
-std::shared_ptr<spdlog::logger> log::s_client_logger;
+ref<spdlog::logger> log::s_core_logger;
+ref<spdlog::logger> log::s_client_logger;
 
 void log::init()
 {
@@ -16,7 +17,6 @@ void log::init()
 	sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(
 		"sennet.log", true));
 		
-
 	sinks[0]->set_pattern("%^[%T] %n: %v%$");
 	sinks[1]->set_pattern("[%T] [%l] %n: %v");
 
@@ -35,4 +35,4 @@ void log::init()
 	s_client_logger->flush_on(spdlog::level::trace);
 }
 
-};
+}

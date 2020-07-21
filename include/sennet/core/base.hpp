@@ -1,5 +1,11 @@
 #pragma once
 
+// TODO: Move definitions to build system.
+#define SN_DEBUG
+#define SN_ENABLE_ASSERTS
+
+#include <memory>
+
 #ifdef __WIN32
 	#ifdef __WIN64
 		#define SN_PLATFORM_WINDOWS
@@ -38,7 +44,8 @@
 	#define SN_DEBUGBREAK()
 #endif
 
-#ifdef SN_ENABLE_ASSERTS
+// TODO: Make macro able to take in no arguments except condition.
+#ifdef SN_ENABLE_ASSERTS							
 	#define SN_ASSERT(x, ...)						\
 	{ 									\
 		if(!(x)) 							\

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <sennet/snpch.hpp>
+#include <sennet/core/base.hpp>
 
 #include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
 
 namespace sennet 
 {
@@ -12,22 +13,22 @@ class log
 public: 
 	static void init();
 
-	static std::shared_ptr<spdlog::logger>& get_core_logger() 
+	static ref<spdlog::logger>& get_core_logger() 
 	{
 		return s_core_logger;
 	}
 	
-	static std::shared_ptr<spdlog::logger>& get_client_logger() 
+	static ref<spdlog::logger>& get_client_logger() 
 	{
 		return s_client_logger;
 	}
 
 private:
-	static std::shared_ptr<spdlog::logger> s_core_logger;
-	static std::shared_ptr<spdlog::logger> s_client_logger;
+	static ref<spdlog::logger> s_core_logger;
+	static ref<spdlog::logger> s_client_logger;
 };
 
-};
+}
 
 // Core log macros.
 #define SN_CORE_TRACE(...) \

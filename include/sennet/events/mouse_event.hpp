@@ -46,6 +46,9 @@ public:
 		return ss.str();
 	}
 
+	EVENT_CLASS_TYPE(mouse_scrolled)
+	EVENT_CLASS_CATEGORY(event_category_mouse | event_category_input)
+
 private:
 	float m_x_offset, m_y_offset;
 };
