@@ -72,6 +72,7 @@ target_link_libraries(sennet
 	PRIVATE 
 	Boost::serialization
 	Boost::thread
+	glfw
 	${ZED_LIBS}
 	) 
 

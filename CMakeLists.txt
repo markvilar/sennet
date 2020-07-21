@@ -26,8 +26,8 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 
 # Find packages
-find_package(Git QUIET)
-find_package(Threads)
+find_package(Git QUIET REQUIRED)
+find_package(Threads REQUIRED)
 find_package(Boost COMPONENTS chrono program_options serialization system thread 
 	REQUIRED)
 find_package(ZED 3 REQUIRED)

@@ -29,6 +29,31 @@ windows_window::~windows_window()
 	shutdown();
 }
 
+void windows_window::on_update()
+{
+	glfwPollEvents();
+	m_context->swap_buffers();
+}
+
+void windows_window::set_vsync(bool enabled)
+{
+	if (enabled)
+	{
+		glfwSwapInterval(1);
+	}
+	else
+	{
+		glfwSwapInterval(0);
+	}
+
+	m_data.vsync = enabled;
+}
+
+bool windows_window::is_vsync() const
+{
+	return m_data.vsync;
+}
+
 void windows_window::init(const window_props& props)
 {
 	m_data.title = props.title;
@@ -40,8 +65,10 @@ void windows_window::init(const window_props& props)
 	
 	if (s_glfw_window_count == 0)
 	{
+		SN_CORE_INFO("Initializing GLFW");
 		int success = glfwInit();
 		SN_CORE_ASSERT(success, "Could not initialize GLFW!");
+		glfwSetErrorCallback(glfw_error_callback);
 	}
 	
 	{
@@ -177,33 +204,9 @@ void windows_window::shutdown()
 
 	if (s_glfw_window_count == 0)
 	{
+		SN_CORE_INFO("Terminating GLFW");
 		glfwTerminate();
 	}
-}
-
-void windows_window::on_update()
-{
-	glfwPollEvents();
-	m_context->swap_buffers();
-}
-
-void windows_window::set_vsync(bool enabled)
-{
-	if (enabled)
-	{
-		glfwSwapInterval(1);
-	}
-	else
-	{
-		glfwSwapInterval(0);
-	}
-
-	m_data.vsync = enabled;
-}
-
-bool windows_window::is_vsync() const
-{
-	return m_data.vsync;
 }
 
 }

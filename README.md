@@ -38,7 +38,6 @@ cmake --build build --target docs
 - Implement ZED record handler.
 - Implement error system (?).
 - Revise communication system (runtime, messages, callbacks).
-- Implement linux window.
 - Implement application class.
 - Implement file handler.
 
@@ -46,3 +45,5 @@ cmake --build build --target docs
 - Integrate logger into system.
 - Implement assertion macros.
 - Implement ZED wrappers (conversion functions).
+- Implement linux window.
+
