@@ -3,15 +3,6 @@ add_executable(sandbox sandbox.cpp)
 target_compile_features(sandbox PRIVATE cxx_std_17)
 target_link_libraries(sandbox PRIVATE 
 	sennet
-	glad
-	)
-
-# Test - Hello world
-add_executable(test_hello_world test_hello_world.cpp)
-target_compile_features(test_hello_world PRIVATE cxx_std_17)
-target_link_libraries(test_hello_world PRIVATE 
-	sennet
-	Boost::program_options
 	)
 
 # Test - Serialization
