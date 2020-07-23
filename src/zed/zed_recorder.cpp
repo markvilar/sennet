@@ -1,141 +1,195 @@
 #include <sennet/zed/zed_recorder.hpp>
 
+#include <sennet/zed/conversion.hpp>
+
 namespace sennet
 {
 
 zed_recorder::zed_recorder()
-	: m_init_params(),
-	m_rec_params(),
-	m_run_params(),
-	m_zed(),
-	m_close_flag(true),
-	m_stop_flag(true),
-	m_mutex(),
-	m_exec_thread()
+	: m_init_params(create_ref<sl::InitParameters>()),
+	m_rec_params(create_ref<sl::RecordingParameters>()),
+	m_run_params(create_ref<sl::RuntimeParameters>()),
+	m_zed(create_scope<sl::Camera>()),
+	m_running(false),
+	m_recording(false),
+	m_mutex(create_scope<std::mutex>()),
+	m_exec_thread(nullptr),
+	m_worker_timeout(100),
+	m_record_timeout(10)
 {
-	SN_INFO("[{}] Initialized.", get_name());
+	init();
 }
-
 zed_recorder::~zed_recorder()
 {
-	if (not m_close_flag)
+	if (m_running and m_exec_thread->joinable())
 	{
-		close();
+		shutdown();
 	}
 }
 
-void zed_recorder::open()
+void zed_recorder::init()
 {
-	SN_INFO("[{}] Opening.", get_name());
-	if (m_close_flag)
+	// TODO: Join threads properly.
+	if (m_running.load())
 	{
-		m_close_flag = false;
-		// TODO: Problem here! Look into starting the thread properly.
-		m_exec_thread = std::thread(&zed_recorder::exec_worker, this);
+		SN_CORE_INFO("[{0}] Already initialized.", get_name());
+	}
+	else
+	{
+		SN_CORE_INFO("[{0}] Initialized.", get_name());
+		m_running.store(true);
+		m_exec_thread = create_scope<std::thread>(
+			&zed_recorder::exec_worker, this);
 	}
 }
 
-void zed_recorder::close() 
+void zed_recorder::shutdown()
 {
-	if (not m_stop_flag)
+	// TODO: Join threads properly.
+	if (m_running.load())
 	{
-		stop();
+		if (m_recording)
+		{
+			stop_record();
+		}
+		m_running.store(false);
+		m_exec_thread->join();
 	}
-	m_close_flag = true;
-	SN_INFO("[{}] Joining threads.", get_name());
-	m_exec_thread.join();
-	SN_INFO("[{}] Closing.", get_name());
-}
-
-bool zed_recorder::is_opened() const
-{
-	return (not m_close_flag);
+	else
+	{
+	}
+	SN_CORE_INFO("[{0}] Shutdown.", get_name());
 }
 
 std::string zed_recorder::to_string() const
 {
 	// TODO: Implement.
+	return std::string("");
 }
 
-void zed_recorder::run()
+void zed_recorder::start_record()
 {
-	// TODO: Add checking of execution thread.
-	if (m_stop_flag)
+	if (!m_running.load())
 	{
-		m_stop_flag = false;
+		SN_CORE_INFO("[{0}] Not initialized, cannot record.",
+			get_name());
+	}
+	else if (m_running.load() and m_recording.load())
+	{
+		SN_CORE_INFO("[{0}] Already recording.", get_name());
+	}
+	else if (m_running.load() and not m_recording.load())
+	{
+		SN_CORE_INFO("[{0}] Start record.", get_name());
+		m_recording.store(true);
 	}
 }
 
-void zed_recorder::stop()
+void zed_recorder::stop_record()
 {
-	if (not m_stop_flag)
+	if (!m_running.load())
 	{
-		m_stop_flag = true;
-		SN_INFO("[{}] Stopping.", get_name());
+		SN_CORE_INFO("[{0}] Not initialized, cannot stop record.",
+			get_name());
 	}
+	else if (m_running.load() and not m_recording.load())
+	{
+		SN_CORE_INFO("[{0}] Not recording.", get_name());
+	}
+	else if (m_running.load() and m_recording.load())
+	{
+		SN_CORE_INFO("[{0}] Stop record.", get_name());
+		m_recording.store(false);
+	}
+	
 }
 
 bool zed_recorder::is_zed_opened()
 {
-	return m_zed.isOpened();
+	std::lock_guard<std::mutex> lock(*m_mutex);
+	return m_zed->isOpened();
 }
 
-zed::image zed_recorder::get_image() const
+ref<zed::image> zed_recorder::get_image(const zed::view& view) const
 {
-	// TODO: Implement.
+	std::lock_guard<std::mutex> lock(*m_mutex);
+	if (m_zed->isOpened())
+	{
+		sl::Mat m;
+		m_zed->retrieveImage(m, ::to_stereolabs(view));
+		//return to_sennet(m);
+		return nullptr;
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
-zed::state zed_recorder::get_state() const
+ref<zed::init_params> zed_recorder::get_init_params() const
 {
-	// TODO: Implement.
+	std::lock_guard<std::mutex> lock(*m_mutex);
+	//return ::to_sennet(*m_init_params);
+	return nullptr;
 }
 
-zed::init_params zed_recorder::get_init_params() const
+ref<zed::recording_params> zed_recorder::get_rec_params() const
 {
-	// TODO: Implement.
+	std::lock_guard<std::mutex> lock(*m_mutex);
+	//return ::to_sennet(*m_rec_params);
+	return nullptr;
 }
 
-zed::recording_params zed_recorder::get_rec_params() const
+ref<zed::runtime_params> zed_recorder::get_run_params() const
 {
-	// TODO: Implement.
+	std::lock_guard<std::mutex> lock(*m_mutex);
+	//return ::to_sennet(*m_run_params);
+	return nullptr;
 }
 
-zed::runtime_params zed_recorder::get_run_params() const
+void zed_recorder::set_init_params(const ref<zed::init_params> init_params)
 {
-	// TODO: Implement.
+	std::lock_guard<std::mutex> lock(*m_mutex);
+	m_init_params = ::to_stereolabs(init_params);
 }
 
-void zed_recorder::set_init_params(const zed::init_params& init_params)
+void zed_recorder::set_rec_params(const ref<zed::recording_params> rec_params)
 {
-	// TODO: Implement.
+	std::lock_guard<std::mutex> lock(*m_mutex);
+	m_rec_params = ::to_stereolabs(rec_params);
 }
 
-void zed_recorder::set_rec_params(const zed::recording_params& rec_params)
+void zed_recorder::set_run_params(const ref<zed::runtime_params> run_params)
 {
-	// TODO: Implement.
-}
-
-void zed_recorder::set_run_params(const zed::runtime_params& run_params)
-{
-	// TODO: Implement.
+	std::lock_guard<std::mutex> lock(*m_mutex);
+	m_run_params = ::to_stereolabs(run_params);
 }
 
 void zed_recorder::exec_worker()
 {
-	// TODO: Open ZED.
-	while (not m_close_flag)
+	while (m_running.load())
 	{
-		run_loop();
+		record_loop();
+		std::this_thread::sleep_for(m_worker_timeout);
 	}
-	// TODO: Close ZED.
 }
 
-void zed_recorder::run_loop()
+void zed_recorder::record_loop()
 {
-	while (not m_stop_flag)
+	// Get parameters
+
+	// Open camera
+
+	// Enable recording
+
+	// Record
+	while (m_recording.load())
 	{
-		SN_INFO("[{}] Running.", get_name());
+		SN_CORE_INFO("Recording...");
+		std::this_thread::sleep_for(m_record_timeout);
 	}
+
+	// Close camera
 }
 
-};
+}

@@ -1,8 +1,8 @@
 #include <sennet/zed/conversion.hpp>
 
-sl::VIEW to_stereolabs(const sennet::zed::view& x)
+sl::VIEW to_stereolabs(const sennet::zed::view& sn_view)
 {
-	switch (x)
+	switch (sn_view)
 	{
 		case sennet::zed::view::left:
 			return sl::VIEW::LEFT;
@@ -27,9 +27,9 @@ sl::VIEW to_stereolabs(const sennet::zed::view& x)
 	}
 }
 
-sl::RESOLUTION to_stereolabs(const sennet::zed::resolution& x)
+sl::RESOLUTION to_stereolabs(const sennet::zed::resolution& sn_res)
 {
-	switch (x)
+	switch (sn_res)
 	{
 		case sennet::zed::resolution::hd2k:
 			return sl::RESOLUTION::HD2K;
@@ -44,9 +44,9 @@ sl::RESOLUTION to_stereolabs(const sennet::zed::resolution& x)
 	}
 }
 
-sl::VIDEO_SETTINGS to_stereolabs(const sennet::zed::video_settings& x)
+sl::VIDEO_SETTINGS to_stereolabs(const sennet::zed::video_settings& sn_video)
 {
-	switch (x)
+	switch (sn_video)
 	{
 		case sennet::zed::video_settings::brightness:
 			return sl::VIDEO_SETTINGS::BRIGHTNESS;
@@ -75,9 +75,9 @@ sl::VIDEO_SETTINGS to_stereolabs(const sennet::zed::video_settings& x)
 	}
 }
 
-sl::DEPTH_MODE to_stereolabs(const sennet::zed::depth_mode& x)
+sl::DEPTH_MODE to_stereolabs(const sennet::zed::depth_mode& sn_depth)
 {
-	switch (x)
+	switch (sn_depth)
 	{
 		case sennet::zed::depth_mode::performance:
 			return sl::DEPTH_MODE::PERFORMANCE;
@@ -90,9 +90,9 @@ sl::DEPTH_MODE to_stereolabs(const sennet::zed::depth_mode& x)
 	}
 }
 
-sl::UNIT to_stereolabs(const sennet::zed::unit& x)
+sl::UNIT to_stereolabs(const sennet::zed::unit& sn_unit)
 {
-	switch (x)
+	switch (sn_unit)
 	{
 		case sennet::zed::unit::millimeter:
 			return sl::UNIT::MILLIMETER;
@@ -110,9 +110,9 @@ sl::UNIT to_stereolabs(const sennet::zed::unit& x)
 }
 
 sl::SVO_COMPRESSION_MODE to_stereolabs(
-	const sennet::zed::svo_compression_mode& x)
+	const sennet::zed::svo_compression_mode& sn_compr)
 {
-	switch (x)
+	switch (sn_compr)
 	{
 		case sennet::zed::svo_compression_mode::lossless:
 			return sl::SVO_COMPRESSION_MODE::LOSSLESS;
@@ -125,9 +125,9 @@ sl::SVO_COMPRESSION_MODE to_stereolabs(
 	}
 }
 
-sl::SENSING_MODE to_stereolabs(const sennet::zed::sensing_mode& x)
+sl::SENSING_MODE to_stereolabs(const sennet::zed::sensing_mode& sn_sensing)
 {
-	switch (x)
+	switch (sn_sensing)
 	{
 		case sennet::zed::sensing_mode::standard:
 			return sl::SENSING_MODE::STANDARD;
@@ -138,9 +138,9 @@ sl::SENSING_MODE to_stereolabs(const sennet::zed::sensing_mode& x)
 	}
 }
 
-sl::REFERENCE_FRAME to_stereolabs(const sennet::zed::reference_frame& x)
+sl::REFERENCE_FRAME to_stereolabs(const sennet::zed::reference_frame& sn_ref)
 {
-	switch (x)
+	switch (sn_ref)
 	{
 		case sennet::zed::reference_frame::world: 
 			return sl::REFERENCE_FRAME::WORLD;
@@ -151,9 +151,9 @@ sl::REFERENCE_FRAME to_stereolabs(const sennet::zed::reference_frame& x)
 	}
 }
 
-sl::COORDINATE_SYSTEM to_stereolabs(const sennet::zed::coordinate_system& x)
+sl::COORDINATE_SYSTEM to_stereolabs(const sennet::zed::coordinate_system& sn_sys)
 {
-	switch (x)
+	switch (sn_sys)
 	{
 		case sennet::zed::coordinate_system::image:
 			return sl::COORDINATE_SYSTEM::IMAGE;
@@ -172,10 +172,10 @@ sl::COORDINATE_SYSTEM to_stereolabs(const sennet::zed::coordinate_system& x)
 	}
 }
 
-std::shared_ptr<sl::Mat> to_stereolabs(const sennet::zed::image& x)
+sennet::ref<sl::Mat> to_stereolabs(const sennet::ref<sennet::zed::image> sn_img)
 {
 	auto mat_type = sl::MAT_TYPE::U8_C1;
-	switch (x.get_channels())
+	switch (sn_img->get_channels())
 	{
 		case 1:
 			mat_type = sl::MAT_TYPE::U8_C1;
@@ -192,64 +192,69 @@ std::shared_ptr<sl::Mat> to_stereolabs(const sennet::zed::image& x)
 		default:
 			return nullptr;
 	}
-	return std::make_shared<sl::Mat>(x.get_width(), x.get_height(), 
-		mat_type, (sl::uchar1*)x.get_ptr(), x.get_channels());
+	return sennet::create_ref<sl::Mat>(sn_img->get_width(), 
+		sn_img->get_height(), mat_type, (sl::uchar1*)sn_img->get_ptr(),
+		sn_img->get_channels());
 }
 
-sl::InitParameters to_stereolabs(const sennet::zed::init_params& ip)
+sennet::ref<sl::InitParameters> to_stereolabs(
+	const sennet::ref<sennet::zed::init_params> sn_ip)
 {
-	sl::InitParameters cnv;
-	
+	auto sl_ip = sennet::create_ref<sl::InitParameters>();
+
 	// Depth parameters.
-	auto dp = ip.get_depth_params();
-	cnv.depth_mode = ::to_stereolabs(dp.get_depth_mode());
-	cnv.coordinate_units = ::to_stereolabs(dp.get_coord_units());
-	cnv.coordinate_system = ::to_stereolabs(dp.get_coord_sys());
-	cnv.depth_stabilization = dp.get_depth_stab();
-	cnv.depth_minimum_distance = dp.get_min_depth();
-	cnv.depth_maximum_distance = dp.get_max_depth();
-	cnv.enable_right_side_measure = dp.right_depth_enabled();
+	sl_ip->depth_mode = to_stereolabs(sn_ip->get_depth_mode());
+	sl_ip->coordinate_units = to_stereolabs(sn_ip->get_coord_units());
+	sl_ip->coordinate_system = to_stereolabs(sn_ip->get_coord_sys());
+	sl_ip->depth_stabilization = sn_ip->get_depth_stab();
+	sl_ip->depth_minimum_distance = sn_ip->get_min_depth();
+	sl_ip->depth_maximum_distance = sn_ip->get_max_depth();
+	sl_ip->enable_right_side_measure = sn_ip->right_depth_enabled();
 
 	// Generic parameters.
-	cnv.camera_resolution = ::to_stereolabs(ip.get_resolution());
-	cnv.camera_fps = ip.get_camera_fps();
-	cnv.enable_image_enhancement = ip.img_enhance_enabled();
-	cnv.camera_disable_self_calib = ip.self_calib_disabled();
-	cnv.sdk_verbose = ip.is_sdk_verbose();
-	cnv.sensors_required = ip.sensors_required();
+	sl_ip->camera_resolution = ::to_stereolabs(sn_ip->get_resolution());
+	sl_ip->camera_fps = sn_ip->get_camera_fps();
+	sl_ip->enable_image_enhancement = sn_ip->img_enhance_enabled();
+	sl_ip->camera_disable_self_calib = sn_ip->self_calib_disabled();
+	sl_ip->sdk_verbose = sn_ip->is_sdk_verbose();
+	sl_ip->sensors_required = sn_ip->sensors_required();
 
-	return cnv;
+	return sl_ip;
 }
 
-sl::RecordingParameters to_stereolabs(const sennet::zed::recording_params& rp)
+sennet::ref<sl::RecordingParameters> to_stereolabs(
+	const sennet::ref<sennet::zed::recording_params> sn_rp)
 {
-	sl::RecordingParameters cnv;
-	cnv.video_filename = sl::String(rp.get_filename().c_str());
-	cnv.compression_mode = to_stereolabs(rp.get_compression_mode());
+	auto sl_rp = sennet::create_ref<sl::RecordingParameters>();
 
-	return cnv;
+	sl_rp->video_filename = sl::String(sn_rp->get_filename().c_str());
+	sl_rp->compression_mode = to_stereolabs(sn_rp->get_compression_mode());
+
+	return sl_rp;
 }
 
-sl::RuntimeParameters to_stereolabs(const sennet::zed::runtime_params& rp)
+sennet::ref<sl::RuntimeParameters> to_stereolabs(
+	const sennet::ref<sennet::zed::runtime_params> sn_rp)
 {
-	sl::RuntimeParameters cnv;
-	cnv.sensing_mode = to_stereolabs(rp.get_sensing_mode());
-	cnv.measure3D_reference_frame = to_stereolabs(rp.get_reference_frame());
-	cnv.enable_depth = rp.is_depth_enabled();
-	cnv.confidence_threshold = rp.get_confidence_threshold();
-	cnv.textureness_confidence_threshold =
-		rp.get_texture_confidence_threshold();
-	return cnv;
+	auto sl_rp = sennet::create_ref<sl::RuntimeParameters>();
+	sl_rp->sensing_mode = to_stereolabs(sn_rp->get_sensing_mode());
+	sl_rp->measure3D_reference_frame = 
+		to_stereolabs(sn_rp->get_reference_frame());
+	sl_rp->enable_depth = sn_rp->is_depth_enabled();
+	sl_rp->confidence_threshold = sn_rp->get_confidence_threshold();
+	sl_rp->textureness_confidence_threshold =
+		sn_rp->get_texture_confidence_threshold();
+	return sl_rp;
 }
 
 
 
 // To ZED conversion functions.
 
-sennet::zed::view to_sennet(const sl::VIEW& x)
+sennet::zed::view to_sennet(const sl::VIEW& sl_view)
 {
 	typedef sennet::zed::view zed_view;
-	switch (x)
+	switch (sl_view)
 	{
 		case sl::VIEW::LEFT:
 			return zed_view::left;
@@ -274,10 +279,10 @@ sennet::zed::view to_sennet(const sl::VIEW& x)
 	}
 }
 
-sennet::zed::resolution to_sennet(const sl::RESOLUTION& x)
+sennet::zed::resolution to_sennet(const sl::RESOLUTION& sl_res)
 {
 	typedef sennet::zed::resolution zed_resolution;
-	switch (x)
+	switch (sl_res)
 	{
 		case sl::RESOLUTION::HD2K:
 			return zed_resolution::hd2k;
@@ -292,10 +297,10 @@ sennet::zed::resolution to_sennet(const sl::RESOLUTION& x)
 	}
 }
 
-sennet::zed::video_settings to_sennet(const sl::VIDEO_SETTINGS& x)
+sennet::zed::video_settings to_sennet(const sl::VIDEO_SETTINGS& sl_video)
 {
 	typedef sennet::zed::video_settings zed_video_settings;
-	switch (x)
+	switch (sl_video)
 	{
 		case sl::VIDEO_SETTINGS::BRIGHTNESS:
 			return zed_video_settings::brightness;
@@ -324,10 +329,10 @@ sennet::zed::video_settings to_sennet(const sl::VIDEO_SETTINGS& x)
 	}
 }
 
-sennet::zed::depth_mode to_sennet(const sl::DEPTH_MODE& x)
+sennet::zed::depth_mode to_sennet(const sl::DEPTH_MODE& sl_depth)
 {
 	typedef sennet::zed::depth_mode zed_depth_mode;
-	switch (x)
+	switch (sl_depth)
 	{
 		case sl::DEPTH_MODE::PERFORMANCE:
 			return zed_depth_mode::performance;
@@ -340,10 +345,10 @@ sennet::zed::depth_mode to_sennet(const sl::DEPTH_MODE& x)
 	}
 }
 
-sennet::zed::unit to_sennet(const sl::UNIT& x)
+sennet::zed::unit to_sennet(const sl::UNIT& sl_unit)
 {
 	typedef sennet::zed::unit zed_unit;
-	switch (x)
+	switch (sl_unit)
 	{
 		case sl::UNIT::MILLIMETER:
 			return zed_unit::millimeter;		
@@ -360,10 +365,11 @@ sennet::zed::unit to_sennet(const sl::UNIT& x)
 	}
 }
 
-sennet::zed::svo_compression_mode to_sennet(const sl::SVO_COMPRESSION_MODE& x)
+sennet::zed::svo_compression_mode to_sennet(
+	const sl::SVO_COMPRESSION_MODE& sl_compr)
 {
 	typedef sennet::zed::svo_compression_mode zed_svo_compression_mode;
-	switch (x)
+	switch (sl_compr)
 	{
 		case sl::SVO_COMPRESSION_MODE::LOSSLESS:
 			return zed_svo_compression_mode::lossless;
@@ -376,10 +382,10 @@ sennet::zed::svo_compression_mode to_sennet(const sl::SVO_COMPRESSION_MODE& x)
 	}
 }
 
-sennet::zed::sensing_mode to_sennet(const sl::SENSING_MODE& x)
+sennet::zed::sensing_mode to_sennet(const sl::SENSING_MODE& sl_sensing)
 {
 	typedef sennet::zed::sensing_mode zed_sensing_mode;
-	switch (x)
+	switch (sl_sensing)
 	{
 		case sl::SENSING_MODE::STANDARD:
 			return zed_sensing_mode::standard;
@@ -390,10 +396,10 @@ sennet::zed::sensing_mode to_sennet(const sl::SENSING_MODE& x)
 	}
 }
 
-sennet::zed::reference_frame to_sennet(const sl::REFERENCE_FRAME& x)
+sennet::zed::reference_frame to_sennet(const sl::REFERENCE_FRAME& sl_ref)
 {
 	typedef sennet::zed::reference_frame zed_ref_frame;
-	switch (x)
+	switch (sl_ref)
 	{
 		case sl::REFERENCE_FRAME::WORLD:
 			return zed_ref_frame::world;		
@@ -404,10 +410,10 @@ sennet::zed::reference_frame to_sennet(const sl::REFERENCE_FRAME& x)
 	}
 }
 
-sennet::zed::coordinate_system to_sennet(const sl::COORDINATE_SYSTEM& x)
+sennet::zed::coordinate_system to_sennet(const sl::COORDINATE_SYSTEM& sl_sys)
 {
 	typedef sennet::zed::coordinate_system zed_coord_sys;
-	switch (x)
+	switch (sl_sys)
 	{
 		case sl::COORDINATE_SYSTEM::IMAGE:
 			return zed_coord_sys::image;
@@ -426,68 +432,60 @@ sennet::zed::coordinate_system to_sennet(const sl::COORDINATE_SYSTEM& x)
 	}
 }
 
-std::shared_ptr<sennet::zed::image> to_sennet(const sl::Mat& m)
+sennet::ref<sennet::zed::image> to_sennet(const sennet::ref<sl::Mat> sl_img)
 {
-	size_t channels = 0;
-	switch (m.getDataType())
+	switch (sl_img->getDataType())
 	{
 		case sl::MAT_TYPE::U8_C1:
-			channels = 1;
 			break;
 		case sl::MAT_TYPE::U8_C2:
-			channels = 2;
 			break;
 		case sl::MAT_TYPE::U8_C3:
-			channels = 3;
 			break;
 		case sl::MAT_TYPE::U8_C4:
-			channels = 4;
 			break;
 		default:
 			return nullptr;
 	}
-	return std::make_shared<sennet::zed::image>(m.getPtr<unsigned char>(),
-		m.getWidth(), m.getHeight(), m.getChannels());
+	return sennet::create_ref<sennet::zed::image>(
+		sl_img->getPtr<unsigned char>(), sl_img->getWidth(), 
+		sl_img->getHeight(), sl_img->getChannels());
 }
 
-sennet::zed::init_params to_sennet(const sl::InitParameters& ip)
+sennet::ref<sennet::zed::init_params> to_sennet(
+	const sennet::ref<sl::InitParameters> sl_ip)
 {
-	sennet::zed::depth_init_params dp(
-		to_sennet(ip.depth_mode),
-		to_sennet(ip.coordinate_units),
-		to_sennet(ip.coordinate_system),
-		ip.depth_stabilization,
-		ip.depth_minimum_distance,
-		ip.depth_maximum_distance,
-		ip.enable_right_side_measure);
-
-	sennet::zed::init_params cnv(
-		dp,
-		to_sennet(ip.camera_resolution),
-		ip.camera_fps,
-		ip.enable_image_enhancement,
-		ip.camera_disable_self_calib,
-		ip.sdk_verbose,
-		ip.sensors_required);
-
-	return cnv;
+	return sennet::create_ref<sennet::zed::init_params>(
+		to_sennet(sl_ip->depth_mode),
+		to_sennet(sl_ip->coordinate_units),
+		to_sennet(sl_ip->coordinate_system),
+		sl_ip->depth_stabilization,
+		sl_ip->depth_minimum_distance,
+		sl_ip->depth_maximum_distance,
+		sl_ip->enable_right_side_measure,
+		to_sennet(sl_ip->camera_resolution),
+		sl_ip->camera_fps,
+		sl_ip->enable_image_enhancement,
+		sl_ip->camera_disable_self_calib,
+		sl_ip->sdk_verbose,
+		sl_ip->sensors_required);
 }
 
-sennet::zed::recording_params to_sennet(const sl::RecordingParameters& rp)
+sennet::ref<sennet::zed::recording_params> to_sennet(
+	const sennet::ref<sl::RecordingParameters> sl_rp)
 {
-	sennet::zed::recording_params cnv(
-		std::string(rp.video_filename.get()),
-		to_sennet(rp.compression_mode));
-	return cnv;
+	return sennet::create_ref<sennet::zed::recording_params>(
+		std::string(sl_rp->video_filename.get()), 
+		to_sennet(sl_rp->compression_mode));
 }
 
-sennet::zed::runtime_params to_sennet(const sl::RuntimeParameters& rp)
+sennet::ref<sennet::zed::runtime_params> to_sennet(
+	const sennet::ref<sl::RuntimeParameters> sl_rp)
 {
-	sennet::zed::runtime_params cnv(
-		to_sennet(rp.sensing_mode),
-		to_sennet(rp.measure3D_reference_frame),
-		rp.enable_depth,
-		rp.confidence_threshold,
-		rp.textureness_confidence_threshold);
-	return cnv;
+	return sennet::create_ref<sennet::zed::runtime_params>(
+		to_sennet(sl_rp->sensing_mode),
+		to_sennet(sl_rp->measure3D_reference_frame),
+		sl_rp->enable_depth,
+		sl_rp->confidence_threshold,
+		sl_rp->textureness_confidence_threshold);
 }

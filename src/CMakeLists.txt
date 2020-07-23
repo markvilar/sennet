@@ -6,11 +6,11 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/am/core.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/application.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/base.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/handler.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/input.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/key_codes.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/mouse_codes.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/source_handle.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/application_event.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/event.hpp"
@@ -28,8 +28,8 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/zed/zed_recorder.hpp"
 	)
 
-# Make an automatic library - will be static or dynamic based on user setting
-add_library(sennet
+# Add sennet as a static library
+add_library(sennet STATIC
 	am/core.cpp 
 	core/application.cpp
 	core/log.cpp
@@ -72,6 +72,7 @@ target_link_libraries(sennet
 	PRIVATE 
 	Boost::serialization
 	Boost::thread
+	glad
 	glfw
 	${ZED_LIBS}
 	) 

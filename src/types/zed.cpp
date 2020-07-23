@@ -6,46 +6,6 @@ namespace sennet
 namespace zed
 {
 
-depth_init_params::depth_init_params(
-		const depth_mode mode,
-		const unit coord_units,
-		const coordinate_system coord_sys,
-		const int depth_stab,
-		const float depth_min,
-		const float depth_max,
-		const bool depth_right
-	)
-	: m_depth_mode(mode), m_coord_units(coord_units), 
-	m_coord_sys(coord_sys), m_depth_stab(depth_stab),
-	m_depth_min(depth_min), m_depth_max(depth_max),
-	m_depth_right(depth_right)
-{
-	// TODO: Add assertions?
-}
-
-std::string depth_init_params::to_string() const
-{
-	std::stringstream ss;
-	ss << "[depth_init_params] " 
-		<< "mode: " << ::to_string(get_depth_mode()) << ", "
-		<< "unit: " << ::to_string(get_coord_units()) << ", "
-		<< "sys.: " << ::to_string(get_coord_sys()) << ", "
-		<< "stab.: " << get_depth_stab() << ", "
-		<< "min. depth: " << get_min_depth() << ", "
-		<< "max. depth: " << get_max_depth() << ", "
-		<< "depth right: " << std::boolalpha << right_depth_enabled();
-	return ss.str();
-}
-
-std::ostream& operator<<(std::ostream& os, 
-		const depth_init_params& dp)
-{
-	os << dp.to_string();
-	return os;
-}
-
-
-
 image::image()
 	: m_buffer(),
 	m_width(0),
@@ -157,20 +117,28 @@ std::string image::to_string() const
 
 std::ostream& operator<<(std::ostream& os, const image& img)
 {
-	os << img.to_string();
-	return os;
+	return os << img.to_string();
 }
 
 init_params::init_params(
-		const depth_init_params depth_params,
-		const resolution resolution,
-		const int camera_fps,
-		const bool img_enhancement,
-		const bool disable_self_calib,
-		const bool sdk_verbose,
-		const bool sensors_required
+	const depth_mode mode,
+	const unit coord_units,
+	const coordinate_system coord_sys,
+	const int depth_stab,
+	const float depth_min,
+	const float depth_max,
+	const bool depth_right,
+	const resolution resolution,
+	const int camera_fps,
+	const bool img_enhancement,
+	const bool disable_self_calib,
+	const bool sdk_verbose,
+	const bool sensors_required
 	)
-	: m_depth_params(depth_params), m_resolution(resolution),
+	: m_depth_mode(mode), m_coord_units(coord_units), 
+	m_coord_sys(coord_sys), m_depth_stab(depth_stab),
+	m_depth_min(depth_min), m_depth_max(depth_max),
+	m_depth_right(depth_right), m_resolution(resolution),
 	m_camera_fps(camera_fps), m_img_enhancement(img_enhancement),
 	m_disable_self_calib(disable_self_calib), m_sdk_verbose(sdk_verbose),
 	m_sensors_required(sensors_required)
@@ -181,9 +149,15 @@ init_params::init_params(
 std::string init_params::to_string() const
 {
 	std::stringstream ss;
-	ss << "[init_params]" << get_depth_params().to_string() << "\n" 
-		<< "[init_params] "
-		<< "res.: " << ::to_string(get_resolution()) << ", "
+	ss << "[init_params] \n" 
+		<< "mode: " << ::to_string(get_depth_mode()) << ", "
+		<< "unit: " << ::to_string(get_coord_units()) << ", "
+		<< "sys.: " << ::to_string(get_coord_sys()) << ", "
+		<< "stab.: " << get_depth_stab() << ", "
+		<< "min. depth: " << get_min_depth() << ", "
+		<< "max. depth: " << get_max_depth() << ", "
+		<< "depth right: " << std::boolalpha << right_depth_enabled()
+		<< "\nres.: " << ::to_string(get_resolution()) << ", "
 		<< "fps: " << get_camera_fps() << ", "
 		<< "img. enh.: " << std::boolalpha 
 		<< img_enhance_enabled() << ", "
@@ -198,8 +172,7 @@ std::string init_params::to_string() const
 
 std::ostream& operator<<(std::ostream& os, const init_params& ip)
 {
-	os << ip.to_string();
-	return os;
+	return os << ip.to_string();
 }
 
 recording_params::recording_params(
@@ -228,8 +201,7 @@ std::string recording_params::to_string() const
 
 std::ostream& operator<<(std::ostream& os, const recording_params& rp)
 {
-	os << rp.to_string();
-	return os;
+	return os << rp.to_string();
 }
 
 runtime_params::runtime_params(
@@ -261,8 +233,7 @@ std::string runtime_params::to_string() const
 
 std::ostream& operator<<(std::ostream& os, const runtime_params& rp)
 {
-	os << rp.to_string();
-	return os;
+	return os << rp.to_string();
 }
 
 }
@@ -446,8 +417,7 @@ std::ostream& operator<<(
 	const sennet::zed::coordinate_system sys
 	)
 {
-	os << to_string(sys);
-	return os;
+	return os << to_string(sys);
 }
 
 std::ostream& operator<<(
@@ -455,55 +425,47 @@ std::ostream& operator<<(
 	const sennet::zed::depth_mode mode
 	)
 {
-	os << to_string(mode);
-	return os;
+	return os << to_string(mode);
 }
 
 std::ostream& operator<<(std::ostream& os, 
 	const sennet::zed::reference_frame ref)
 {
-	os << to_string(ref);
-	return os;
+	return os << to_string(ref);
 }
 
 std::ostream& operator<<(std::ostream& os, 
 	const sennet::zed::resolution res)
 {
-	os << to_string(res);
-	return os;
+	return os << to_string(res);
 }
 
 std::ostream& operator<<(std::ostream& os, 
 	const sennet::zed::svo_compression_mode scm)
 {
-	os << to_string(scm);
-	return os;
+	return os << to_string(scm);
 }
 
 std::ostream& operator<<(std::ostream& os, 
 	const sennet::zed::sensing_mode sm)
 {
-	os << to_string(sm);
-	return os;
+	return os << to_string(sm);
 }
 
 std::ostream& operator<<(std::ostream& os, 
 	const sennet::zed::unit u)
 {
-	os << to_string(u);
-	return os;
+	return os << to_string(u);
 }
 
 std::ostream& operator<<(std::ostream& os, 
 	const sennet::zed::video_settings vs)
 {
-	os << to_string(vs);
-	return os;
+	return os << to_string(vs);
 }
 
 std::ostream& operator<<(std::ostream& os, 
 	const sennet::zed::view v)
 {
-	os << to_string(v);
-	return os;
+	return os << to_string(v);
 }
