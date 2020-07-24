@@ -62,12 +62,10 @@ void sleep_this_thread(int ms)
 void test_recorder()
 {
 	auto handle = sennet::create_scope<sennet::zed::recorder>();
-
-	//handle->init();
 	sleep_this_thread(100);
 	handle->start_record();
+	sleep_this_thread(1000);
 
-	sleep_this_thread(100);
 	auto init_params = handle->get_init_params();
 	auto zed_init_params = handle->get_zed_init_params();
 	if (init_params)
@@ -79,8 +77,27 @@ void test_recorder()
 		SN_INFO(zed_init_params->to_string());
 	}
 
-	// Record for 10 seconds.
-	sleep_this_thread(10000);
+	int count = 0;
+	int n = 10;
+
+	while (count < n)
+	{
+		auto image = handle->get_image(sennet::zed::view::side_by_side);
+		if (image)
+		{
+			std::cout << *image << "\n";
+			std::cout << static_cast<int>(image->get_pixel(640, 360, 0))
+				<< ", " 
+				<< static_cast<int>(image->get_pixel(640, 360, 1))
+				<< ", " 
+				<< static_cast<int>(image->get_pixel(640, 360, 2))
+				<< ", " 
+				<< static_cast<int>(image->get_pixel(640, 360, 3))
+				<< "\n";
+			count++;
+			sleep_this_thread(1000);
+		}
+	}
 }
 
 int main(int argc, char* argv[])
