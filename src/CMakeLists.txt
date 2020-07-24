@@ -23,9 +23,9 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/basic_types.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/zed.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/zed/conversion.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed/io.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/zed/io.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/sennet/zed/recorder.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/zed/serialization.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed/zed_recorder.hpp"
 	)
 
 # Add sennet as a static library
@@ -41,8 +41,8 @@ add_library(sennet STATIC
 	types/basic_types.cpp
 	types/zed.cpp
 	zed/conversion.cpp
-	zed/io.cpp 
-	zed/zed_recorder.cpp
+	zed/io.cpp 	
+	zed/recorder.cpp
 	${HEADER_LIST}
 	)
 

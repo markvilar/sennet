@@ -7,8 +7,8 @@
 #include <sennet/sennet.hpp>
 
 #include <sennet/zed/conversion.hpp>
+#include <sennet/zed/recorder.hpp>
 #include <sennet/zed/io.hpp>
-#include <sennet/zed/zed_recorder.hpp>
 
 void test_params()
 {
@@ -54,23 +54,33 @@ void test_to_sennet()
 
 }
 
+void sleep_this_thread(int ms)
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
 void test_recorder()
 {
-	sennet::zed_recorder handle;
+	auto handle = sennet::create_scope<sennet::zed::recorder>();
 
-	handle.init();
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	handle.start_record();
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	handle.stop_record();
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	handle.shutdown();
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	//handle->init();
+	sleep_this_thread(100);
+	handle->start_record();
 
-	handle.init();
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	handle.start_record();
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	sleep_this_thread(100);
+	auto init_params = handle->get_init_params();
+	auto zed_init_params = handle->get_zed_init_params();
+	if (init_params)
+	{
+		SN_INFO(init_params->to_string());
+	}
+	if (zed_init_params)
+	{
+		SN_INFO(zed_init_params->to_string());
+	}
+
+	// Record for 10 seconds.
+	sleep_this_thread(10000);
 }
 
 int main(int argc, char* argv[])
