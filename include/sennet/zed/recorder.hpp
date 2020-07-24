@@ -71,6 +71,7 @@ private:
 	// Thread members.
 	::sennet::scope<std::mutex> m_mutex;
 	::sennet::scope<std::thread> m_exec_thread;
+	std::chrono::milliseconds m_init_timeout;
 	std::chrono::milliseconds m_worker_timeout;
 	std::chrono::milliseconds m_record_timeout;
 

@@ -17,6 +17,7 @@ recorder::recorder()
 	m_recording(false),
 	m_mutex(::sennet::create_scope<std::mutex>()),
 	m_exec_thread(),
+	m_init_timeout(100),
 	m_worker_timeout(100),
 	m_record_timeout(10)
 {
@@ -48,6 +49,9 @@ void recorder::init()
 	stop_exec_thread();
 	join_exec_thread();
 	start_exec_thread();
+
+	// Sleep a bit to allow the execution thread to start up.
+	std::this_thread::sleep_for(m_init_timeout);
 }
 
 void recorder::shutdown()

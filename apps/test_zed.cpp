@@ -62,7 +62,6 @@ void sleep_this_thread(int ms)
 void test_recorder()
 {
 	auto handle = sennet::create_scope<sennet::zed::recorder>();
-	sleep_this_thread(100);
 	handle->start_record();
 	sleep_this_thread(1000);
 
