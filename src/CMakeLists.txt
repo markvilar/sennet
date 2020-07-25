@@ -8,6 +8,8 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/base.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/input.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/key_codes.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/layer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/core/layer_stack.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/mouse_codes.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/source_handle.hpp"
@@ -32,6 +34,8 @@ set(HEADER_LIST
 add_library(sennet STATIC
 	am/core.cpp 
 	core/application.cpp
+	core/layer.cpp
+	core/layer_stack.cpp
 	core/log.cpp
 	core/window.cpp
 	platform/opengl/opengl_context.cpp
