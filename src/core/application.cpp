@@ -1,11 +1,18 @@
+#include <sennet/snpch.hpp>
 #include <sennet/core/application.hpp>
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace sennet
 {
 
-application::application(am::runtime& rt, const std::string& name)
-	: m_name(name),
-	m_runtime(rt)
+application::application()
+{
+	m_window = window::create();
+}
+
+application::~application()
 {
 }
 
@@ -23,6 +30,12 @@ void application::close()
 
 void application::run()
 {
+	while (m_running)
+	{
+		glClearColor(1, 0, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
+		m_window->on_update();
+	}
 }
 
 bool application::on_window_close()

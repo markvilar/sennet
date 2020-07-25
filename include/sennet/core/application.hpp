@@ -1,8 +1,8 @@
 #pragma once
 
-#include <sennet/snpch.hpp>
-
-#include <sennet/am/core.hpp>
+#include <sennet/core/base.hpp>
+#include <sennet/events/event.hpp>
+#include <sennet/core/window.hpp>
 
 namespace sennet
 {
@@ -10,31 +10,24 @@ namespace sennet
 class application
 {
 public:
-	application(am::runtime& rt, const std::string& name = "Sennet App");
+	application();
 	
 	virtual ~application();
-
 	void on_event();
-
 	void get_window();
-
 	void close();
+
+	void run();
 
 	static application& get() { return *s_instance; }
 
 private:
-	void run();
-
 	bool on_window_close();
-
 	bool on_window_resize();
 
 private:
-	const std::string m_name;
-
-	am::runtime& m_runtime;
-
-	// std::unique_ptr<window> m_window;
+	scope<window> m_window;
+	bool m_running = true;
 
 private:
 	static application* s_instance;

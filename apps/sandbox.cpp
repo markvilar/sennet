@@ -10,8 +10,7 @@ int main()
 {	
 	sennet::log::init();
 
-	auto window = sennet::window::create();
-	SN_ASSERT(window, "Window is null!")
-
+	sennet::application app;
+	app.run();
 	return 0;
 }
