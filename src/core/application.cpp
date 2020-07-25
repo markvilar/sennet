@@ -2,7 +2,8 @@
 #include <sennet/core/application.hpp>
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+
+#include <sennet/core/log.hpp>
 
 namespace sennet
 {
