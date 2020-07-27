@@ -34,15 +34,14 @@ cmake --build build --target docs
 ```
 
 ## TODOs
-- Add Cmake build types.
-- Implement error system (?).
-- Implement layer class.
+- Add Cmake build configurations.
+- Implement error system.
 - Revise communication system (runtime, messages, callbacks).
 - Implement OpenGL render API.
 - Implement 2D renderer.
 - Implement shaders.
-- Implement application class.
 - Implement file handler.
+- Revise application class (non-GUI applications).
 - HIL-test ZED recorder (multi-thread interaction, changing settings, etc.)
 
 ## DONEs
@@ -51,6 +50,8 @@ cmake --build build --target docs
 - Implement ZED wrappers (conversion functions).
 - Implement linux window.
 - Implement ZED record handler.
+- Implement layer class.
+- Implement application class.
 
 ## Acknowledgements
 I would like to acknowledge Yan Chernikov (TheCherno) and Bryce
