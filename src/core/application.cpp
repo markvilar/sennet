@@ -8,8 +8,13 @@
 namespace sennet
 {
 
+application* application::s_instance = nullptr;
+
 application::application()
 {
+	SN_CORE_ASSERT(!s_instance, "Application already exists!");
+	s_instance = this;
+
 	m_window = window::create();
 	m_window->set_event_callback(SN_BIND_EVENT_FN(application::on_event));
 }
@@ -39,11 +44,13 @@ void application::on_event(event& e)
 void application::push_layer(layer* lay)
 {
 	m_layer_stack.push_layer(lay);
+	lay->on_attach();
 }
 
 void application::push_overlay(layer* lay)
 {
 	m_layer_stack.push_overlay(lay);
+	lay->on_attach();
 }
 
 void application::close()

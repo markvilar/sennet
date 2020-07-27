@@ -1,9 +1,3 @@
-#include <iostream>
-
-#include <sl/Camera.hpp>
-
-#include <imgui.h>
-
 #include <sennet/sennet.hpp>
 
 class example_layer : public sennet::layer
@@ -31,6 +25,7 @@ public:
 	sandbox()
 	{
 		push_layer(new example_layer());
+		push_overlay(new sennet::imgui_layer());
 	}
 
 	~sandbox()

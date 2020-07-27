@@ -1,3 +1,12 @@
+# Temporaries
+set(TEMP_HEADERS
+	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/imgui_opengl_renderer.h"
+	)
+
+set(TEMP_SRC
+	platform/opengl/imgui_opengl_renderer.cpp
+	)
+
 # Headers
 set(HEADER_LIST 
 	"${PROJECT_SOURCE_DIR}/include/sennet/sennet.hpp"
@@ -18,6 +27,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/event.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/key_event.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/mouse_event.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/imgui/imgui_layer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/opengl_context.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/windows/windows_window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/linux/linux_window.hpp"
@@ -38,6 +48,7 @@ add_library(sennet STATIC
 	core/layer_stack.cpp
 	core/log.cpp
 	core/window.cpp
+	imgui/imgui_layer.cpp
 	platform/opengl/opengl_context.cpp
 	platform/windows/windows_window.cpp
 	platform/linux/linux_window.cpp
@@ -48,6 +59,8 @@ add_library(sennet STATIC
 	zed/io.cpp 	
 	zed/recorder.cpp
 	${HEADER_LIST}
+	${TEMP_HEADERS}
+	${TEMP_SRC}
 	)
 
 # Precompiled headers
@@ -78,6 +91,7 @@ target_link_libraries(sennet
 	Boost::thread
 	glad
 	glfw
+	imgui
 	${ZED_LIBS}
 	) 
 

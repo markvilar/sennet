@@ -8,5 +8,7 @@
 #include <sennet/core/source_handle.hpp>
 #include <sennet/core/window.hpp>
 
+#include <sennet/imgui/imgui_layer.hpp>
+
 #include <sennet/types/basic_types.hpp>
 #include <sennet/types/zed.hpp>
