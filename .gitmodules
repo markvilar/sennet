@@ -10,3 +10,6 @@
 [submodule "extern/glad"]
 	path = extern/glad
 	url = ../../markvilar/glad.git
+[submodule "extern/glm"]
+	path = extern/glm
+	url = ../../markvilar/glm.git

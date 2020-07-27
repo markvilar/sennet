@@ -79,6 +79,7 @@ target_include_directories(sennet
 	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/extern/glad/include"
 	"${PROJECT_SOURCE_DIR}/extern/glfw/include"
+	"${PROJECT_SOURCE_DIR}/extern/glm"
 	"${PROJECT_SOURCE_DIR}/extern/imgui"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	${Boost_INCLUDE_DIRS} 
