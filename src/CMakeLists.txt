@@ -50,7 +50,9 @@ add_library(sennet STATIC
 	core/window.cpp
 	imgui/imgui_layer.cpp
 	platform/opengl/opengl_context.cpp
+	platform/windows/windows_input.cpp
 	platform/windows/windows_window.cpp
+	platform/linux/linux_input.cpp
 	platform/linux/linux_window.cpp
 	renderer/graphics_context.cpp
 	types/basic_types.cpp

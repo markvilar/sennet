@@ -6,7 +6,10 @@
 #include <sennet/core/layer.hpp>
 #include <sennet/core/log.hpp>
 #include <sennet/core/source_handle.hpp>
-#include <sennet/core/window.hpp>
+
+#include <sennet/core/input.hpp>
+#include <sennet/core/key_codes.hpp>
+#include <sennet/core/mouse_codes.hpp>
 
 #include <sennet/imgui/imgui_layer.hpp>
 

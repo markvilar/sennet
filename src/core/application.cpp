@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 
 #include <sennet/core/log.hpp>
+#include <sennet/core/input.hpp>
 
 namespace sennet
 {
@@ -63,7 +64,7 @@ void application::run()
 	{
 		glClearColor(1, 0, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
-		
+
 		for (layer* lay : m_layer_stack)
 		{
 			lay->on_update();
