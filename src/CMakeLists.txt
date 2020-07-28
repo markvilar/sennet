@@ -10,9 +10,6 @@ set(TEMP_SRC
 # Headers
 set(HEADER_LIST 
 	"${PROJECT_SOURCE_DIR}/include/sennet/sennet.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/actions.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/container_device.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/am/core.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/application.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/base.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/core/input.hpp"
@@ -28,6 +25,9 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/key_event.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/mouse_event.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/imgui/imgui_layer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/network/connection.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/network/connection_manager.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/network/container_device.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/opengl_context.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/windows/windows_window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/linux/linux_window.hpp"
@@ -42,13 +42,14 @@ set(HEADER_LIST
 
 # Add sennet as a static library
 add_library(sennet STATIC
-	am/core.cpp 
 	core/application.cpp
 	core/layer.cpp
 	core/layer_stack.cpp
 	core/log.cpp
 	core/window.cpp
 	imgui/imgui_layer.cpp
+	network/connection.cpp
+	network/connection_manager.cpp 
 	platform/opengl/opengl_context.cpp
 	platform/windows/windows_input.cpp
 	platform/windows/windows_window.cpp

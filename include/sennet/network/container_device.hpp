@@ -7,7 +7,8 @@
 #include <boost/iostreams/categories.hpp>	// source_tag
 #include <boost/iostreams/positioning.hpp>	// stream_offset
 
-namespace am {
+namespace sennet 
+{
 
 // This is a Boost.IoStreams SeekableDevice that can be used to create an
 // (io)stream on top of a random access container (i.e. vector<>).
@@ -148,4 +149,4 @@ public:
 
 }; // class container_device
 
-}; // namespace am
+}
