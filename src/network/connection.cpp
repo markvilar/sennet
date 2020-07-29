@@ -2,8 +2,6 @@
 
 #include <sennet/messages/message.hpp>
 
-#include <boost/bind.hpp>
-
 namespace sennet
 {
 
@@ -40,113 +38,98 @@ boost::asio::ip::tcp::endpoint connection::get_local_endpoint() const
 	return m_socket.local_endpoint();
 }
 
+void connection::set_parcel_callback(const parcel_callback_fn& callback)
+{
+	m_parcel_callback = callback;
+}
+
 void connection::async_read()
 {
 	// Check that the in buffer is NULL.
-	BOOST_ASSERT(m_in_buffer == 0);
+	SN_CORE_ASSERT(m_in_buffer == 0, "In buffer is null!");
 
 	// Set up attributes for a new read.
 	m_in_size = 0;
-	m_in_buffer = new std::vector<char>();
+	m_in_buffer = new parcel();
 
 	boost::asio::async_read(m_socket,
 		boost::asio::buffer(&m_in_size, sizeof(m_in_size)),
-		boost::bind(&connection::handle_read_size, shared_from_this(),
-			boost::asio::placeholders::error));
+		std::bind(&connection::on_read_size, shared_from_this(),
+		std::placeholders::_1));
 }
 
-void connection::async_write(const message& msg)
+void connection::async_write(std::shared_ptr<parcel> out_buffer)
 {
-	// Create a default function if a handler is not specified.
-	std::function<void(boost::system::error_code const&)> h;
-
-	// Start async. write operation with the default function.
-	async_write(msg, h);
-}
-
-void connection::async_write(const message& msg,
-	std::function<void(boost::system::error_code const&)> handler)
-{
-	std::shared_ptr<message> msg_ptr(msg.clone());
-
-	// TODO: Fix!
-	// m_manager.get_local_queue().push(msg_ptr);
-}
-
-void connection::async_write_worker(const message& msg,
-	std::function<void(boost::system::error_code const&)> handler)
-{
-	// TODO: Fix
-	// Serialize the action parcel and add it to an out buffer.
-	// std::shared_ptr<std::vector<char>> 
-		//out_buffer(m_manager.serialize_parcel(*msg));
-
-	// Temporary
-	std::shared_ptr<std::vector<char>> out_buffer(new std::vector<char>());
-	
 	// Get out buffer size.
-	std::shared_ptr<boost::uint64_t>
-		out_size(new boost::uint64_t(out_buffer->size()));
+	std::shared_ptr<uint64_t> out_size(new uint64_t(out_buffer->size()));
 
 	// Set up buffers for the out size and out buffer.
 	std::vector<boost::asio::const_buffer> buffers;
 	buffers.push_back(boost::asio::buffer(&*out_size, sizeof(*out_size)));
 	buffers.push_back(boost::asio::buffer(*out_buffer));
 
-	// Set up async. write operation with handle_write() as completion
+	// Set up async. write operation with on_write() as completion
 	// handler.
 	boost::asio::async_write(m_socket, buffers,
-		boost::bind(&connection::handle_write, shared_from_this(),
-			boost::asio::placeholders::error, out_size,
-			out_buffer, handler));
-			
+		std::bind(&connection::on_write, shared_from_this(),
+		std::placeholders::_1, out_size, out_buffer));
 }
 
-void connection::handle_read_size(boost::system::error_code const& error)
+void connection::on_read_size(const boost::system::error_code& error)
 {
 	// Return if an error has occured.
 	if (error) return;
 
 	// Check that the in buffer is valid.
-	BOOST_ASSERT(m_in_buffer);
+	SN_CORE_ASSERT(m_in_buffer, "In on_read_size: In buffer is null!");
 
 	// Resize the in buffer to the in size.
 	(*m_in_buffer).resize(m_in_size);
 
 	// TODO: Look into adding a macro for the handler binding!
-	// Set up async. read operation for the in data with handle_read_data()
+	// Set up async. read operation for the in data with on_read_data()
 	// as completion handler.
 	boost::asio::async_read(m_socket, boost::asio::buffer(*m_in_buffer),
-		boost::bind(&connection::handle_read_data, shared_from_this(),
-		boost::asio::placeholders::error));
+		std::bind(&connection::on_read_data, shared_from_this(),
+		std::placeholders::_1));
 }
 
-void connection::handle_read_data(boost::system::error_code const& error)
+void connection::on_read_data(const boost::system::error_code& error)
 {
 	// Return if an error has occured.
-	if (error) return;
+	if (error)
+	{
+		SN_CORE_ERROR("Error in on_read_data: {0}", error.message());
+		return;
+	}
 
 	// Extract raw message.
-	std::vector<char>* raw_msg = nullptr;
+	parcel* raw_msg = nullptr;
 	std::swap(m_in_buffer, raw_msg);
 
-	// TODO: Add on_parcel callback!
-	// Add raw message to parcel queue.
-	// m_manager.get_parcel_queue().push(raw_msg);
+	if (m_parcel_callback)
+	{
+		SN_CORE_ASSERT(raw_msg, 
+			"In on_read_data: Raw message point is null");
+		m_parcel_callback(raw_msg);
+	}
+	else if (raw_msg)
+	{
+		SN_CORE_WARN("In on_read_data: No parcel callback function.");
+	}
 
 	// Start next async. read operation.
 	async_read();
 }
 
-void connection::handle_write(
-	boost::system::error_code const& error,
-	std::shared_ptr<boost::uint64_t> out_size,
-	std::shared_ptr<std::vector<char>> out_buffer,
-	std::function<void(boost::system::error_code const&)> handler
-	)
+void connection::on_write(const boost::system::error_code& error,
+	std::shared_ptr<uint64_t> out_size, std::shared_ptr<parcel> out_buffer)
+	
 {
-	if (handler)
-		handler(error);
+	if (error)
+	{
+		SN_CORE_ERROR("Error in on_write: {0}", error.message());
+	}
 }
 
 }

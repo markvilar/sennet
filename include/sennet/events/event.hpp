@@ -53,7 +53,6 @@ public:
 
 	bool is_in_category(event_category category)
 	{
-		// Bitwise AND operator.
 		return get_category_flags() & category;
 	}
 };

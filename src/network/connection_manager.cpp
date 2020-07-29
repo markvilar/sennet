@@ -2,28 +2,25 @@
 
 #include <sennet/core/base.hpp>
 
-#include <sennet/network/container_device.hpp>
-
-#include <boost/bind.hpp>
+#include <sennet/network/message_encoder.hpp>
 
 namespace sennet 
 {
 
-connection_manager::connection_manager(std::string port, 
-	boost::uint64_t wait_for)
+connection_manager::connection_manager(std::string port, uint64_t wait_for)
 	: m_io_service(),
 	m_acceptor(m_io_service, boost::asio::ip::tcp::endpoint(
 		boost::asio::ip::tcp::v4(), 
 		boost::lexical_cast<boost::uint16_t>(port))),
 	m_connections(),
 	m_exec_thread(),
-	m_inbound_queue(64),
-	m_outbound_queue(64),
+	m_inbound_queue(),
+	m_outbound_queue(),
 	m_stop_flag(false),
 	m_wait_for(wait_for)
 {
 	// Make sure we are waiting for some clients.
-	BOOST_ASSERT(wait_for != 0);
+	SN_CORE_ASSERT(wait_for != 0, "Not waiting for clients!");
 }
 
 connection_manager::~connection_manager()
@@ -36,12 +33,13 @@ boost::asio::io_service& connection_manager::get_io_service()
 	return m_io_service; 
 }
 
-boost::lockfree::queue<std::vector<char>*>& connection_manager::get_inbound_queue()
+std::queue<std::vector<char>*>& connection_manager::get_inbound_queue()
 { 
 	return m_inbound_queue;
 }
 
-boost::lockfree::queue<message*>& connection_manager::get_outbound_queue()
+std::queue<std::pair<ref<connection>, ref<message>>>& 
+	connection_manager::get_outbound_queue()
 {
 	return m_outbound_queue;
 }
@@ -65,6 +63,11 @@ ref<connection> connection_manager::find_connection(const std::string& addr,
 		++it;
 	}
 	return nullptr;
+}
+
+void connection_manager::set_message_callback(const msg_callback_fn& callback)
+{
+	m_message_callback = callback;
 }
 
 void connection_manager::start()
@@ -103,6 +106,7 @@ void connection_manager::run()
 	m_io_service.run();
 
 	if (m_exec_thread.joinable())
+		SN_CORE_TRACE("Joining execution thread.");
 		m_exec_thread.join();
 }
 
@@ -111,8 +115,8 @@ ref<connection> connection_manager::connect(std::string host,
 {
 	// Set up resolver and query.
 	boost::asio::ip::tcp::resolver resolver(m_io_service);
-	boost::asio::ip::tcp::resolver::query query(
-		boost::asio::ip::tcp::v4(), host, port);
+	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(),
+		host, port);
 	
 	// Initialize iterators.
 	boost::asio::ip::tcp::resolver::iterator it = resolver.resolve(query);
@@ -131,7 +135,7 @@ ref<connection> connection_manager::connect(std::string host,
 
 	// Wait for some time for the connection manager to become available.
 	// TODO: Look into adding a more general connection timer!
-	for (boost::uint64_t i = 0; i < 64; ++i)
+	for (uint64_t i = 0; i < 64; ++i)
 	{
 		boost::system::error_code ec;
 		boost::asio::connect(conn->get_socket(), it, ec);
@@ -155,8 +159,11 @@ ref<connection> connection_manager::connect(std::string host,
 	// Note that if there were multiple I/O threads, one would have to lock
 	// before accessing the connection map.
 	boost::asio::ip::tcp::endpoint ep = conn->get_remote_endpoint();
-	BOOST_ASSERT(m_connections.count(ep) == 0);
+	SN_CORE_ASSERT(m_connections.count(ep) == 0, 
+		"Connection already established!");
 
+	SN_CORE_TRACE("Added new connection: {0}:{1}", ep.address().to_string(),
+		ep.port());
 	m_connections[ep] = conn;
 
 	// Start the connection by calling the async. read operation.
@@ -172,21 +179,20 @@ void connection_manager::async_accept()
 	// Set up async. accept operation with handle_accept() as completion
 	// handler.
 	m_acceptor.async_accept(conn->get_socket(),
-		boost::bind(&connection_manager::handle_accept,
-			boost::ref(*this),
-			boost::asio::placeholders::error,
-			conn));
+		std::bind(&connection_manager::on_accept, this,
+		std::placeholders::_1, conn));
+		
 }
 
-void connection_manager::handle_accept(boost::system::error_code const& error,
-	std::shared_ptr<connection> conn)
+void connection_manager::on_accept(boost::system::error_code const& error,
+	ref<connection> conn)
 {
 	if (!error)
 	{
 		// If there was no error, then we need to insert conn into the
 		// connection table, but first the next async_accept() is set
 		// up.
-		std::shared_ptr<connection> old_conn(conn);
+		ref<connection> old_conn = conn;
 
 		// Initialize new connection.
 		conn.reset(new connection(get_io_service()));
@@ -194,15 +200,16 @@ void connection_manager::handle_accept(boost::system::error_code const& error,
 		// Set up new async. accept operation with handle_accept() as
 		// completion handler.
 		m_acceptor.async_accept(conn->get_socket(),
-			boost::bind(&connection_manager::handle_accept,
-				boost::ref(*this), boost::asio::placeholders::error,
-				conn));
+			std::bind(&connection_manager::on_accept, this,
+			std::placeholders::_1, conn));
+				
 		
 		// Note that if there were multiple I/O threads, we would have
 		// to lock before touching the map.
 		boost::asio::ip::tcp::endpoint ep =
 			old_conn->get_remote_endpoint();
-		BOOST_ASSERT(m_connections.count(ep) == 0);
+		SN_CORE_ASSERT(m_connections.count(ep) == 0, 
+			"Connection already established!");
 
 		// Add accepted connection to connections.	
 		m_connections[ep] = old_conn;
@@ -218,80 +225,34 @@ void connection_manager::exec_loop()
 	{
 		// Look for pending actions that has been posted locally to 
 		// execute.
-		message* msg_ptr = nullptr;
 
-		if (m_outbound_queue.pop(msg_ptr))
+		if (!m_outbound_queue.empty())
 		{
+			auto [conn, outbound_msg] = m_outbound_queue.front();
+
 			// Check action validity.
-			BOOST_ASSERT(msg_ptr);
+			SN_CORE_ASSERT(conn, "Connection is null!");
+			SN_CORE_ASSERT(outbound_msg, "Message is null!");
 			
-			// TODO: Add async_write_worker callback.
+			auto outbound_parcel = message_encoder::encode(
+				*outbound_msg);
+				
+			conn->async_write(outbound_parcel);
 		}
 
-		// If there's no pending actions, find parcel to deserialize and
-		// execute.
-		std::vector<char>* raw_msg_ptr = nullptr;
-
-		if (m_inbound_queue.pop(raw_msg_ptr))
+		// If there's no pending outbound messages, find parcel to 
+		// deserialize and execute.
+		if (!m_inbound_queue.empty())
 		{
-			// Extract raw message.
-			boost::scoped_ptr<std::vector<char>> 
-				raw_msg(raw_msg_ptr);
+			auto inbound_parcel = m_inbound_queue.front();
+			auto inbound_msg = message_encoder::decode(*inbound_parcel);
 
-			// Create action from raw message.
-			boost::scoped_ptr<message>
-				msg(deserialize_parcel(*raw_msg));
-			
-			// TODO: Add message callback.
+			if (m_message_callback)
+			{
+				m_message_callback(*inbound_msg);
+			}
 		}
 	}
-}
-
-std::vector<char>* connection_manager::serialize_parcel(const message& msg)
-{
-	std::vector<char>* raw_msg_ptr = new std::vector<char>();
-
-	// Define I/O type.
-	typedef container_device<std::vector<char>> io_device_type;
-
-	// Create I/O stream in order to serialize action into parcel with an
-	// archive.
-	boost::iostreams::stream<io_device_type> io(*raw_msg_ptr);
-
-	// Initialize action pointer to be input to archive.
-	message const* msg_ptr = &msg;
-
-	// Local scope in order to make sure archive goes out of scope before
-	// proceeding.
-	{
-		boost::archive::binary_oarchive archive(io);
-		archive & msg_ptr;
-	}
-
-	return raw_msg_ptr;
-}
-
-message* connection_manager::deserialize_parcel(std::vector<char>& raw_msg)
-{
-	// Define I/O type.
-	typedef container_device<std::vector<char>> io_device_type;
-
-	// Create I/O stream in order to deserialize parcel into action with an
-	// archive.
-	boost::iostreams::stream<io_device_type> io(raw_msg);
-
-	message* msg_ptr = nullptr;
-
-	// Local scope in order to make sure archive goes out of scope before
-	// proceeding.
-	{
-		boost::archive::binary_iarchive archive(io);
-		archive & msg_ptr;
-	}
-
-	BOOST_ASSERT(msg_ptr);
-
-	return msg_ptr;
 }
 
 }

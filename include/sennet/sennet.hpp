@@ -13,5 +13,10 @@
 
 #include <sennet/imgui/imgui_layer.hpp>
 
+#include <sennet/network/connection.hpp>
+#include <sennet/network/connection_manager.hpp>
+#include <sennet/network/container_device.hpp>
+#include <sennet/network/message_encoder.hpp>
+
 #include <sennet/types/basic_types.hpp>
 #include <sennet/types/zed.hpp>
