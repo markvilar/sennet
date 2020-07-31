@@ -1,8 +1,9 @@
 #include <sennet/network/connection_manager.hpp>
 
-#include <sennet/core/base.hpp>
+#include <boost/lexical_cast.hpp>
 
-#include <sennet/network/message_encoder.hpp>
+#include <sennet/core/base.hpp>
+#include <sennet/messages/message_encoder.hpp>
 
 namespace sennet 
 {
@@ -33,7 +34,7 @@ boost::asio::io_service& connection_manager::get_io_service()
 	return m_io_service; 
 }
 
-std::queue<std::vector<char>*>& connection_manager::get_inbound_queue()
+std::queue<connection_manager::parcel*>& connection_manager::get_inbound_queue()
 { 
 	return m_inbound_queue;
 }
@@ -48,21 +49,6 @@ std::map<boost::asio::ip::tcp::endpoint, ref<connection>>&
 	connection_manager::get_connections()
 {
 	return m_connections;
-}
-
-ref<connection> connection_manager::find_connection(const std::string& addr,
-	const unsigned short port)
-{
-	auto conns = get_connections();
-	auto it = conns.begin();
-	while (it != conns.end())
-	{
-		if (it->first.address().to_string() == addr and 
-			it->first.port() == port)
-			return it->second;
-		++it;
-	}
-	return nullptr;
 }
 
 void connection_manager::set_message_callback(const msg_callback_fn& callback)
@@ -172,6 +158,30 @@ ref<connection> connection_manager::connect(std::string host,
 	return conn;
 }
 
+ref<connection> connection_manager::connection_search(const std::string& addr,
+	const unsigned short port)
+{
+	auto conns = get_connections();
+	auto it = conns.begin();
+	while (it != conns.end())
+	{
+		if (it->first.address().to_string() == addr and 
+			it->first.port() == port)
+			return it->second;
+		++it;
+	}
+	return nullptr;
+}
+
+void connection_manager::push_message(ref<connection> conn, const message& msg)
+{
+	ref<message> msg_ptr(msg.clone());
+
+	m_mutex.lock();
+	m_outbound_queue.push(std::make_pair(conn, msg_ptr));
+	m_mutex.unlock();
+}
+
 void connection_manager::async_accept()
 {
 	ref<connection> conn = create_ref<connection>(get_io_service());
@@ -223,9 +233,10 @@ void connection_manager::exec_loop()
 {
 	while (!m_stop_flag)
 	{
+		// TODO: Clean up!
+
 		// Look for pending actions that has been posted locally to 
 		// execute.
-
 		if (!m_outbound_queue.empty())
 		{
 			auto [conn, outbound_msg] = m_outbound_queue.front();
@@ -234,8 +245,9 @@ void connection_manager::exec_loop()
 			SN_CORE_ASSERT(conn, "Connection is null!");
 			SN_CORE_ASSERT(outbound_msg, "Message is null!");
 			
-			auto outbound_parcel = message_encoder::encode(
-				*outbound_msg);
+			ref<parcel> outbound_parcel(message_encoder::encode(
+				*outbound_msg));
+				
 				
 			conn->async_write(outbound_parcel);
 		}

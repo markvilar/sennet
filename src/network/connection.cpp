@@ -1,7 +1,5 @@
 #include <sennet/network/connection.hpp>
 
-#include <sennet/messages/message.hpp>
-
 namespace sennet
 {
 

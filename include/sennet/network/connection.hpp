@@ -1,18 +1,17 @@
 #pragma once
 #include <sennet/snpch.hpp>
 
-#include <sennet/core/base.hpp>
-#include <sennet/messages/message.hpp>
-
 #include <boost/asio.hpp>
 
-// TODO: Implement sennet::endpoint and sennet::socket!
+#include <sennet/core/base.hpp>
 
 namespace sennet
 {
 
 class connection : public std::enable_shared_from_this<connection>
 {
+	// Asynchronous connection class. 
+
 	typedef std::vector<char> parcel;
 	typedef std::function<void(std::vector<char>*)> parcel_callback_fn;
 

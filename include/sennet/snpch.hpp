@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <iosfwd>
 #include <iostream>
 #include <stdexcept>
 

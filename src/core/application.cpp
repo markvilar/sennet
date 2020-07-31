@@ -44,7 +44,7 @@ void application::on_event(event& e)
 
 void application::on_message(message& msg)
 {
-	SN_CORE_TRACE("Got message: {0}", msg.to_string());
+	SN_CORE_TRACE("Application got message");
 }
 
 void application::push_layer(layer* lay)

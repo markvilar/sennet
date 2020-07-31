@@ -1,11 +1,16 @@
 #include <functional>
+#include <thread>
 
 #include <sennet/sennet.hpp>
-#include <sennet/messages/message.hpp>
 
 void handle_message(sennet::message& msg)
 {
-	std::cout << "Server got message: " << msg.to_string() << "\n";
+	SN_TRACE("Server: Got message!");
+}
+
+void io_worker(sennet::connection_manager& manager)
+{
+	manager.run();
 }
 
 int main()
@@ -15,7 +20,15 @@ int main()
 	manager.set_message_callback(std::bind(handle_message, 
 		std::placeholders::_1));
 	manager.start();
-	manager.run();
-	SN_INFO("Server finished.");
+
+	std::thread io_thread(io_worker, std::ref(manager));
+
+	SN_TRACE("Server: Started IO thread.");
+	if (io_thread.joinable())
+	{
+		io_thread.join();
+	}
+
+	SN_INFO("Server: Finished.");
 	return 0;
 }

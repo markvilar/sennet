@@ -1,14 +1,41 @@
+#include <functional>
+#include <thread>
+
 #include <sennet/sennet.hpp>
-#include <sennet/messages/message.hpp>
+
+void io_worker(sennet::connection_manager& manager)
+{
+	manager.run();
+}
 
 int main()
 {
 	sennet::log::init();
 	sennet::connection_manager manager("6000", 1);
 	SN_INFO("Client attempting to connect.");
-	manager.connect("localhost", "7000");
+	auto conn = manager.connect("localhost", "7000");
 	manager.start();
-	manager.run();
-	SN_INFO("Client finished.");
+
+	std::thread io_thread(io_worker, std::ref(manager));
+
+	SN_INFO("Client: Started IO thread.");
+
+	SN_INFO("Client: Sending messages.");
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (conn)
+		{
+			sennet::hello_world_message msg;
+			manager.push_message(conn, msg);
+		}
+	}
+
+	if (io_thread.joinable())
+	{
+		io_thread.join();
+	}
+
+	SN_INFO("Client: Finished.");
 	return 0;
 }
