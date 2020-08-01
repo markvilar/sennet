@@ -110,6 +110,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	add_subdirectory(apps)
 endif()
 
+# TODO: Add CMake support to libnop.
 # External libraries
 add_subdirectory(extern/glad)
 add_subdirectory(extern/glfw)

@@ -8,9 +8,6 @@
 #include <sennet/events/event.hpp>
 #include <sennet/events/application_event.hpp>
 
-#include <sennet/messages/message.hpp>
-#include <sennet/messages/hello_world_message.hpp>
-
 namespace sennet
 {
 
@@ -24,7 +21,6 @@ public:
 	virtual ~application();
 
 	void on_event(event& e);
-	void on_message(message& msg);
 
 	void push_layer(layer* lay);
 	void push_overlay(layer* lay);
