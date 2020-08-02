@@ -14,14 +14,16 @@ enum class message_type
 };
 
 
-struct message_parcel
+struct message_header
 {
+	// Table to store the information needed to recreate message objects
+	// from a parcel stream.
 public:
 	message_type m_type;
-	std::vector<char> m_encoded_message;
+	std::vector<char> m_message;
 
 private:
-	NOP_STRUCTURE(message_parcel, m_type, m_encoded_message);
+	NOP_STRUCTURE(message_header, m_type, m_message);
 };
 
 class message
