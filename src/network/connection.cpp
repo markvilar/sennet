@@ -36,9 +36,9 @@ boost::asio::ip::tcp::endpoint connection::get_local_endpoint() const
 	return m_socket.local_endpoint();
 }
 
-void connection::set_parcel_callback(const parcel_callback_fn& callback)
+void connection::set_data_callback(const parcel_callback_fn& callback)
 {
-	m_parcel_callback = callback;
+	m_data_callback = callback;
 }
 
 void connection::async_read()
@@ -105,11 +105,11 @@ void connection::on_read_data(const boost::system::error_code& error)
 	parcel* raw_msg = nullptr;
 	std::swap(m_in_buffer, raw_msg);
 
-	if (m_parcel_callback)
+	if (m_data_callback)
 	{
 		SN_CORE_ASSERT(raw_msg, 
 			"In on_read_data: Raw message point is null");
-		m_parcel_callback(raw_msg);
+		m_data_callback(raw_msg);
 	}
 	else if (raw_msg)
 	{

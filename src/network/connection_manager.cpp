@@ -182,6 +182,13 @@ void connection_manager::push_message(ref<connection> conn, const message& msg)
 	m_mutex.unlock();
 }
 
+void connection_manager::on_data(parcel* raw_msg)
+{
+	m_mutex.lock();
+	m_inbound_queue.push(raw_msg);
+	m_mutex.unlock();
+}
+
 void connection_manager::async_accept()
 {
 	ref<connection> conn = create_ref<connection>(get_io_service());
@@ -222,6 +229,8 @@ void connection_manager::on_accept(boost::system::error_code const& error,
 			"Connection already established!");
 
 		// Add accepted connection to connections.	
+		old_conn->set_data_callback(std::bind(&connection_manager::on_data,
+			this, std::placeholders::_1));
 		m_connections[ep] = old_conn;
 
 		// Start read from the accepted connection.
@@ -240,16 +249,18 @@ void connection_manager::exec_loop()
 		if (!m_outbound_queue.empty())
 		{
 			auto [conn, outbound_msg] = m_outbound_queue.front();
+			m_outbound_queue.pop();
 
-			// Check action validity.
 			SN_CORE_ASSERT(conn, "Connection is null!");
 			SN_CORE_ASSERT(outbound_msg, "Message is null!");
 			
+			/*
 			ref<parcel> outbound_parcel(message_encoder::encode(
 				*outbound_msg));
 				
 				
 			conn->async_write(outbound_parcel);
+			*/
 		}
 
 		// If there's no pending outbound messages, find parcel to 
@@ -257,12 +268,19 @@ void connection_manager::exec_loop()
 		if (!m_inbound_queue.empty())
 		{
 			auto inbound_parcel = m_inbound_queue.front();
-			auto inbound_msg = message_encoder::decode(*inbound_parcel);
+			m_inbound_queue.pop();
+
+			SN_CORE_ASSERT(inbound_parcel, "Inbound parcel is null!");
+
+			/*
+			ref<message> inbound_msg(message_encoder::decode(
+				*inbound_parcel));
 
 			if (m_message_callback)
 			{
-				m_message_callback(*inbound_msg);
+				m_message_callback(inbound_msg);
 			}
+			*/
 		}
 	}
 }

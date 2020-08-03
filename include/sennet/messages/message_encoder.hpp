@@ -9,8 +9,10 @@ namespace sennet
 class message_encoder
 {
 public:
-	static std::vector<char>* encode(const message& msg);
-	static message* decode(std::vector<char>& raw_msg);
+	static std::string* encode(const message& msg);
+	static message* decode(const std::string& raw_msg);
 };
+
+message* type_to_class(const message_type& type);
 
 }

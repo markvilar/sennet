@@ -3,9 +3,9 @@
 
 #include <sennet/sennet.hpp>
 
-void handle_message(sennet::message& msg)
+void handle_message(sennet::ref<sennet::message>& msg)
 {
-	SN_TRACE("Server: Got message!");
+	SN_TRACE("Server: {0}", msg->to_string());
 }
 
 void io_worker(sennet::connection_manager& manager)

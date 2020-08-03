@@ -22,14 +22,16 @@ int main()
 
 	SN_INFO("Client: Sending messages.");
 
-	for (int i = 0; i < 10; i++)
+	sennet::message msg("gunnar");
+	for (int i = 0; i < 1; i++)
 	{
 		if (conn)
 		{
-			sennet::hello_world_message msg;
 			manager.push_message(conn, msg);
 		}
 	}
+
+	SN_INFO("Client: {0}", msg.to_string());
 
 	if (io_thread.joinable())
 	{

@@ -15,7 +15,7 @@ class connection_manager
 	typedef std::vector<char> parcel;
 
 public:
-	using msg_callback_fn = std::function<void(message&)>;
+	using msg_callback_fn = std::function<void(ref<message>&)>;
 
 	connection_manager(std::string port, uint64_t wait_for = 1);
 	~connection_manager();
@@ -36,6 +36,8 @@ public:
 	ref<connection> connection_search(const std::string& addr, 
 		const unsigned short port);
 	void push_message(ref<connection> conn, const message& msg);
+
+	void on_data(parcel* raw_msg);
 
 	void async_accept();
 	void on_accept(const boost::system::error_code& error, 

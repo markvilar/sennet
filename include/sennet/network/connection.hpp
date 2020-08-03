@@ -23,7 +23,7 @@ public:
 	boost::asio::ip::tcp::endpoint get_remote_endpoint() const;
 	boost::asio::ip::tcp::endpoint get_local_endpoint() const;
 
-	void set_parcel_callback(const parcel_callback_fn& callback);
+	void set_data_callback(const parcel_callback_fn& callback);
 
 	void async_read();
 	void async_write(std::shared_ptr<parcel> out_buffer);
@@ -40,7 +40,7 @@ private:
 	uint64_t m_in_size;
 	parcel* m_in_buffer;
 
-	parcel_callback_fn m_parcel_callback;
+	parcel_callback_fn m_data_callback;
 };
 
 }
