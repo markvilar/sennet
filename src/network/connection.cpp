@@ -44,11 +44,11 @@ void connection::set_data_callback(const parcel_callback_fn& callback)
 void connection::async_read()
 {
 	// Check that the in buffer is NULL.
-	SN_CORE_ASSERT(m_in_buffer == 0, "In buffer is null!");
+	SN_CORE_ASSERT(m_in_buffer == nullptr, "In buffer is not null!");
 
 	// Set up attributes for a new read.
 	m_in_size = 0;
-	m_in_buffer = new parcel();
+	m_in_buffer = create_ref<message_encoding>();
 
 	boost::asio::async_read(m_socket,
 		boost::asio::buffer(&m_in_size, sizeof(m_in_size)),
@@ -56,7 +56,7 @@ void connection::async_read()
 		std::placeholders::_1));
 }
 
-void connection::async_write(std::shared_ptr<parcel> out_buffer)
+void connection::async_write(ref<message_encoding> out_buffer)
 {
 	// Get out buffer size.
 	std::shared_ptr<uint64_t> out_size(new uint64_t(out_buffer->size()));
@@ -84,7 +84,6 @@ void connection::on_read_size(const boost::system::error_code& error)
 	// Resize the in buffer to the in size.
 	(*m_in_buffer).resize(m_in_size);
 
-	// TODO: Look into adding a macro for the handler binding!
 	// Set up async. read operation for the in data with on_read_data()
 	// as completion handler.
 	boost::asio::async_read(m_socket, boost::asio::buffer(*m_in_buffer),
@@ -102,7 +101,7 @@ void connection::on_read_data(const boost::system::error_code& error)
 	}
 
 	// Extract raw message.
-	parcel* raw_msg = nullptr;
+	ref<message_encoding> raw_msg = nullptr;
 	std::swap(m_in_buffer, raw_msg);
 
 	if (m_data_callback)
@@ -111,9 +110,9 @@ void connection::on_read_data(const boost::system::error_code& error)
 			"In on_read_data: Raw message point is null");
 		m_data_callback(raw_msg);
 	}
-	else if (raw_msg)
+	else if (!m_data_callback)
 	{
-		SN_CORE_WARN("In on_read_data: No parcel callback function.");
+		SN_CORE_WARN("In on_read_data: No data callback.");
 	}
 
 	// Start next async. read operation.
@@ -121,8 +120,7 @@ void connection::on_read_data(const boost::system::error_code& error)
 }
 
 void connection::on_write(const boost::system::error_code& error,
-	std::shared_ptr<uint64_t> out_size, std::shared_ptr<parcel> out_buffer)
-	
+	ref<uint64_t> out_size, ref<message_encoding> out_buffer)
 {
 	if (error)
 	{

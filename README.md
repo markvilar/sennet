@@ -54,9 +54,8 @@ cmake --build build --target docs
 - Implement application class.
 
 ## Acknowledgements
-I would like to acknowledge Yan Chernikov (TheCherno) and Bryce
-Adelstein-Lelbach for inspiring the system design of this project
-through the game engine Hazel and the CppCon 2014 presentation on Boost.Asio and
-Boost.Serialization, respectively. A significant portion of the source code of
-this project is either directly copied or slightly altered from these two
-projects.
+I would like to acknowledge Yan Chernikov (TheCherno) for inspiring the system 
+design of this project through the game engine 
+[Hazel](https://github.com/TheCherno/Hazel). A significant portion of the source 
+code of this project is either directly copied or slightly altered from this 
+project.

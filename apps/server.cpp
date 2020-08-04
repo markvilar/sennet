@@ -23,6 +23,9 @@ int main()
 
 	std::thread io_thread(io_worker, std::ref(manager));
 
+	// IMPORTANT: This needs to be here, else it gets compiled away.
+	sennet::hello_world_message msg("hei");
+
 	SN_TRACE("Server: Started IO thread.");
 	if (io_thread.joinable())
 	{

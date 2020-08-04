@@ -12,8 +12,6 @@ namespace sennet
 
 class connection_manager
 {
-	typedef std::vector<char> parcel;
-
 public:
 	using msg_callback_fn = std::function<void(ref<message>&)>;
 
@@ -22,7 +20,7 @@ public:
 	
 	boost::asio::io_service& get_io_service();
 
-	std::queue<parcel*>& get_inbound_queue();
+	std::queue<ref<message_encoding>>& get_inbound_queue();
 	std::queue<std::pair<ref<connection>, ref<message>>>& get_outbound_queue();
 	std::map<boost::asio::ip::tcp::endpoint, ref<connection>>& get_connections();
 	
@@ -37,7 +35,7 @@ public:
 		const unsigned short port);
 	void push_message(ref<connection> conn, const message& msg);
 
-	void on_data(parcel* raw_msg);
+	void on_data(ref<message_encoding> raw_msg);
 
 	void async_accept();
 	void on_accept(const boost::system::error_code& error, 
@@ -51,7 +49,7 @@ private:
 	boost::asio::ip::tcp::acceptor m_acceptor;
 
 	std::queue<std::pair<ref<connection>, ref<message>>> m_outbound_queue;
-	std::queue<parcel*> m_inbound_queue;
+	std::queue<ref<message_encoding>> m_inbound_queue;
 	std::map<boost::asio::ip::tcp::endpoint, ref<connection>> m_connections;
 
 	std::atomic<bool> m_stop_flag;

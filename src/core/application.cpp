@@ -82,6 +82,7 @@ bool application::on_window_close(window_close_event& e)
 
 bool application::on_window_resize(window_resize_event& e)
 {
+	return true;
 }
 
 };

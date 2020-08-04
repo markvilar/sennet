@@ -21,9 +21,9 @@ target_link_libraries(server PRIVATE sennet)
 # Simple sandbox
 add_executable(simple simple.cpp)
 target_compile_features(simple PRIVATE cxx_std_17)
-target_link_libraries(simple PRIVATE)
+target_link_libraries(simple PRIVATE sennet)
 
 # Test - ZED
 add_executable(test_zed test_zed.cpp)
 target_compile_features(test_zed PRIVATE cxx_std_17)
-target_link_libraries(test_zed PRIVATE sennet Boost::program_options)
+target_link_libraries(test_zed PRIVATE sennet)

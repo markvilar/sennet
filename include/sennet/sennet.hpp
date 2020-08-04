@@ -14,6 +14,7 @@
 #include <sennet/imgui/imgui_layer.hpp>
 
 #include <sennet/messages/message.hpp>
+#include <sennet/messages/message_encoder.hpp>
 #include <sennet/messages/hello_world_message.hpp>
 
 #include <sennet/network/connection.hpp>

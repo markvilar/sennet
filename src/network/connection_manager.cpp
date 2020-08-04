@@ -34,7 +34,7 @@ boost::asio::io_service& connection_manager::get_io_service()
 	return m_io_service; 
 }
 
-std::queue<connection_manager::parcel*>& connection_manager::get_inbound_queue()
+std::queue<ref<message_encoding>>& connection_manager::get_inbound_queue()
 { 
 	return m_inbound_queue;
 }
@@ -96,8 +96,7 @@ void connection_manager::run()
 		m_exec_thread.join();
 }
 
-ref<connection> connection_manager::connect(std::string host, 
-	std::string port)
+ref<connection> connection_manager::connect(std::string host, std::string port)
 {
 	// Set up resolver and query.
 	boost::asio::ip::tcp::resolver resolver(m_io_service);
@@ -182,7 +181,7 @@ void connection_manager::push_message(ref<connection> conn, const message& msg)
 	m_mutex.unlock();
 }
 
-void connection_manager::on_data(parcel* raw_msg)
+void connection_manager::on_data(ref<message_encoding> raw_msg)
 {
 	m_mutex.lock();
 	m_inbound_queue.push(raw_msg);
@@ -254,13 +253,9 @@ void connection_manager::exec_loop()
 			SN_CORE_ASSERT(conn, "Connection is null!");
 			SN_CORE_ASSERT(outbound_msg, "Message is null!");
 			
-			/*
-			ref<parcel> outbound_parcel(message_encoder::encode(
-				*outbound_msg));
-				
+			auto outbound_parcel = message_encoder::encode(outbound_msg);
 				
 			conn->async_write(outbound_parcel);
-			*/
 		}
 
 		// If there's no pending outbound messages, find parcel to 
@@ -272,15 +267,16 @@ void connection_manager::exec_loop()
 
 			SN_CORE_ASSERT(inbound_parcel, "Inbound parcel is null!");
 
-			/*
-			ref<message> inbound_msg(message_encoder::decode(
-				*inbound_parcel));
+			auto inbound_msg = message_encoder::decode(inbound_parcel);
 
 			if (m_message_callback)
 			{
 				m_message_callback(inbound_msg);
 			}
-			*/
+			else if (!m_message_callback)
+			{
+				SN_CORE_WARN("In exec_loop: No message callback.");
+			}
 		}
 	}
 }
