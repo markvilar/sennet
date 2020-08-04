@@ -1,8 +1,11 @@
 #include <sennet/snpch.hpp>
 #include <sennet/platform/opengl/opengl_context.hpp>
 
-#include <GLFW/glfw3.h>
+#include <sennet/core/base.hpp>
+#include <sennet/core/log.hpp>
+
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace sennet
 {

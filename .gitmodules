@@ -10,3 +10,9 @@
 [submodule "extern/glad"]
 	path = extern/glad
 	url = ../../markvilar/glad.git
+[submodule "extern/glm"]
+	path = extern/glm
+	url = ../../markvilar/glm.git
+[submodule "extern/serializer"]
+	path = extern/serializer
+	url = ../../markvilar/serializer.git

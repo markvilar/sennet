@@ -1,22 +1,31 @@
 #pragma once
 
-#include <sennet/snpch.hpp>
+#include <sennet/core/base.hpp>
 
-#include <sennet/am/core.hpp>
+#include <sennet/core/window.hpp>
+#include <sennet/core/layer_stack.hpp>
+
+#include <sennet/events/event.hpp>
+#include <sennet/events/application_event.hpp>
 
 namespace sennet
 {
 
+// TODO: Look into an alternative to sennet::main function!
+int main(int argc, char** argv);
+
 class application
 {
 public:
-	application(am::runtime& rt, const std::string& name = "Sennet App");
-	
+	application();
 	virtual ~application();
 
-	void on_event();
+	void on_event(event& e);
 
-	void get_window();
+	void push_layer(layer* lay);
+	void push_overlay(layer* lay);
+
+	window& get_window() { return *m_window; }
 
 	void close();
 
@@ -24,25 +33,20 @@ public:
 
 private:
 	void run();
-
-	bool on_window_close();
-
-	bool on_window_resize();
+	bool on_window_close(window_close_event& e);
+	bool on_window_resize(window_resize_event& e);
 
 private:
-	const std::string m_name;
-
-	am::runtime& m_runtime;
-
-	// std::unique_ptr<window> m_window;
+	scope<window> m_window;
+	bool m_running = true;
+	layer_stack m_layer_stack;
 
 private:
 	static application* s_instance;
-
 	friend int main(int argc, char** argv);
 };
 
 // To be defined in client.
 application* create_application();
 
-};
+}

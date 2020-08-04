@@ -59,47 +59,7 @@ enum class view
 	side_by_side
 };
 
-class depth_init_params
-{
-	// Encapsulate of the parameters in sl::InitParameters related to depth
-	// measurement and the depth map computed by the ZED. 
-public:
-	depth_init_params(
-		const depth_mode mode=depth_mode::ultra,
-		const unit coord_units=unit::millimeter,
-		const coordinate_system coord_sys=coordinate_system::image,
-		const int depth_stab=1,
-		const float depth_min=-1,
-		const float depth_max=-1,
-		const bool depth_right=false
-	);
-	~depth_init_params() = default;
 
-	inline depth_mode get_depth_mode() const { return m_depth_mode; }
-	inline unit get_coord_units() const { return m_coord_units; }
-	inline coordinate_system get_coord_sys() const { return m_coord_sys; }
-	inline int get_depth_stab() const { return m_depth_stab; }
-	inline float get_min_depth() const { return m_depth_min; }
-	inline float get_max_depth() const { return m_depth_max; }
-	inline bool right_depth_enabled() const { return m_depth_right; }
-
-	// TODO: Implement set functions?
-
-	std::string to_string() const;
-	friend std::ostream& operator<<(std::ostream& os, 
-		const depth_init_params& dp);
-
-	friend class init_params;
-
-private:
-	depth_mode m_depth_mode;
-	unit m_coord_units;
-	coordinate_system m_coord_sys;
-	int m_depth_stab;
-	float m_depth_min;
-	float m_depth_max;
-	bool m_depth_right;
-};
 
 class image
 {
@@ -139,13 +99,20 @@ private:
 	size_t m_channels;
 };
 
+
 class init_params
 {
 	// Wrapper for sl::InitParameters. Neglects functionality of the
 	// Stereolabs SDK that is considered unimportant for recording.
 public:
 	init_params(
-		const depth_init_params depth_params,
+		const depth_mode mode=depth_mode::ultra,
+		const unit coord_units=unit::millimeter,
+		const coordinate_system coord_sys=coordinate_system::image,
+		const int depth_stab=1,
+		const float depth_min=-1,
+		const float depth_max=-1,
+		const bool depth_right=false,
 		const resolution resolution=resolution::hd720,
 		const int camera_fps=0,
 		const bool img_enhancement=true,
@@ -155,10 +122,16 @@ public:
 	);
 	~init_params() = default;
 
-	inline depth_init_params get_depth_params() const 
-	{ 
-		return m_depth_params; 
-	}
+	// Depth functions.
+	inline depth_mode get_depth_mode() const { return m_depth_mode; }
+	inline unit get_coord_units() const { return m_coord_units; }
+	inline coordinate_system get_coord_sys() const { return m_coord_sys; }
+	inline int get_depth_stab() const { return m_depth_stab; }
+	inline float get_min_depth() const { return m_depth_min; }
+	inline float get_max_depth() const { return m_depth_max; }
+	inline bool right_depth_enabled() const { return m_depth_right; }
+
+	// Generic functions.
 	inline resolution get_resolution() const { return m_resolution; }
 	inline int get_camera_fps() const { return m_camera_fps; }
 	inline bool img_enhance_enabled() const { return m_img_enhancement; }
@@ -166,16 +139,20 @@ public:
 	inline bool is_sdk_verbose() const { return m_sdk_verbose; }
 	inline bool sensors_required() const { return m_sensors_required; }
 
-	// TODO: Implement set functions?
-
 	std::string to_string() const;
 	friend std::ostream& operator<<(std::ostream& os, const init_params& ip);
 
-	// TODO: Add conversion function to sl::InitParameters in 
-	// conversion/zed.
-
 private:
-	depth_init_params m_depth_params;
+	// Depth related members.
+	depth_mode m_depth_mode;
+	unit m_coord_units;
+	coordinate_system m_coord_sys;
+	int m_depth_stab;
+	float m_depth_min;
+	float m_depth_max;
+	bool m_depth_right;
+
+	// Generic members.
 	resolution m_resolution;
 	int m_camera_fps;
 	bool m_img_enhancement;
@@ -246,8 +223,6 @@ public:
 	{ return m_text_conf_threshold;
 	}
 
-	// TODO: Add set methods?
-
 	std::string to_string() const;
 	friend std::ostream& operator<<(std::ostream& os, 
 		const runtime_params& rp);
@@ -260,10 +235,8 @@ private:
 	int m_text_conf_threshold;
 };
 
-
-
 }
-};
+}
 
 std::string to_string(const sennet::zed::coordinate_system sys);
 std::string to_string(const sennet::zed::depth_mode mode);

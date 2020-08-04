@@ -67,6 +67,13 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/glfw/CMakeLists.txt")
 		"again.")
 endif()
 
+# Git submodule - glm
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/glm/CMakeLists.txt")
+    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
+		"was turned off or failed. Please update submodules and try "
+		"again.")
+endif()
+
 # Git submodule - imgui
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/imgui/CMakeLists.txt")
     	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
@@ -103,6 +110,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	add_subdirectory(apps)
 endif()
 
+# TODO: Add CMake support to libnop.
 # External libraries
 add_subdirectory(extern/glad)
 add_subdirectory(extern/glfw)
