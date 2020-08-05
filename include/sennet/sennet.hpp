@@ -13,12 +13,13 @@
 
 #include <sennet/imgui/imgui_layer.hpp>
 
+#include <sennet/messages/hello_world_message.hpp>
+#include <sennet/messages/image_message.hpp>
 #include <sennet/messages/message.hpp>
 #include <sennet/messages/message_encoder.hpp>
-#include <sennet/messages/hello_world_message.hpp>
 
 #include <sennet/network/connection.hpp>
 #include <sennet/network/connection_manager.hpp>
 
-#include <sennet/types/basic_types.hpp>
+#include <sennet/types/primitives.hpp>
 #include <sennet/types/zed.hpp>

@@ -1,4 +1,4 @@
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 #include <sennet/platform/opengl/opengl_context.hpp>
 
 #include <sennet/core/base.hpp>

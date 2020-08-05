@@ -1,4 +1,4 @@
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 
 #include <sennet/core/window.hpp>
 

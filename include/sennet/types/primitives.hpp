@@ -1,7 +1,8 @@
 #pragma once
 
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 
 namespace sennet
 {
-};
+
+}

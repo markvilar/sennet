@@ -24,8 +24,3 @@ message* hello_world_message::clone() const
 }
 
 }
-
-zpp::serializer::register_types<
-	zpp::serializer::make_type<sennet::hello_world_message,
-	zpp::serializer::make_id("sennet::hello_world_message")>
-> _;

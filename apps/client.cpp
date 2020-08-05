@@ -3,6 +3,19 @@
 
 #include <sennet/sennet.hpp>
 
+// Register messages.
+namespace
+{
+
+zpp::serializer::register_types<
+	zpp::serializer::make_type<sennet::hello_world_message,
+	zpp::serializer::make_id("sennet::hello_world_message")>,
+	zpp::serializer::make_type<sennet::image_message,
+	zpp::serializer::make_id("sennet::image_message")>
+> _;
+
+}
+
 void io_worker(sennet::connection_manager& manager)
 {
 	manager.run();
@@ -17,19 +30,17 @@ int main()
 	manager.start();
 
 	std::thread io_thread(io_worker, std::ref(manager));
-
 	SN_INFO("Client: Started IO thread.");
 
 	SN_INFO("Client: Sending messages.");
+	sennet::hello_world_message hello_msg("hello world!");
+	auto vec = std::vector<unsigned char>(1920*1080*3, 150);
 
-	sennet::hello_world_message msg("gunnar");
-	for (int i = 0; i < 10; i++)
-	{
-		if (conn)
-		{
-			manager.push_message(conn, msg);
-		}
-	}
+	sennet::image_message img_msg(vec, 1920, 1080, 3, 
+		sennet::zed::view::right);
+		
+	manager.push_message(conn, hello_msg);
+	manager.push_message(conn, img_msg);
 
 	if (io_thread.joinable())
 	{

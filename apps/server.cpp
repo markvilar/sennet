@@ -3,6 +3,19 @@
 
 #include <sennet/sennet.hpp>
 
+// Register messages.
+namespace
+{
+
+zpp::serializer::register_types<
+	zpp::serializer::make_type<sennet::hello_world_message,
+	zpp::serializer::make_id("sennet::hello_world_message")>,
+	zpp::serializer::make_type<sennet::image_message,
+	zpp::serializer::make_id("sennet::image_message")>
+> _;
+
+}
+
 void handle_message(sennet::ref<sennet::message>& msg)
 {
 	SN_TRACE("Server: {0}", msg->to_string());
@@ -22,11 +35,8 @@ int main()
 	manager.start();
 
 	std::thread io_thread(io_worker, std::ref(manager));
-
-	// IMPORTANT: This needs to be here, else it gets compiled away.
-	sennet::hello_world_message msg("hei");
-
 	SN_TRACE("Server: Started IO thread.");
+
 	if (io_thread.joinable())
 	{
 		io_thread.join();

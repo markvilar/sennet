@@ -237,7 +237,7 @@ std::ostream& operator<<(std::ostream& os, const runtime_params& rp)
 }
 
 }
-};
+}
 
 
 

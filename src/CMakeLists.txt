@@ -26,6 +26,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/events/mouse_event.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/imgui/imgui_layer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/messages/hello_world_message.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/messages/image_message.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/messages/message.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/messages/message_encoder.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/network/connection.hpp"
@@ -34,13 +35,11 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/windows/windows_window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/linux/linux_window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/renderer/graphics_context.hpp"	
-	"${PROJECT_SOURCE_DIR}/include/sennet/types/basic_types.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/types/primitives.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/zed.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/zed/conversion.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/zed/io.hpp"	
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed/recorder.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed/serialization.hpp"
-	)
+	"${PROJECT_SOURCE_DIR}/include/sennet/zed/recorder.hpp")
 
 # Add sennet as a static library
 add_library(sennet STATIC
@@ -51,6 +50,7 @@ add_library(sennet STATIC
 	core/window.cpp
 	imgui/imgui_layer.cpp
 	messages/hello_world_message.cpp
+	messages/image_message.cpp
 	messages/message_encoder.cpp
 	network/connection.cpp
 	network/connection_manager.cpp 
@@ -60,7 +60,7 @@ add_library(sennet STATIC
 	platform/linux/linux_input.cpp
 	platform/linux/linux_window.cpp
 	renderer/graphics_context.cpp
-	types/basic_types.cpp
+	types/primitives.cpp
 	types/zed.cpp
 	zed/conversion.cpp
 	zed/io.cpp 	
@@ -71,10 +71,8 @@ add_library(sennet STATIC
 	)
 
 # Precompiled headers
-target_precompile_headers(sennet
-	PRIVATE
-	"${PROJECT_SOURCE_DIR}/include/sennet/snpch.hpp"
-	)
+target_precompile_headers(sennet PRIVATE
+	"${PROJECT_SOURCE_DIR}/include/sennet/pch.hpp")
 
 # Include headers and source code from other libraries in sennet. This way we
 # won't have to link all of sennet dependencies into targets that use

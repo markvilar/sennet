@@ -1,4 +1,4 @@
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 #include <sennet/core/application.hpp>
 
 #include <glad/glad.h>

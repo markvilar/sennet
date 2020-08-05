@@ -1,4 +1,4 @@
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 #include <sennet/imgui/imgui_layer.hpp>
 
 #include <imgui.h>

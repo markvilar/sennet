@@ -1,4 +1,4 @@
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 #include <sennet/platform/windows/windows_window.hpp>
 
 #include <sennet/core/input.hpp>

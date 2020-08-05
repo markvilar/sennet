@@ -1,6 +1,6 @@
 #if defined(SN_PLATFORM_WINDOWS)
 
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 #include <sennet/core/input.hpp>
 
 #include <sennet/core/application.hpp>

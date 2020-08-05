@@ -1,5 +1,5 @@
 #pragma once
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 
 #include <serializer/serializer.h>
 
@@ -12,7 +12,8 @@ enum class message_type
 {
 	none = 0,
 	message,
-	hello_world_message
+	hello_world_message,
+	image_message
 };
 
 class message : public zpp::serializer::polymorphic

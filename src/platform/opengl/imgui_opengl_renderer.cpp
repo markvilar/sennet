@@ -71,7 +71,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#include <sennet/snpch.hpp>
+#include <sennet/pch.hpp>
 #include <imgui.h>
 #include <sennet/platform/opengl/imgui_opengl_renderer.h>
 #include <glad/glad.h>
