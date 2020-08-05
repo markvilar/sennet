@@ -1,12 +1,3 @@
-# Temporaries
-set(TEMP_HEADERS
-	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/imgui_opengl_renderer.h"
-	)
-
-set(TEMP_SRC
-	platform/opengl/imgui_opengl_renderer.cpp
-	)
-
 # Headers
 set(HEADER_LIST 
 	"${PROJECT_SOURCE_DIR}/include/sennet/sennet.hpp"
@@ -48,6 +39,7 @@ add_library(sennet STATIC
 	core/layer_stack.cpp
 	core/log.cpp
 	core/window.cpp
+	imgui/imgui_build.cpp
 	imgui/imgui_layer.cpp
 	messages/hello_world_message.cpp
 	messages/image_message.cpp
@@ -66,8 +58,6 @@ add_library(sennet STATIC
 	zed/io.cpp 	
 	zed/recorder.cpp
 	${HEADER_LIST}
-	${TEMP_HEADERS}
-	${TEMP_SRC}
 	)
 
 # Precompiled headers

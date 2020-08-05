@@ -1,5 +1,7 @@
 #include <sennet/sennet.hpp>
 
+#include <imgui.h>
+
 class example_layer : public sennet::layer
 {
 public:
@@ -12,6 +14,13 @@ public:
 	{
 		if (sennet::input::is_key_pressed(SN_KEY_TAB))
 			SN_TRACE("Tab key is pressed (poll)!");
+	}
+
+	virtual void on_imgui_render() override
+	{
+		ImGui::Begin("Test");
+		ImGui::Text("Hello world!");
+		ImGui::End();
 	}
 
 	void on_event(sennet::event& event) override
@@ -37,7 +46,6 @@ public:
 	sandbox()
 	{
 		push_layer(new example_layer());
-		push_overlay(new sennet::imgui_layer());
 	}
 
 	~sandbox()

@@ -18,6 +18,9 @@ application::application()
 
 	m_window = window::create();
 	m_window->set_event_callback(SN_BIND_EVENT_FN(application::on_event));
+
+	m_imgui_layer = new imgui_layer();
+	push_overlay(m_imgui_layer);
 }
 
 application::~application()
@@ -69,6 +72,14 @@ void application::run()
 		{
 			lay->on_update();
 		}
+		
+		// Imgui rendering.
+		m_imgui_layer->begin();
+		for (layer* lay : m_layer_stack)
+		{
+			lay->on_imgui_render();
+		}
+		m_imgui_layer->end();
 
 		m_window->on_update();
 	}

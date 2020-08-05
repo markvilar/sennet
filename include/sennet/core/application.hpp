@@ -8,6 +8,8 @@
 #include <sennet/events/event.hpp>
 #include <sennet/events/application_event.hpp>
 
+#include <sennet/imgui/imgui_layer.hpp>
+
 namespace sennet
 {
 
@@ -38,6 +40,7 @@ private:
 
 private:
 	scope<window> m_window;
+	imgui_layer* m_imgui_layer;
 	bool m_running = true;
 	layer_stack m_layer_stack;
 
