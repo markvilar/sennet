@@ -1,9 +1,10 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-
 #include <sennet/core/window.hpp>
 #include <sennet/renderer/graphics_context.hpp>
+
+// Forward declaration.
+struct GLFWwindow;
 
 namespace sennet
 {

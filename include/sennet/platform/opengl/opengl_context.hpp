@@ -2,8 +2,7 @@
 
 #include <sennet/renderer/graphics_context.hpp>
 
-// Forward declaration.
-struct GLFWwindow;
+#include <GLFW/glfw3.h>
 
 namespace sennet
 {

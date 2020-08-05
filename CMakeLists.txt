@@ -20,10 +20,12 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	include(CTest)
 endif()
 
+#[[
 if(COMMAND cmake_policy)
 	cmake_policy(SET CMP0003 OLD)
 	cmake_policy(SET CMP0015 OLD)
 endif(COMMAND cmake_policy)
+]]#
 
 # Find packages
 find_package(Git QUIET REQUIRED)
@@ -31,8 +33,9 @@ find_package(Threads REQUIRED)
 find_package(Boost COMPONENTS chrono program_options serialization system thread 
 	REQUIRED)
 find_package(ZED 3 REQUIRED)
-message(STATUS "Found ZED SDK ${ZED_VERSION} at ${ZED_DIR}")
-find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
+message(STATUS "Found ZED SDK ${ZED_VERSION} at ${ZED_DIR}. ZED CUDA version:
+	${ZED_CUDA_VERSION}")
+find_package(CUDA REQUIRED)
 message(STATUS "Found CUDA ${CUDA_VERSION_STRING} at ${CUDA_TOOLKIT_ROOT_DIR}")
 
 # Update Git submodules
@@ -110,10 +113,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	add_subdirectory(apps)
 endif()
 
-# TODO: Add CMake support to libnop.
 # External libraries
 add_subdirectory(extern/glad)
 add_subdirectory(extern/glfw)
+add_subdirectory(extern/glm)
 add_subdirectory(extern/imgui)
 add_subdirectory(extern/spdlog)
 

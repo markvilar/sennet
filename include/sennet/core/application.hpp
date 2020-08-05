@@ -44,6 +44,9 @@ private:
 	bool m_running = true;
 	layer_stack m_layer_stack;
 
+	// Temporary
+	unsigned int m_vertex_array, m_vertex_buffer, m_index_buffer;
+
 private:
 	static application* s_instance;
 	friend int main(int argc, char** argv);
