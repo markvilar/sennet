@@ -22,10 +22,14 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/sennet/messages/message_encoder.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/network/connection.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/network/connection_manager.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/opengl_buffer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/opengl_context.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/windows/windows_window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/platform/linux/linux_window.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/renderer/buffer.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/sennet/renderer/graphics_context.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/sennet/renderer/renderer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/sennet/renderer/shader.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/primitives.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/types/zed.hpp"
 	"${PROJECT_SOURCE_DIR}/include/sennet/zed/conversion.hpp"
@@ -46,12 +50,16 @@ add_library(sennet STATIC
 	messages/message_encoder.cpp
 	network/connection.cpp
 	network/connection_manager.cpp 
+	platform/opengl/opengl_buffer.cpp
 	platform/opengl/opengl_context.cpp
 	platform/windows/windows_input.cpp
 	platform/windows/windows_window.cpp
 	platform/linux/linux_input.cpp
 	platform/linux/linux_window.cpp
+	renderer/buffer.cpp
 	renderer/graphics_context.cpp
+	renderer/renderer.cpp
+	renderer/shader.cpp
 	types/primitives.cpp
 	types/zed.cpp
 	zed/conversion.cpp

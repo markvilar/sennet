@@ -65,7 +65,7 @@ void windows_window::init(const window_props& props)
 	
 	if (s_glfw_window_count == 0)
 	{
-		SN_CORE_INFO("Initializing GLFW");
+		SN_CORE_INFO("Initializing GLFW.");
 		int success = glfwInit();
 		SN_CORE_ASSERT(success, "Could not initialize GLFW!");
 		glfwSetErrorCallback(glfw_error_callback);

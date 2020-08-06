@@ -10,6 +10,10 @@
 
 #include <sennet/imgui/imgui_layer.hpp>
 
+// Temporary.
+#include <sennet/renderer/buffer.hpp>
+#include <sennet/renderer/shader.hpp>
+
 namespace sennet
 {
 
@@ -45,8 +49,10 @@ private:
 	layer_stack m_layer_stack;
 
 	// Temporary
-	unsigned int m_vertex_array, m_vertex_buffer, m_index_buffer;
-
+	unsigned int m_vertex_array;
+	std::unique_ptr<shader> m_shader;
+	std::unique_ptr<vertex_buffer> m_vertex_buffer;
+	std::unique_ptr<index_buffer> m_index_buffer;
 private:
 	static application* s_instance;
 	friend int main(int argc, char** argv);
