@@ -13,6 +13,7 @@
 // Temporary.
 #include <sennet/renderer/buffer.hpp>
 #include <sennet/renderer/shader.hpp>
+#include <sennet/renderer/vertex_array.hpp>
 
 namespace sennet
 {
@@ -48,11 +49,14 @@ private:
 	bool m_running = true;
 	layer_stack m_layer_stack;
 
-	// Temporary
-	unsigned int m_vertex_array;
-	std::unique_ptr<shader> m_shader;
-	std::unique_ptr<vertex_buffer> m_vertex_buffer;
-	std::unique_ptr<index_buffer> m_index_buffer;
+	// Temporary.
+	ref<shader> m_shader;
+	ref<vertex_array> m_vertex_array;
+	ref<vertex_buffer> m_vertex_buffer;
+	ref<index_buffer> m_index_buffer;
+
+	ref<shader> m_blue_shader;
+	ref<vertex_array> m_square_va;
 private:
 	static application* s_instance;
 	friend int main(int argc, char** argv);

@@ -11,27 +11,7 @@ namespace sennet
 
 application* application::s_instance = nullptr;
 
-static GLenum shader_data_type_2_opengl_base_type(shader_data_type type)
-{
-	switch (type)
-	{
-		case shader_data_type::Float: 	return GL_FLOAT;
-		case shader_data_type::Float2: 	return GL_FLOAT;
-		case shader_data_type::Float3: 	return GL_FLOAT;
-		case shader_data_type::Float4: 	return GL_FLOAT;
-		case shader_data_type::Mat3: 	return GL_FLOAT;
-		case shader_data_type::Mat4: 	return GL_FLOAT;
-		case shader_data_type::Int: 	return GL_INT;
-		case shader_data_type::Int2: 	return GL_INT;
-		case shader_data_type::Int3: 	return GL_INT;
-		case shader_data_type::Int4: 	return GL_INT;
-		case shader_data_type::Bool: 	return GL_BOOL;
-		case shader_data_type::None:	return 0;
-	}
 
-	SN_CORE_ASSERT(false, "Unknown shader_data_type!");
-	return 0;
-}
 
 application::application()
 {
@@ -44,13 +24,7 @@ application::application()
 	m_imgui_layer = new imgui_layer();
 	push_overlay(m_imgui_layer);
 
-	// Vertex array
-	// Vertex buffer
-	// Index buffer
-
-	// Temporary
-	glGenVertexArrays(1, &m_vertex_array);
-	glBindVertexArray(m_vertex_array);
+	m_vertex_array.reset(vertex_array::create());
 
 	float vertices[3 * 7] = 
 	{
@@ -60,34 +34,45 @@ application::application()
 	};
 
 	m_vertex_buffer.reset(vertex_buffer::create(vertices, sizeof(vertices)));
+	buffer_layout layout = {
+		{ shader_data_type::Float3, "a_position" },
+		{ shader_data_type::Float4, "a_color" }
+	};
 
-	{
-		buffer_layout layout = {
-			{ shader_data_type::Float3, "a_position" },
-			{ shader_data_type::Float4, "a_color" }
-		};
-
-		m_vertex_buffer->set_layout(layout);
-	}
-
-	const auto& layout = m_vertex_buffer->get_layout();
-	uint32_t index = 0;
-	for (const auto& element : layout)
-	{
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index, 
-			element.get_component_count(), 
-			shader_data_type_2_opengl_base_type(element.type), 
-			element.normalized ? GL_TRUE : GL_FALSE, 
-			layout.get_stride(), 
-			(const void*)element.offset);
-		index++;
-	}
+	m_vertex_buffer->set_layout(layout);
+	m_vertex_array->add_vertex_buffer(m_vertex_buffer);
 
 	uint32_t indices[3] = { 0, 1, 2 };
 
 	m_index_buffer.reset(index_buffer::create(indices, 
 		sizeof(indices) / sizeof(uint32_t)));
+	m_vertex_array->set_index_buffer(m_index_buffer);
+
+	// Square.
+
+	m_square_va.reset(vertex_array::create());
+
+	float square_vertices[4 * 3] = 
+	{
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		 0.5f,  0.5f, 0.0f,
+		-0.5f,  0.5f, 0.0f
+	};
+	
+	ref<vertex_buffer> square_vb(vertex_buffer::create(square_vertices,
+		sizeof(square_vertices)));
+
+	square_vb->set_layout({
+		{ shader_data_type::Float3, "a_position" },
+	});
+	m_square_va->add_vertex_buffer(square_vb);
+
+	uint32_t square_indices[6] = { 0, 1, 2, 2, 3, 0 };
+
+	ref<index_buffer> square_ib(index_buffer::create(square_indices, 
+		sizeof(square_indices) / sizeof(uint32_t)));
+	m_square_va->set_index_buffer(square_ib);
 
 	std::string vertex_src = R"(
 		#version 330 core
@@ -122,6 +107,36 @@ application::application()
 	)";
 
 	m_shader.reset(new shader(vertex_src, fragment_src));
+
+	std::string blue_shader_vertex_src = R"(
+		#version 330 core
+
+		layout(location = 0) in vec3 a_position;
+
+		out vec3 v_position;
+
+		void main()
+		{
+			v_position = a_position;
+			gl_Position = vec4(a_position, 1.0);
+		}
+	)";
+
+	std::string blue_shader_fragment_src = R"(
+		#version 330 core
+
+		layout(location = 0) out vec4 color;
+
+		in vec3 v_position;
+
+		void main()
+		{
+			color = vec4(0.2, 0.3, 0.8, 1.0);
+		}
+	)";
+
+	m_blue_shader.reset(new shader(blue_shader_vertex_src,
+		blue_shader_fragment_src));
 }
 
 application::~application()
@@ -169,8 +184,15 @@ void application::run()
 		glClearColor(0.1f, 0.1f, 0.1f, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		m_blue_shader->bind();
+		m_square_va->bind();
+		glDrawElements(GL_TRIANGLES, 
+			m_square_va->get_index_buffer()->get_count(),
+			GL_UNSIGNED_INT, 
+			nullptr);
+
 		m_shader->bind();
-		glBindVertexArray(m_vertex_array);
+		m_vertex_array->bind();
 		glDrawElements(GL_TRIANGLES, m_index_buffer->get_count(), 
 			GL_UNSIGNED_INT, nullptr);
 
@@ -179,7 +201,6 @@ void application::run()
 			lay->on_update();
 		}
 		
-		// Imgui rendering.
 		m_imgui_layer->begin();
 		for (layer* lay : m_layer_stack)
 		{
