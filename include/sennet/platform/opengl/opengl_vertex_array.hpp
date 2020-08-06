@@ -10,7 +10,7 @@ class opengl_vertex_array : public vertex_array
 	typedef std::vector<ref<vertex_buffer>> vertex_buffer_vec;
 public:
 	opengl_vertex_array();
-	virtual ~opengl_vertex_array() {}
+	virtual ~opengl_vertex_array();
 
 	virtual void bind() const override;
 	virtual void unbind() const override;

@@ -51,9 +51,7 @@ private:
 
 	// Temporary.
 	ref<shader> m_shader;
-	ref<vertex_array> m_vertex_array;
-	ref<vertex_buffer> m_vertex_buffer;
-	ref<index_buffer> m_index_buffer;
+	ref<vertex_array> m_triangle_va;
 
 	ref<shader> m_blue_shader;
 	ref<vertex_array> m_square_va;

@@ -24,29 +24,29 @@ application::application()
 	m_imgui_layer = new imgui_layer();
 	push_overlay(m_imgui_layer);
 
-	m_vertex_array.reset(vertex_array::create());
+	m_triangle_va.reset(vertex_array::create());
 
-	float vertices[3 * 7] = 
+	float triangle_vertices[3 * 7] = 
 	{
 		-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
 		 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 		 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 	};
 
-	m_vertex_buffer.reset(vertex_buffer::create(vertices, sizeof(vertices)));
-	buffer_layout layout = {
+	ref<vertex_buffer> triangle_vb(vertex_buffer::create(triangle_vertices, 
+		sizeof(triangle_vertices)));
+	triangle_vb->set_layout({
 		{ shader_data_type::Float3, "a_position" },
 		{ shader_data_type::Float4, "a_color" }
-	};
+	});
 
-	m_vertex_buffer->set_layout(layout);
-	m_vertex_array->add_vertex_buffer(m_vertex_buffer);
+	m_triangle_va->add_vertex_buffer(triangle_vb);
 
-	uint32_t indices[3] = { 0, 1, 2 };
+	uint32_t triangle_indices[3] = { 0, 1, 2 };
 
-	m_index_buffer.reset(index_buffer::create(indices, 
-		sizeof(indices) / sizeof(uint32_t)));
-	m_vertex_array->set_index_buffer(m_index_buffer);
+	ref<index_buffer> triangle_ib(index_buffer::create(triangle_indices, 
+		sizeof(triangle_indices) / sizeof(uint32_t)));
+	m_triangle_va->set_index_buffer(triangle_ib);
 
 	// Square.
 
@@ -54,10 +54,10 @@ application::application()
 
 	float square_vertices[4 * 3] = 
 	{
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
+		-0.75f, -0.75f, 0.0f,
+		 0.75f, -0.75f, 0.0f,
+		 0.75f,  0.75f, 0.0f,
+		-0.75f,  0.75f, 0.0f
 	};
 	
 	ref<vertex_buffer> square_vb(vertex_buffer::create(square_vertices,
@@ -192,9 +192,11 @@ void application::run()
 			nullptr);
 
 		m_shader->bind();
-		m_vertex_array->bind();
-		glDrawElements(GL_TRIANGLES, m_index_buffer->get_count(), 
-			GL_UNSIGNED_INT, nullptr);
+		m_triangle_va->bind();
+		glDrawElements(GL_TRIANGLES, 
+			m_triangle_va->get_index_buffer()->get_count(), 
+			GL_UNSIGNED_INT, 
+			nullptr);
 
 		for (layer* lay : m_layer_stack)
 		{
