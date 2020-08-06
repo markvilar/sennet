@@ -13,8 +13,18 @@ public:
 	virtual void bind() const override;
 	virtual void unbind() const override;
 
+	virtual const buffer_layout& get_layout() const override 
+	{ 
+		return m_layout;
+	}
+	virtual void set_layout(const buffer_layout& layout) override
+	{
+		m_layout = layout;
+	}
+
 private:
 	uint32_t m_renderer_id;
+	buffer_layout m_layout;
 };
 
 class opengl_index_buffer : public index_buffer

@@ -11,6 +11,28 @@ namespace sennet
 
 application* application::s_instance = nullptr;
 
+static GLenum shader_data_type_2_opengl_base_type(shader_data_type type)
+{
+	switch (type)
+	{
+		case shader_data_type::Float: 	return GL_FLOAT;
+		case shader_data_type::Float2: 	return GL_FLOAT;
+		case shader_data_type::Float3: 	return GL_FLOAT;
+		case shader_data_type::Float4: 	return GL_FLOAT;
+		case shader_data_type::Mat3: 	return GL_FLOAT;
+		case shader_data_type::Mat4: 	return GL_FLOAT;
+		case shader_data_type::Int: 	return GL_INT;
+		case shader_data_type::Int2: 	return GL_INT;
+		case shader_data_type::Int3: 	return GL_INT;
+		case shader_data_type::Int4: 	return GL_INT;
+		case shader_data_type::Bool: 	return GL_BOOL;
+		case shader_data_type::None:	return 0;
+	}
+
+	SN_CORE_ASSERT(false, "Unknown shader_data_type!");
+	return 0;
+}
+
 application::application()
 {
 	SN_CORE_ASSERT(!s_instance, "Application already exists!");
@@ -30,17 +52,37 @@ application::application()
 	glGenVertexArrays(1, &m_vertex_array);
 	glBindVertexArray(m_vertex_array);
 
-	float vertices[3 * 3] = 
+	float vertices[3 * 7] = 
 	{
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
+		-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+		 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+		 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 	};
 
 	m_vertex_buffer.reset(vertex_buffer::create(vertices, sizeof(vertices)));
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), nullptr);
+	{
+		buffer_layout layout = {
+			{ shader_data_type::Float3, "a_position" },
+			{ shader_data_type::Float4, "a_color" }
+		};
+
+		m_vertex_buffer->set_layout(layout);
+	}
+
+	const auto& layout = m_vertex_buffer->get_layout();
+	uint32_t index = 0;
+	for (const auto& element : layout)
+	{
+		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(index, 
+			element.get_component_count(), 
+			shader_data_type_2_opengl_base_type(element.type), 
+			element.normalized ? GL_TRUE : GL_FALSE, 
+			layout.get_stride(), 
+			(const void*)element.offset);
+		index++;
+	}
 
 	uint32_t indices[3] = { 0, 1, 2 };
 
@@ -51,12 +93,15 @@ application::application()
 		#version 330 core
 
 		layout(location = 0) in vec3 a_position;
+		layout(location = 1) in vec4 a_color;
 
 		out vec3 v_position;
+		out vec4 v_color;
 
 		void main()
 		{
 			v_position = a_position;
+			v_color = a_color;
 			gl_Position = vec4(a_position, 1.0);
 		}
 	)";
@@ -67,10 +112,12 @@ application::application()
 		layout(location = 0) out vec4 color;
 
 		in vec3 v_position;
+		in vec4 v_color;
 
 		void main()
 		{
 			color = vec4(v_position * 0.5 + 0.5, 1.0);
+			color = v_color;
 		}
 	)";
 

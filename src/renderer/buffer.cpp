@@ -8,6 +8,34 @@
 namespace sennet
 {
 
+std::string buffer_layout::to_string() const
+{
+	std::stringstream ss;
+	ss << "\nstride: " << m_stride << "\n";
+	for (auto& element : m_elements)
+	{
+		ss << "name: " << element.name 
+			<< ", type: " << ::sennet::to_string(element.type)
+			<< ", size: " << element.size
+			<< ", offset: " << element.offset
+			<< "\n";
+	}
+	return ss.str();
+}
+
+
+void buffer_layout::calculate_offset_and_stride()
+{
+	uint32_t offset = 0;
+	m_stride = 0;
+	for (auto& element : m_elements)
+	{
+		element.offset = offset;
+		offset += element.size;
+		m_stride += element.size;
+	}
+}
+
 vertex_buffer* vertex_buffer::create(float* vertices, uint32_t size)
 {
 	switch (renderer::get_api())
