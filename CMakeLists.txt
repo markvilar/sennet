@@ -1,6 +1,6 @@
 # Project
 cmake_minimum_required(VERSION 3.16)
-project(sennet VERSION 1.0 LANGUAGES CXX C)
+project(Sennet VERSION 1.0 LANGUAGES CXX C)
 
 # Build configurations
 # TODO: Look into setting up configurations with CMake.

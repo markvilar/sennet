@@ -1,29 +1,29 @@
 # Client
-add_executable(client client.cpp)
-target_compile_features(client PRIVATE cxx_std_17)
-target_link_libraries(client PRIVATE sennet)
+add_executable(Client Client.cpp)
+target_compile_features(Client PRIVATE cxx_std_17)
+target_link_libraries(Client PRIVATE Sennet)
 
 # Sandbox
-add_executable(sandbox sandbox.cpp)
-target_compile_features(sandbox PRIVATE cxx_std_17)
-target_link_libraries(sandbox PRIVATE sennet)
+add_executable(Sandbox Sandbox.cpp)
+target_compile_features(Sandbox PRIVATE cxx_std_17)
+target_link_libraries(Sandbox PRIVATE Sennet)
 
 # Serialization
-add_executable(serialization serialization.cpp)
-target_compile_features(serialization PRIVATE cxx_std_17)
-target_link_libraries(serialization PRIVATE sennet)
+add_executable(Serialization Serialization.cpp)
+target_compile_features(Serialization PRIVATE cxx_std_17)
+target_link_libraries(Serialization PRIVATE Sennet)
 
 # Server
-add_executable(server server.cpp)
-target_compile_features(server PRIVATE cxx_std_17)
-target_link_libraries(server PRIVATE sennet)
+add_executable(Server Server.cpp)
+target_compile_features(Server PRIVATE cxx_std_17)
+target_link_libraries(Server PRIVATE Sennet)
 
 # Simple sandbox
-add_executable(simple simple.cpp)
-target_compile_features(simple PRIVATE cxx_std_17)
-target_link_libraries(simple PRIVATE sennet)
+add_executable(Simple Simple.cpp)
+target_compile_features(Simple PRIVATE cxx_std_17)
+target_link_libraries(Simple PRIVATE Sennet)
 
 # Test - ZED
-add_executable(test_zed test_zed.cpp)
-target_compile_features(test_zed PRIVATE cxx_std_17)
-target_link_libraries(test_zed PRIVATE sennet)
+add_executable(TestZED TestZED.cpp)
+target_compile_features(TestZED PRIVATE cxx_std_17)
+target_link_libraries(TestZED PRIVATE Sennet)
