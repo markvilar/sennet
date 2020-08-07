@@ -24,11 +24,14 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/ConnectionManager.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLContext.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLRendererAPI.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLVertexArray.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Windows/WindowsWindow.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Linux/LinuxWindow.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Buffer.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/GraphicsContext.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/OrthographicCamera.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RenderCommand.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Renderer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RendererAPI.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Shader.hpp"
@@ -55,6 +58,7 @@ add_library(Sennet STATIC
 	Network/ConnectionManager.cpp 
 	Platform/OpenGL/OpenGLBuffer.cpp
 	Platform/OpenGL/OpenGLContext.cpp
+	Platform/OpenGL/OpenGLRendererAPI.cpp
 	Platform/OpenGL/OpenGLVertexArray.cpp
 	Platform/Windows/WindowsInput.cpp
 	Platform/Windows/WindowsWindow.cpp
@@ -62,6 +66,8 @@ add_library(Sennet STATIC
 	Platform/Linux/LinuxWindow.cpp
 	Renderer/Buffer.cpp
 	Renderer/GraphicsContext.cpp
+	Renderer/OrthographicCamera.cpp
+	Renderer/RenderCommand.cpp
 	Renderer/Renderer.cpp
 	Renderer/RendererAPI.cpp
 	Renderer/Shader.cpp

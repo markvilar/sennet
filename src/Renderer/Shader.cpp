@@ -1,49 +1,9 @@
+#include <Sennet/pch.hpp>
 #include <Sennet/Renderer/Shader.hpp>
 
 #include <glad/glad.h>
 
-/*
-// Shaders are programs created in a two-step compilation process;
-// object compilation and linking.
-
-// Procedure for setting up a shader.
-
-// Step 1: Create shader object.
-GLuint glCreateShader(GLenum shaderType);
-
-// GLenum:
-// GL_VERTEX_SHADER; GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER,
-// GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER, GL_COMPUTE_SHADER
-
-// Step 2: Load GLSL source code.
-void glShaderSource(GLuint shader, GLsizei count, const GLchar** string,
-	const GLint* length);
-
-// Step 3: Compile shader.
-void glCompileShader(GLuint shader);
-
-// Shader compilation status.
-GLint success = 0;
-glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-// Shader error log.
-GLint logSize = 0;
-glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
-void glGetShaderInfoLog(GLuint shader, GLsizei maxLength,
-	GLsizei* length, GLchar *infoLog);
-
-// Step 4: Program setup.
-GLuint glCreateProgram();
-
-// Step 5: Attaching shader(s).
-void glAttachShader(GLuint program, GLuint shader);
-
-// Step 6: Cleanup / detaching shader(s).
-void glDetachShader(GLuint program, GLuint shader);
-
-// Step 7: Cleanup / deleting shader(s)
-void glDeleteShader(GLuint shader);
-*/
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Sennet
 {
@@ -168,6 +128,12 @@ void Shader::Bind() const
 void Shader::Unbind() const
 {
 	glUseProgram(0);
+}
+
+void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+{
+	GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 }

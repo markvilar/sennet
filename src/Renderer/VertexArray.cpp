@@ -10,7 +10,7 @@ namespace Sennet
 
 VertexArray* VertexArray::Create()
 {
-	switch (RendererAPI::GetAPI())
+	switch (Renderer::GetAPI())
 	{
 		case RendererAPI::API::None: 
 			SN_CORE_ASSERT(false, "renderer_api::none is currently \

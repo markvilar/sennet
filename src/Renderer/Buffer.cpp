@@ -23,7 +23,7 @@ void BufferLayout::CalculateOffsetAndStride()
 
 VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
 {
-	switch (RendererAPI::GetAPI())
+	switch (Renderer::GetAPI())
 	{
 		case RendererAPI::API::None: 
 			SN_CORE_ASSERT(false, "renderer_api::none is currently \
@@ -38,7 +38,7 @@ VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
 
 IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
 {
-	switch (RendererAPI::GetAPI())
+	switch (Renderer::GetAPI())
 	{
 		case RendererAPI::API::None: 
 			SN_CORE_ASSERT(false, "Renderer API none is currently \

@@ -11,7 +11,7 @@
 #include <Sennet/ImGui/ImGuiLayer.hpp>
 
 // Temporary.
-#include <Sennet/Renderer/Buffer.hpp>
+#include <Sennet/Renderer/OrthographicCamera.hpp>
 #include <Sennet/Renderer/Shader.hpp>
 #include <Sennet/Renderer/VertexArray.hpp>
 
@@ -55,6 +55,8 @@ private:
 
 	Ref<Shader> m_BlueShader;
 	Ref<VertexArray> m_SquareVa;
+
+	OrthographicCamera m_Camera;
 private:
 	static Application* s_Instance;
 	friend int main(int argc, char** argv);
