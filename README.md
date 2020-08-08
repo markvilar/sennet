@@ -36,7 +36,6 @@ cmake --build build --target docs
 ## TODOs
 - Add Cmake build configurations.
 - Implement 2D renderer.
-- Implement shaders.
 - Implement ZED messages (in separate project?).
 - Implement file handler.
 - Revise application class (non-GUI applications?).
@@ -52,6 +51,7 @@ cmake --build build --target docs
 - Implement application class.
 - Revise communication system (runtime, messages, callbacks).
 - Implement OpenGL render API.
+- Implement shaders.
 
 ## Acknowledgements
 I would like to acknowledge Yan Chernikov (TheCherno) for inspiring the system 

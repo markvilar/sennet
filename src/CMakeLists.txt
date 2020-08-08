@@ -26,6 +26,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLContext.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLRendererAPI.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLShader.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLVertexArray.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Windows/WindowsWindow.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Linux/LinuxWindow.hpp"
@@ -60,6 +61,7 @@ add_library(Sennet STATIC
 	Platform/OpenGL/OpenGLBuffer.cpp
 	Platform/OpenGL/OpenGLContext.cpp
 	Platform/OpenGL/OpenGLRendererAPI.cpp
+	Platform/OpenGL/OpenGLShader.cpp
 	Platform/OpenGL/OpenGLVertexArray.cpp
 	Platform/Windows/WindowsInput.cpp
 	Platform/Windows/WindowsWindow.cpp
