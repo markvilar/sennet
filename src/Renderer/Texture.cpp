@@ -1,14 +1,14 @@
 #include <Sennet/pch.hpp>
-#include <Sennet/Renderer/VertexArray.hpp>
+#include <Sennet/Renderer/Texture.hpp>
 
 #include <Sennet/Renderer/Renderer.hpp>
 
-#include <Sennet/Platform/OpenGL/OpenGLVertexArray.hpp>
+#include <Sennet/Platform/OpenGL/OpenGLTexture.hpp>
 
 namespace Sennet
 {
 
-VertexArray* VertexArray::Create()
+Ref<Texture2D> Texture2D::Create(const std::string& path)
 {
 	switch (Renderer::GetAPI())
 	{
@@ -16,7 +16,7 @@ VertexArray* VertexArray::Create()
 			SN_CORE_ASSERT(false, "Renderer API None is currently \
 				not supported!");
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexArray();
+			return CreateRef<OpenGLTexture2D>(path);
 	}
 	
 	SN_CORE_ASSERT(false, "Unknown Renderer API.");

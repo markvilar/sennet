@@ -4,7 +4,9 @@
 #include <boost/asio.hpp>
 
 #include <Sennet/Core/Base.hpp>
+
 #include <Sennet/Messages/Message.hpp>
+
 #include <Sennet/Network/Connection.hpp>
 
 namespace Sennet 
@@ -15,7 +17,7 @@ class ConnectionManager
 public:
 	using MessageCallbackFn= std::function<void(Ref<Message>&)>;
 
-	ConnectionManager(std::string port, uint64_t wait_for = 1);
+	ConnectionManager(unsigned short port, uint64_t wait_for = 1);
 	~ConnectionManager();
 	
 	boost::asio::io_service& GetIOService();

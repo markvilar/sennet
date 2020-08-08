@@ -46,12 +46,12 @@ public:
 
 		m_SquareVa.reset(Sennet::VertexArray::Create());
 
-		float squareVertices[4 * 3] = 
+		float squareVertices[4 * 5] = 
 		{
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		
 		Sennet::Ref<Sennet::VertexBuffer> squareVb(
@@ -60,6 +60,7 @@ public:
 
 		squareVb->SetLayout({
 			{ Sennet::ShaderDataType::Float3, "a_Position" },
+			{ Sennet::ShaderDataType::Float2, "a_TexCoord" }
 		});
 		m_SquareVa->AddVertexBuffer(squareVb);
 
@@ -141,6 +142,53 @@ public:
 
 		m_FlatColorShader.reset(Sennet::Shader::Create(
 			flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+
+		std::string textureShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform
+					* vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader.reset(Sennet::Shader::Create(
+			textureShaderVertexSrc, textureShaderFragmentSrc));
+
+		m_Texture = Sennet::Texture2D::Create(
+			"/home/martin/dev/sennet/data/assets/checkerboard.png");
+
+		std::dynamic_pointer_cast<Sennet::OpenGLShader>(
+			m_TextureShader)->Bind();
+
+		std::dynamic_pointer_cast<Sennet::OpenGLShader>(
+			m_TextureShader)->UploadUniformInt("u_Texture", 0);
+
 	}
 
 	void OnUpdate(Sennet::Timestep ts) override
@@ -192,6 +240,7 @@ public:
 			m_FlatColorShader)->UploadUniformFloat3("u_Color",
 			m_SquareColor);
 
+		// Square grid.
 		for (int j = 0; j < 20; j++)
 		{
 			for (int i = 0; i < 20; i++)
@@ -204,8 +253,14 @@ public:
 					m_SquareVa, transform);
 			}
 		}
-				
-		Sennet::Renderer::Submit(m_Shader, m_TriangleVa);
+
+		// Square.
+		m_Texture->Bind();
+		Sennet::Renderer::Submit(m_TextureShader, m_SquareVa, 
+			glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		
+		// Triangle.
+		//Sennet::Renderer::Submit(m_Shader, m_TriangleVa);
 
 		Sennet::Renderer::EndScene();
 	}
@@ -225,8 +280,10 @@ private:
 	Sennet::Ref<Sennet::Shader> m_Shader;
 	Sennet::Ref<Sennet::VertexArray> m_TriangleVa;
 
-	Sennet::Ref<Sennet::Shader> m_FlatColorShader;
+	Sennet::Ref<Sennet::Shader> m_FlatColorShader, m_TextureShader;
 	Sennet::Ref<Sennet::VertexArray> m_SquareVa;
+
+	Sennet::Ref<Sennet::Texture2D> m_Texture;
 
 	Sennet::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;

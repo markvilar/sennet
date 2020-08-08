@@ -29,7 +29,7 @@ void IOWorker(Sennet::ConnectionManager& manager)
 int main()
 {
 	Sennet::Log::Init();
-	Sennet::ConnectionManager manager("7000", 1);
+	Sennet::ConnectionManager manager(7000, 1);
 	manager.SetMessageCallback(std::bind(HandleMessage, 
 		std::placeholders::_1));
 	manager.Start();

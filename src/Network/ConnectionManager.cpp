@@ -1,18 +1,15 @@
 #include <Sennet/Network/ConnectionManager.hpp>
 
-#include <boost/lexical_cast.hpp>
-
 #include <Sennet/Core/Base.hpp>
 #include <Sennet/Messages/MessageEncoder.hpp>
 
 namespace Sennet 
 {
 
-ConnectionManager::ConnectionManager(std::string port, uint64_t waitFor)
+ConnectionManager::ConnectionManager(unsigned short port, uint64_t waitFor)
 	: m_IOService(),
 	m_Acceptor(m_IOService, boost::asio::ip::tcp::endpoint(
-		boost::asio::ip::tcp::v4(), 
-		boost::lexical_cast<boost::uint16_t>(port))),
+		boost::asio::ip::tcp::v4(), port)),
 	m_Connections(),
 	m_ExecutionThread(),
 	m_InboundQueue(),

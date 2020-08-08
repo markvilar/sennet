@@ -24,7 +24,7 @@ void IOWorker(Sennet::ConnectionManager& manager)
 int main()
 {
 	Sennet::Log::Init();
-	Sennet::ConnectionManager manager("6000", 1);
+	Sennet::ConnectionManager manager(6000, 1);
 	SN_INFO("Client attempting to connect.");
 	auto connection = manager.Connect("localhost", "7000");
 	manager.Start();

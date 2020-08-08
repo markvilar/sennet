@@ -27,6 +27,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLContext.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLRendererAPI.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLShader.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLTexture.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLVertexArray.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Windows/WindowsWindow.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Linux/LinuxWindow.hpp"
@@ -37,6 +38,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Renderer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RendererAPI.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Shader.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Texture.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/VertexArray.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/Primitives.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/ZED.hpp"
@@ -62,6 +64,7 @@ add_library(Sennet STATIC
 	Platform/OpenGL/OpenGLContext.cpp
 	Platform/OpenGL/OpenGLRendererAPI.cpp
 	Platform/OpenGL/OpenGLShader.cpp
+	Platform/OpenGL/OpenGLTexture.cpp
 	Platform/OpenGL/OpenGLVertexArray.cpp
 	Platform/Windows/WindowsInput.cpp
 	Platform/Windows/WindowsWindow.cpp
@@ -74,6 +77,7 @@ add_library(Sennet STATIC
 	Renderer/Renderer.cpp
 	Renderer/RendererAPI.cpp
 	Renderer/Shader.cpp
+	Renderer/Texture.cpp
 	Renderer/VertexArray.cpp
 	Primitives/Primitives.cpp
 	Primitives/ZED.cpp
@@ -100,6 +104,7 @@ target_include_directories(Sennet
 	"${PROJECT_SOURCE_DIR}/extern/imgui"
 	"${PROJECT_SOURCE_DIR}/extern/serializer/include"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
+	"${PROJECT_SOURCE_DIR}/extern/stb"
 	${Boost_INCLUDE_DIRS} 
 	${CUDA_INCLUDE_DIRS} 
 	${ZED_INCLUDE_DIRS}
@@ -113,6 +118,7 @@ target_link_libraries(Sennet
 	glad
 	glfw
 	imgui
+	stb
 	${ZED_LIBS}
 	) 
 
