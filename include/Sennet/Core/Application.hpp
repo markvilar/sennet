@@ -10,11 +10,6 @@
 
 #include <Sennet/ImGui/ImGuiLayer.hpp>
 
-// Temporary.
-#include <Sennet/Renderer/OrthographicCamera.hpp>
-#include <Sennet/Renderer/Shader.hpp>
-#include <Sennet/Renderer/VertexArray.hpp>
-
 namespace Sennet
 {
 
@@ -49,14 +44,6 @@ private:
 	bool m_Running = true;
 	LayerStack m_LayerStack;
 
-	// Temporary.
-	Ref<Shader> m_Shader;
-	Ref<VertexArray> m_TriangleVa;
-
-	Ref<Shader> m_BlueShader;
-	Ref<VertexArray> m_SquareVa;
-
-	OrthographicCamera m_Camera;
 private:
 	static Application* s_Instance;
 	friend int main(int argc, char** argv);
