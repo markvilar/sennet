@@ -1,8 +1,9 @@
 #pragma once
-
 #include <Sennet/pch.hpp>
 
 #include <Sennet/Core/Base.hpp>
+#include <Sennet/Core/Timestep.hpp>
+
 #include <Sennet/Events/Event.hpp>
 
 namespace Sennet
@@ -16,7 +17,7 @@ public:
 
 	virtual void OnAttach() {}
 	virtual void OnDetach() {}
-	virtual void OnUpdate() {}
+	virtual void OnUpdate(Timestep ts) {}
 	virtual void OnImGuiRender() {}
 	virtual void OnEvent(Event& e) {}
 

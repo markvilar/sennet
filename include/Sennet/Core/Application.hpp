@@ -2,8 +2,9 @@
 
 #include <Sennet/Core/Base.hpp>
 
-#include <Sennet/Core/Window.hpp>
 #include <Sennet/Core/LayerStack.hpp>
+#include <Sennet/Core/Timestep.hpp>
+#include <Sennet/Core/Window.hpp>
 
 #include <Sennet/Events/Event.hpp>
 #include <Sennet/Events/ApplicationEvent.hpp>
@@ -41,8 +42,9 @@ private:
 private:
 	Scope<Window> m_Window;
 	ImGuiLayer* m_ImGuiLayer;
-	bool m_Running = true;
 	LayerStack m_LayerStack;
+	bool m_Running = true;
+	float m_LastFrameTime = 0.0f;
 
 private:
 	static Application* s_Instance;

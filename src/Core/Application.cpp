@@ -1,8 +1,11 @@
 #include <Sennet/pch.hpp>
 #include <Sennet/Core/Application.hpp>
 
-#include <Sennet/Core/Log.hpp>
+#include <GLFW/glfw3.h>
+
 #include <Sennet/Core/Input.hpp>
+#include <Sennet/Core/Log.hpp>
+#include <Sennet/Core/Timestep.hpp>
 
 namespace Sennet
 {
@@ -16,6 +19,7 @@ Application::Application()
 
 	m_Window = Window::Create();
 	m_Window->SetEventCallback(SN_BIND_EVENT_FN(Application::OnEvent));
+	m_Window->SetVSync(true);
 
 	m_ImGuiLayer = new ImGuiLayer();
 	PushOverlay(m_ImGuiLayer);
@@ -63,10 +67,14 @@ void Application::Run()
 {
 	while (m_Running)
 	{
+		// Temporary.
+		float time = glfwGetTime(); // Platform::GetTime
+		Timestep ts = time - m_LastFrameTime;
+		m_LastFrameTime = time;
 
 		for (Layer* layer : m_LayerStack)
 		{
-			layer->OnUpdate();
+			layer->OnUpdate(ts);
 		}
 		
 		m_ImGuiLayer->Begin();

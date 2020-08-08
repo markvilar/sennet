@@ -1,6 +1,9 @@
-#include <Sennet/Sennet.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <imgui.h>
+
+#include <Sennet/Sennet.hpp>
 
 class ExampleLayer : public Sennet::Layer
 {
@@ -41,10 +44,10 @@ public:
 
 		float squareVertices[4 * 3] = 
 		{
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 		
 		Sennet::Ref<Sennet::VertexBuffer> squareVb(
@@ -70,6 +73,7 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -78,8 +82,8 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection 
-					* vec4(a_Position, 1.0);	
+				gl_Position = u_ViewProjection * u_Transform
+					 * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -104,13 +108,14 @@ public:
 			layout(location = 0) in vec3 a_Position;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = u_ViewProjection 
+				gl_Position = u_ViewProjection * u_Transform
 					* vec4(a_Position, 1.0);	
 			}
 		)";
@@ -131,33 +136,36 @@ public:
 
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Sennet::Timestep ts) override
 	{
+		// Camera x position.
 		if (Sennet::Input::IsKeyPressed(SN_KEY_A))
 		{
-			m_CameraPosition.x -= m_CameraTranslationSpeed;
+			m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
 		}
 		else if (Sennet::Input::IsKeyPressed(SN_KEY_D))
 		{
-			m_CameraPosition.x += m_CameraTranslationSpeed;
+			m_CameraPosition.x += m_CameraTranslationSpeed * ts;
 		}
 
+		// Camera y position.
 		if (Sennet::Input::IsKeyPressed(SN_KEY_W))
 		{
-			m_CameraPosition.y += m_CameraTranslationSpeed;
+			m_CameraPosition.y += m_CameraTranslationSpeed * ts;
 		}
 		else if (Sennet::Input::IsKeyPressed(SN_KEY_S))
 		{
-			m_CameraPosition.y -= m_CameraTranslationSpeed;
+			m_CameraPosition.y -= m_CameraTranslationSpeed * ts;
 		}
 
+		// Camera rotation.
 		if (Sennet::Input::IsKeyPressed(SN_KEY_Q))
 		{
-			m_CameraRotation += m_CameraRotationSpeed;
+			m_CameraRotation += m_CameraRotationSpeed * ts;
 		}
 		else if (Sennet::Input::IsKeyPressed(SN_KEY_E))
 		{
-			m_CameraRotation -= m_CameraRotationSpeed;
+			m_CameraRotation -= m_CameraRotationSpeed * ts;
 		}
 
 		Sennet::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
@@ -168,7 +176,20 @@ public:
 
 		Sennet::Renderer::BeginScene(m_Camera);
 
-		Sennet::Renderer::Submit(m_BlueShader, m_SquareVa);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		for (int j = 0; j < 20; j++)
+		{
+			for (int i = 0; i < 20; i++)
+			{
+				glm::vec3 position(i * 0.11f, j * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(
+					glm::mat4(1.0f), position) * scale;
+				Sennet::Renderer::Submit(m_BlueShader, m_SquareVa, 
+					transform);
+			}
+		}
+				
 		Sennet::Renderer::Submit(m_Shader, m_TriangleVa);
 
 		Sennet::Renderer::EndScene();
@@ -192,8 +213,9 @@ private:
 	Sennet::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
 	float m_CameraRotation;
-	float m_CameraTranslationSpeed = 0.1f;
-	float m_CameraRotationSpeed = 2.0f;
+	float m_CameraTranslationSpeed = 1.5f;
+	float m_CameraRotationSpeed = 70.0f;
+
 };
 
 class Sandbox : public Sennet::Application

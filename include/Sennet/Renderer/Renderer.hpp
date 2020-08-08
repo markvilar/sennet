@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include <Sennet/Core/Base.hpp>
 
 #include <Sennet/Renderer/OrthographicCamera.hpp>
@@ -16,7 +18,8 @@ public:
 	static void EndScene();
 
 	static void Submit(const Ref<Shader>& shader,
-		const Ref<VertexArray>& vertexArray);
+		const Ref<VertexArray>& vertexArray, 
+		const glm::mat4& transform = glm::mat4(1.0f));
 
 	inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 

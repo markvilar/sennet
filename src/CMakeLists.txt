@@ -10,6 +10,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/MouseCodes.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/SourceHandle.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Timestep.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/ApplicationEvent.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/Event.hpp"

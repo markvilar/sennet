@@ -6,6 +6,7 @@
 #include <Sennet/Core/Layer.hpp>
 #include <Sennet/Core/Log.hpp>
 #include <Sennet/Core/SourceHandle.hpp>
+#include <Sennet/Core/Timestep.hpp>
 
 #include <Sennet/Core/Input.hpp>
 #include <Sennet/Core/KeyCodes.hpp>
