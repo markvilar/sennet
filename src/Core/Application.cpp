@@ -7,6 +7,8 @@
 #include <Sennet/Core/Log.hpp>
 #include <Sennet/Core/Timestep.hpp>
 
+#include <Sennet/Renderer/Renderer.hpp>
+
 namespace Sennet
 {
 
@@ -19,7 +21,8 @@ Application::Application()
 
 	m_Window = Window::Create();
 	m_Window->SetEventCallback(SN_BIND_EVENT_FN(Application::OnEvent));
-	m_Window->SetVSync(true);
+
+	Renderer::Init();
 
 	m_ImGuiLayer = new ImGuiLayer();
 	PushOverlay(m_ImGuiLayer);
