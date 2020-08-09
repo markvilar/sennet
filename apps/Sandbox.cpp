@@ -15,7 +15,7 @@ public:
 		: Layer("example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
 		m_CameraPosition(0.0f), m_CameraRotation(0.0f)
 	{
-		m_TriangleVa.reset(Sennet::VertexArray::Create());
+		m_TriangleVa = Sennet::VertexArray::Create();
 
 		float triangleVertices[3 * 7] = 
 		{
@@ -43,7 +43,7 @@ public:
 
 		// Square.
 
-		m_SquareVa.reset(Sennet::VertexArray::Create());
+		m_SquareVa = Sennet::VertexArray::Create();
 
 		float squareVertices[4 * 5] = 
 		{
@@ -104,7 +104,8 @@ public:
 			}
 		)";
 
-		m_Shader.reset(Sennet::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = Sennet::Shader::Create("VertexPosColor", 
+			vertexSrc, fragmentSrc);
 
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
@@ -139,11 +140,12 @@ public:
 			}
 		)";
 
-		m_FlatColorShader.reset(Sennet::Shader::Create(
-			flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+		m_FlatColorShader = Sennet::Shader::Create("FlatColor",
+			flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
-		m_TextureShader.reset(Sennet::Shader::Create(
-			"../../assets/shaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.Load(
+			"../../assets/shaders/Texture.glsl");
+			
 
 		m_CheckerboardTexture = Sennet::Texture2D::Create(
 			"../../assets/textures/checkerboard.png");
@@ -152,10 +154,11 @@ public:
 			"../../assets/textures/cartographer.png");
 
 		std::dynamic_pointer_cast<Sennet::OpenGLShader>(
-			m_TextureShader)->Bind();
+			textureShader)->Bind();
+			
 
 		std::dynamic_pointer_cast<Sennet::OpenGLShader>(
-			m_TextureShader)->UploadUniformInt("u_Texture", 0);
+			textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Sennet::Timestep ts) override
@@ -221,13 +224,15 @@ public:
 			}
 		}
 
+		auto textureShader = m_ShaderLibrary.Get("Texture");
+
 		// Square.
 		m_CheckerboardTexture->Bind();
-		Sennet::Renderer::Submit(m_TextureShader, m_SquareVa, 
+		Sennet::Renderer::Submit(textureShader, m_SquareVa, 
 			glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		m_CartographTexture->Bind();
-		Sennet::Renderer::Submit(m_TextureShader, m_SquareVa, 
+		Sennet::Renderer::Submit(textureShader, m_SquareVa, 
 			glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		// Triangle.
@@ -248,10 +253,11 @@ public:
 	}
 
 private:
+	Sennet::ShaderLibrary m_ShaderLibrary;
 	Sennet::Ref<Sennet::Shader> m_Shader;
 	Sennet::Ref<Sennet::VertexArray> m_TriangleVa;
 
-	Sennet::Ref<Sennet::Shader> m_FlatColorShader, m_TextureShader;
+	Sennet::Ref<Sennet::Shader> m_FlatColorShader;
 	Sennet::Ref<Sennet::VertexArray> m_SquareVa;
 
 	Sennet::Ref<Sennet::Texture2D> m_CheckerboardTexture;

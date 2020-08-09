@@ -18,6 +18,7 @@ public:
 	};
 
 public:
+	virtual ~RendererAPI() = default;
 	virtual void Init() = 0;
 
 	virtual void SetClearColor(const glm::vec4& color) = 0;
@@ -26,6 +27,7 @@ public:
 	virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
 
 	inline static API GetAPI() { return s_API; }
+	static Scope<RendererAPI> Create();
 
 private:
 	static API s_API;

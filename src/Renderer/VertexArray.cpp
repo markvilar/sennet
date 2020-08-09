@@ -8,7 +8,7 @@
 namespace Sennet
 {
 
-VertexArray* VertexArray::Create()
+Ref<VertexArray> VertexArray::Create()
 {
 	switch (Renderer::GetAPI())
 	{
@@ -16,7 +16,7 @@ VertexArray* VertexArray::Create()
 			SN_CORE_ASSERT(false, "Renderer API None is currently \
 				not supported!");
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexArray();
+			return CreateRef<OpenGLVertexArray>();
 	}
 	
 	SN_CORE_ASSERT(false, "Unknown Renderer API.");

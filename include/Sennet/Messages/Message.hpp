@@ -10,10 +10,9 @@ using MessageEncoding = std::vector<unsigned char>;
 
 enum class MessageType
 {
-	None = 0,
-	Message,
-	HelloMessage,
-	ImageMessage
+	None 		= 0,
+	HelloMessage 	= 1,
+	ImageMessage 	= 2
 };
 
 class Message : public zpp::serializer::polymorphic

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <array>
 #include <atomic>
 #include <chrono>
 #include <cstdint>

@@ -36,6 +36,7 @@ cmake --build build --target docs
 ## TODOs
 - Add Cmake build configurations.
 - Implement 2D renderer.
+- Implement message register.
 - Implement ZED messages (in separate project?).
 - Implement file handler.
 - Revise application class (non-GUI applications?).
