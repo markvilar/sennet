@@ -12,8 +12,7 @@ class ExampleLayer : public Sennet::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
-		m_CameraPosition(0.0f), m_CameraRotation(0.0f)
+		: Layer("example"), m_CameraController(1280.0f / 720.0f, true)
 	{
 		m_TriangleVa = Sennet::VertexArray::Create();
 
@@ -42,7 +41,6 @@ public:
 		m_TriangleVa->SetIndexBuffer(triangleIb);
 
 		// Square.
-
 		m_SquareVa = Sennet::VertexArray::Create();
 
 		float squareVertices[4 * 5] = 
@@ -163,43 +161,14 @@ public:
 
 	void OnUpdate(Sennet::Timestep ts) override
 	{
-		// Camera x position.
-		if (Sennet::Input::IsKeyPressed(SN_KEY_A))
-		{
-			m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
-		}
-		else if (Sennet::Input::IsKeyPressed(SN_KEY_D))
-		{
-			m_CameraPosition.x += m_CameraTranslationSpeed * ts;
-		}
+		// Update.
+		m_CameraController.OnUpdate(ts);
 
-		// Camera y position.
-		if (Sennet::Input::IsKeyPressed(SN_KEY_W))
-		{
-			m_CameraPosition.y += m_CameraTranslationSpeed * ts;
-		}
-		else if (Sennet::Input::IsKeyPressed(SN_KEY_S))
-		{
-			m_CameraPosition.y -= m_CameraTranslationSpeed * ts;
-		}
-
-		// Camera rotation.
-		if (Sennet::Input::IsKeyPressed(SN_KEY_Q))
-		{
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		}
-		else if (Sennet::Input::IsKeyPressed(SN_KEY_E))
-		{
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-		}
-
+		// Renderer submittion.
 		Sennet::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
 		Sennet::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-		Sennet::Renderer::BeginScene(m_Camera);
+		Sennet::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -248,8 +217,9 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(Sennet::Event& event) override
+	void OnEvent(Sennet::Event& e) override
 	{
+		m_CameraController.OnEvent(e);
 	}
 
 private:
@@ -263,12 +233,8 @@ private:
 	Sennet::Ref<Sennet::Texture2D> m_CheckerboardTexture;
 	Sennet::Ref<Sennet::Texture2D> m_CartographTexture;
 
-	Sennet::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraRotation;
-	float m_CameraTranslationSpeed = 1.5f;
-	float m_CameraRotationSpeed = 70.0f;
-	
+	Sennet::OrthographicCameraController m_CameraController;
+		
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 

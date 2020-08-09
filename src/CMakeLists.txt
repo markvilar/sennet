@@ -34,6 +34,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Buffer.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/GraphicsContext.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/OrthographicCamera.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/OrthographicCameraController.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RenderCommand.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Renderer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RendererAPI.hpp"
@@ -73,6 +74,7 @@ add_library(Sennet STATIC
 	Renderer/Buffer.cpp
 	Renderer/GraphicsContext.cpp
 	Renderer/OrthographicCamera.cpp
+	Renderer/OrthographicCameraController.cpp
 	Renderer/RenderCommand.cpp
 	Renderer/Renderer.cpp
 	Renderer/RendererAPI.cpp

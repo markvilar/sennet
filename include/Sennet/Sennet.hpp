@@ -24,6 +24,7 @@
 
 #include <Sennet/Renderer/Buffer.hpp>
 #include <Sennet/Renderer/OrthographicCamera.hpp>
+#include <Sennet/Renderer/OrthographicCameraController.hpp>
 #include <Sennet/Renderer/RenderCommand.hpp>
 #include <Sennet/Renderer/Renderer.hpp>
 #include <Sennet/Renderer/Shader.hpp>
