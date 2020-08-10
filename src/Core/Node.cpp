@@ -26,6 +26,8 @@ void Node::OnMessage(Ref<Message> msg)
 
 void Node::PushLayer(Layer* layer)
 {
+	m_LayerStack.PushLayer(layer);
+	layer->OnAttach();
 }
 
 void Node::Close()

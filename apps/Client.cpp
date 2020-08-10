@@ -1,3 +1,4 @@
+#include <chrono>
 #include <functional>
 #include <thread>
 
@@ -16,11 +17,6 @@ zpp::serializer::register_types<
 
 }
 
-void IOWorker(Sennet::ConnectionManager& manager)
-{
-	manager.Run();
-}
-
 int main()
 {
 	Sennet::Log::Init();
@@ -29,21 +25,19 @@ int main()
 	auto connection = manager.Connect("localhost", "7000");
 	manager.Start();
 
-	std::thread IOThread(IOWorker, std::ref(manager));
-	SN_INFO("Client: Started IO thread.");
-
 	SN_INFO("Client: Sending messages.");
-	Sennet::HelloMessage helloMsg("hello world!");
+	auto helloMsg = Sennet::CreateRef<Sennet::HelloMessage>("hello world!");
 	auto vec = std::vector<unsigned char>(1920*1080*3, 150);
 
-	Sennet::ImageMessage imageMsg(vec, 1920, 1080, 3);
+	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(vec, 1920, 1080, 3);
 	
 	manager.PushMessage(connection, helloMsg);
 	manager.PushMessage(connection, imageMsg);
 
-	if (IOThread.joinable())
+	for (int i = 0; i < 20; i++)
 	{
-		IOThread.join();
+		SN_INFO("Running...");
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 
 	SN_INFO("Client: Finished.");

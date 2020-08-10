@@ -30,7 +30,6 @@ public:
 		
 	void Start();
 	void Stop();
-	void Run();
 
 	Ref<Connection> Connect(std::string host, std::string port);
 	Ref<Connection> ConnectionSearch(const std::string& addr, 
@@ -44,7 +43,8 @@ public:
 		Ref<Connection> conn);
 
 private:
-	void ExecutionLoop();
+	void IOWorker();
+	void ExecutionWorker();
 
 private:
 	boost::asio::io_service m_IOService;
@@ -56,6 +56,7 @@ private:
 
 	std::atomic<bool> m_StopFlag;
 	std::thread m_ExecutionThread;
+	std::thread m_IOThread;
 	std::mutex m_Mutex;
 
 	uint64_t m_WaitFor;

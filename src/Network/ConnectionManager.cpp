@@ -60,9 +60,12 @@ void ConnectionManager::Start()
 	m_Acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 	m_Acceptor.set_option(boost::asio::ip::tcp::acceptor::linger(true, 0));
 
+	// Start IO thread.
+	m_IOThread = std::thread(std::bind(&ConnectionManager::IOWorker, this));
+
 	// Start execution thread.
 	m_ExecutionThread = std::thread(
-		std::bind(&ConnectionManager::ExecutionLoop, this));
+		std::bind(&ConnectionManager::ExecutionWorker, this));
 	
 	// Start accepting Connections.
 	AsyncAccept();
@@ -76,18 +79,12 @@ void ConnectionManager::Stop()
 	// Destroy the keep-alive work object, which will cause run() to return
 	// when all I/O work is done.
 	m_IOService.stop();
-}
 
-void ConnectionManager::Run()
-{
-	// Keep io_service::run() from returning.
-	boost::asio::io_service::work work(m_IOService);
-
-	m_IOService.run();
-
-	if (m_ExecutionThread.joinable())
-		SN_CORE_TRACE("Joining execution thread.");
-		m_ExecutionThread.join();
+	if (m_IOThread.joinable())
+	{
+		m_IOThread.join();
+		SN_CORE_TRACE("Connection manager: Joined IO thread.");
+	}
 }
 
 Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
@@ -141,8 +138,8 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 	SN_CORE_ASSERT(m_Connections.count(ep) == 0, 
 		"Connection already established!");
 
-	SN_CORE_TRACE("Added new Connection: {0}:{1}", ep.address().to_string(),
-		ep.port());
+	SN_CORE_TRACE("Connection manager: Added connection: {0}:{1}", 
+		ep.address().to_string(), ep.port());
 	m_Connections[ep] = connection;
 
 	// Start the Connection by calling the async. read operation.
@@ -226,13 +223,32 @@ void ConnectionManager::OnAccept(boost::system::error_code const& error,
 			
 		m_Connections[ep] = oldConnection;
 
+		SN_CORE_TRACE("Connection manager: Accepted connection {0}:{1}",
+			ep.address().to_string(), ep.port());
+
 		// Start read from the accepted Connection.
 		oldConnection->AsyncRead();
 	}
 }
 
-void ConnectionManager::ExecutionLoop()
+void ConnectionManager::IOWorker()
 {
+	SN_CORE_TRACE("Started IO thread.");
+	// Keep io_service::run() from returning.
+	boost::asio::io_service::work work(m_IOService);
+
+	m_IOService.run();
+
+	if (m_ExecutionThread.joinable())
+	{
+		m_ExecutionThread.join();
+		SN_CORE_TRACE("Connection manager: Joined execution thread.");
+	}
+}
+
+void ConnectionManager::ExecutionWorker()
+{
+	SN_CORE_TRACE("Connection manager: Started execution thread.");
 	while (!m_StopFlag)
 	{
 		// TODO: Clean up!
@@ -269,13 +285,13 @@ void ConnectionManager::ExecutionLoop()
 			}
 			else if (!m_MessageCallback)
 			{
-				SN_CORE_WARN("In execution loop: No message \
-					callback.");
+				SN_CORE_WARN("Connection manager execution \
+					loop: No message callback.");
 			}
 			else if (!inboundMsg)
 			{
-				SN_CORE_WARN("In execution loop: Message is \
-					null.");
+				SN_CORE_WARN("Connection manager execution \
+					loop: Message is null.");
 			}
 		}
 	}

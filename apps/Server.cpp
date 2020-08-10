@@ -21,11 +21,6 @@ void HandleMessage(Sennet::Ref<Sennet::Message>& msg)
 	SN_TRACE("Server: {0}", msg->ToString());
 }
 
-void IOWorker(Sennet::ConnectionManager& manager)
-{
-	manager.Run();
-}
-
 int main()
 {
 	Sennet::Log::Init();
@@ -34,12 +29,9 @@ int main()
 		std::placeholders::_1));
 	manager.Start();
 
-	std::thread IOThread(IOWorker, std::ref(manager));
-	SN_TRACE("Server: Started IO thread.");
-
-	if (IOThread.joinable())
+	if (true)
 	{
-		IOThread.join();
+		// Do something.
 	}
 
 	SN_INFO("Server: Finished.");
