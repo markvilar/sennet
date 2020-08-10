@@ -34,12 +34,14 @@ Application::~Application()
 
 void Application::OnEvent(Event& e)
 {
-	// Dispatch event.
 	EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<WindowCloseEvent>(
 		SN_BIND_EVENT_FN(Application::OnWindowClose));
+	dispatcher.Dispatch<WindowResizeEvent>(
+		SN_BIND_EVENT_FN(Application::OnWindowResize));
+	dispatcher.Dispatch<WindowIconifyEvent>(
+		SN_BIND_EVENT_FN(Application::OnWindowIconify));
 
-	// Propagate event through Layers.
 	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 	{
 		(*--it)->OnEvent(e);
@@ -73,20 +75,24 @@ void Application::Run()
 		// Temporary.
 		float time = glfwGetTime(); // Platform::GetTime
 		Timestep ts = time - m_LastFrameTime;
-		m_LastFrameTime = time;
 
-		for (Layer* layer : m_LayerStack)
+		if (!m_Minimized)
 		{
-			layer->OnUpdate(ts);
+			m_LastFrameTime = time;
+
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnUpdate(ts);
+			}
+
+			m_ImGuiLayer->Begin();
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnImGuiRender();
+			}
+			m_ImGuiLayer->End();
 		}
 		
-		m_ImGuiLayer->Begin();
-		for (Layer* layer : m_LayerStack)
-		{
-			layer->OnImGuiRender();
-		}
-		m_ImGuiLayer->End();
-
 		m_Window->OnUpdate();
 	}
 }
@@ -99,7 +105,16 @@ bool Application::OnWindowClose(WindowCloseEvent& e)
 
 bool Application::OnWindowResize(WindowResizeEvent& e)
 {
-	return true;
+	SN_CORE_TRACE("Window Resize: {0}, {1}", e.GetWidth(), e.GetHeight());
+	Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+	return false;
+}
+
+bool Application::OnWindowIconify(WindowIconifyEvent& e)
+{
+	SN_CORE_TRACE("Window Iconified: {0}", e.IsMinimized());
+	m_Minimized = e.IsMinimized();
+	return false;
 }
 
 };

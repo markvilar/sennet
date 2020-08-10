@@ -28,6 +28,19 @@ private:
 	unsigned int m_Width, m_Height;
 };
 
+class WindowIconifyEvent : public Event
+{
+public:
+	WindowIconifyEvent(bool minimized) : m_Minimized(minimized) {}
+
+	bool IsMinimized() const { return m_Minimized; }
+
+	EVENT_CLASS_TYPE(WindowIconify)
+	EVENT_CLASS_CATEGORY(EventCategoryApplication)
+private:
+	bool m_Minimized;
+};
+
 class WindowCloseEvent : public Event
 {
 public:

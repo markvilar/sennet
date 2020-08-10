@@ -38,12 +38,14 @@ private:
 	void Run();
 	bool OnWindowClose(WindowCloseEvent& e);
 	bool OnWindowResize(WindowResizeEvent& e);
+	bool OnWindowIconify(WindowIconifyEvent& e);
 
 private:
 	Scope<Window> m_Window;
 	ImGuiLayer* m_ImGuiLayer;
 	LayerStack m_LayerStack;
 	bool m_Running = true;
+	bool m_Minimized = false;
 	float m_LastFrameTime = 0.0f;
 
 private:

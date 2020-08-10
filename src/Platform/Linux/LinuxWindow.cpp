@@ -95,6 +95,17 @@ void LinuxWindow::Init(const WindowProps& props)
 		data.Height= height;
 
 		WindowResizeEvent event(width, height);
+		SN_CORE_WARN("Window Resize: {0}, {1}", width, height);
+		data.EventCallback(event);
+	});
+
+	glfwSetWindowIconifyCallback(m_Window, [](GLFWwindow* window,
+		int iconified)
+	{
+		WindowData& data =
+			*(WindowData*)glfwGetWindowUserPointer(window);
+		
+		WindowIconifyEvent event(iconified == 1);
 		data.EventCallback(event);
 	});
 	

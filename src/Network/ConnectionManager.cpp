@@ -1,8 +1,5 @@
 #include <Sennet/Network/ConnectionManager.hpp>
 
-#include <Sennet/Core/Base.hpp>
-#include <Sennet/Messages/MessageEncoder.hpp>
-
 namespace Sennet 
 {
 
@@ -169,12 +166,11 @@ Ref<Connection> ConnectionManager::ConnectionSearch(const std::string& addr,
 	return nullptr;
 }
 
-void ConnectionManager::PushMessage(Ref<Connection> connection, const Message& msg)
+void ConnectionManager::PushMessage(Ref<Connection> connection, Ref<Message> msg)
 {
-	Ref<Message> msgPtr(msg.Clone());
-
+	//Ref<Message> msgPtr(msg.Clone());
 	m_Mutex.lock();
-	m_OutboundQueue.push(std::make_pair(connection, msgPtr));
+	m_OutboundQueue.push(std::make_pair(connection, msg));
 	m_Mutex.unlock();
 }
 

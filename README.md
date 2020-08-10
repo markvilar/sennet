@@ -53,6 +53,7 @@ cmake --build build --target docs
 - Revise communication system (runtime, messages, callbacks).
 - Implement OpenGL render API.
 - Implement shaders.
+- Add event for window iconification.
 
 ## Acknowledgements
 I would like to acknowledge Yan Chernikov (TheCherno) for inspiring the system 

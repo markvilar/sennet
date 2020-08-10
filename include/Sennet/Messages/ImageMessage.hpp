@@ -11,15 +11,15 @@ namespace Sennet
 class ImageMessage : public Message
 {
 public:
-	ImageMessage();
+	ImageMessage() = default;
 	ImageMessage(const std::vector<unsigned char>& buffer,
 		const size_t width, const size_t height, const size_t channels);
 	virtual ~ImageMessage() = default;
 
+	static MessageType GetStaticType();
 	virtual MessageType GetMessageType() const override;
 	virtual const char* GetName() const override;
 	virtual std::string ToString() const override;
-	virtual Message* Clone() const override;
 
 	friend zpp::serializer::access;
 	template <typename Archive, typename Self>

@@ -12,7 +12,9 @@ enum class MessageType
 {
 	None 		= 0,
 	HelloMessage 	= 1,
-	ImageMessage 	= 2
+	ImageMessage 	= 2,
+	NodeMessage	= 3,
+	ZEDMessage	= 4
 };
 
 class Message : public zpp::serializer::polymorphic
@@ -24,7 +26,13 @@ public:
 	virtual MessageType GetMessageType() const = 0;
 	virtual const char* GetName() const = 0;
 	virtual std::string ToString() const = 0;
-	virtual Message* Clone() const = 0;
+};
+
+class MessageEncoder
+{
+public:
+	static Ref<MessageEncoding> Encode(const Ref<Message>& msg);
+	static Ref<Message> Decode(const Ref<MessageEncoding>& rawMsg);
 };
 
 }

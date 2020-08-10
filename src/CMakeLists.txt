@@ -9,6 +9,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/LayerStack.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/MouseCodes.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Node.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/SourceHandle.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Timestep.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Window.hpp"
@@ -20,7 +21,6 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/HelloMessage.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/ImageMessage.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/Message.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/MessageEncoder.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Connection.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/ConnectionManager.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
@@ -53,12 +53,13 @@ add_library(Sennet STATIC
 	Core/Layer.cpp
 	Core/LayerStack.cpp
 	Core/Log.cpp
+	Core/Node.cpp
 	Core/Window.cpp
 	ImGui/ImGuiBuild.cpp
 	ImGui/ImGuiLayer.cpp
 	Messages/HelloMessage.cpp
 	Messages/ImageMessage.cpp
-	Messages/MessageEncoder.cpp
+	Messages/Message.cpp
 	Network/Connection.cpp
 	Network/ConnectionManager.cpp 
 	Platform/OpenGL/OpenGLBuffer.cpp

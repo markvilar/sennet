@@ -10,7 +10,7 @@ namespace Sennet
 enum class EventType
 {
 	None = 0, 
-	WindowClose, WindowResize, WindowFocus, WindowLostFocus, 
+	WindowClose, WindowResize, WindowIconify, WindowFocus, WindowLostFocus, 
 	WindowMoved,
 	AppTick, AppUpdate, AppRender, 
 	KeyPressed, KeyReleased, KeyTyped,

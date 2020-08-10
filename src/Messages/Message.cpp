@@ -1,4 +1,4 @@
-#include <Sennet/Messages/MessageEncoder.hpp>
+#include <Sennet/Messages/Message.hpp>
 
 namespace Sennet
 {
