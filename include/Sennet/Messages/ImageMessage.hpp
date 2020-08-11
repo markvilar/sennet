@@ -3,7 +3,7 @@
 #include <Sennet/pch.hpp>
 
 #include <Sennet/Messages/Message.hpp>
-#include <Sennet/Primitives/ZED.hpp>
+#include <Sennet/Primitives/Image.hpp>
 
 namespace Sennet
 {
@@ -11,9 +11,8 @@ namespace Sennet
 class ImageMessage : public Message
 {
 public:
-	ImageMessage() = default;
-	ImageMessage(const std::vector<unsigned char>& buffer,
-		const size_t width, const size_t height, const size_t channels);
+	ImageMessage();
+	ImageMessage(const Image& image);
 	virtual ~ImageMessage() = default;
 
 	static MessageType GetStaticType();
@@ -25,17 +24,11 @@ public:
 	template <typename Archive, typename Self>
 	static void serialize(Archive& archive, Self& self)
 	{
-		archive(self.m_Buffer);
-		archive(self.m_Width);
-		archive(self.m_Height);
-		archive(self.m_Channels);
+		archive(self.m_Image);
 	}
 
 private:
-	std::vector<unsigned char> m_Buffer;
-	size_t m_Width;
-	size_t m_Height;
-	size_t m_Channels;
+	Image m_Image;
 };
 
 }

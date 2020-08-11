@@ -41,8 +41,8 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Shader.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Texture.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/VertexArray.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/Primitives.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/ZED.hpp")
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/Image.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/ZEDParameters.hpp")
 
 # Add sennet as a static library
 add_library(Sennet STATIC
@@ -79,8 +79,8 @@ add_library(Sennet STATIC
 	Renderer/Shader.cpp
 	Renderer/Texture.cpp
 	Renderer/VertexArray.cpp
-	Primitives/Primitives.cpp
-	Primitives/ZED.cpp
+	Primitives/Image.cpp
+	Primitives/ZEDParameters.cpp
 	${HEADER_LIST})
 
 # Precompiled headers

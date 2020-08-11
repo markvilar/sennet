@@ -31,5 +31,5 @@
 #include <Sennet/Renderer/Texture.hpp>
 #include <Sennet/Renderer/VertexArray.hpp>
 
-#include <Sennet/Primitives/Primitives.hpp>
-#include <Sennet/Primitives/ZED.hpp>
+#include <Sennet/Primitives/Image.hpp>
+#include <Sennet/Primitives/ZEDParameters.hpp>

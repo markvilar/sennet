@@ -3,10 +3,13 @@
 namespace Sennet
 {
 
-ImageMessage::ImageMessage(const std::vector<unsigned char>& buffer,
-	const size_t width, const size_t height, const size_t channels)
-	: m_Buffer(buffer), m_Width(width), m_Height(height),
-	m_Channels(channels)
+ImageMessage::ImageMessage()
+	: m_Image()
+{
+}
+
+ImageMessage::ImageMessage(const Image& image)
+	: m_Image(image)
 {
 }
 
@@ -28,8 +31,7 @@ const char* ImageMessage::GetName() const
 std::string ImageMessage::ToString() const
 {
 	std::stringstream ss;
-	ss << GetName() << ": " << m_Buffer.size() << ", (" << m_Width << ", " 
-		<< m_Height << ", " << m_Channels << ")";
+	ss << GetName() << ": " << m_Image.ToString();
 	return ss.str();
 }
 

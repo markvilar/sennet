@@ -26,8 +26,10 @@ int main()
 	manager.Start();
 	
 	auto helloMsg = Sennet::CreateRef<Sennet::HelloMessage>("hello world!");
-	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(
-		std::vector<unsigned char>(1920*1080*3, 150), 1920, 1080, 3);
+
+	auto image = Sennet::Image(std::vector<unsigned char>(1920*1080*3, 150),
+		1920, 1080, 3);
+	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(image);
 	
 	SN_INFO("Pushing messages.");
 	manager.PushMessage(connection, helloMsg);
