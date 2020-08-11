@@ -23,7 +23,8 @@ public:
 	Application();
 	virtual ~Application();
 
-	void OnEvent(Event& e);
+	virtual void OnEvent(Event& e);
+	virtual void OnMessage(Ref<Message> msg);
 
 	void PushLayer(Layer* layer);
 	void PushOverlay(Layer* overlay);
@@ -35,12 +36,12 @@ public:
 	static Application& Get() { return *s_Instance; }
 
 private:
-	void Run();
-	bool OnWindowClose(WindowCloseEvent& e);
-	bool OnWindowResize(WindowResizeEvent& e);
-	bool OnWindowIconify(WindowIconifyEvent& e);
+	virtual void Run();
+	virtual bool OnWindowClose(WindowCloseEvent& e);
+	virtual bool OnWindowResize(WindowResizeEvent& e);
+	virtual bool OnWindowIconify(WindowIconifyEvent& e);
 
-private:
+protected:
 	Scope<Window> m_Window;
 	ImGuiLayer* m_ImGuiLayer;
 	LayerStack m_LayerStack;

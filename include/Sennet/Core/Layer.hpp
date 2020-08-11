@@ -22,7 +22,7 @@ public:
 	virtual void OnUpdate(Timestep ts) {}
 	virtual void OnImGuiRender() {}
 	virtual void OnEvent(Event& e) {}
-	virtual void OnMessage(Message& msg) {}
+	virtual void OnMessage(Ref<Message> msg) {}
 
 	inline const std::string& GetName() const { return m_DebugName; }
 

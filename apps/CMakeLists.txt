@@ -22,18 +22,3 @@ target_link_libraries(Serialization PRIVATE Sennet)
 add_executable(Server Server.cpp)
 target_compile_features(Server PRIVATE cxx_std_17)
 target_link_libraries(Server PRIVATE Sennet)
-
-# ZEDControl
-add_executable(ZEDControl ZEDControl.cpp)
-target_compile_features(ZEDControl PRIVATE cxx_std_17)
-target_link_libraries(ZEDControl PRIVATE Sennet)
-
-# ZEDNode
-add_executable(ZEDNode ZEDNode.cpp)
-target_compile_features(ZEDNode PRIVATE cxx_std_17)
-target_link_libraries(ZEDNode PRIVATE Sennet)
-
-# ZEDSandbox
-add_executable(ZEDSandbox ZEDSandbox.cpp)
-target_compile_features(ZEDSandbox PRIVATE cxx_std_17)
-target_link_libraries(ZEDSandbox PRIVATE Sennet)

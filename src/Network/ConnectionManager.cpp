@@ -14,8 +14,8 @@ ConnectionManager::ConnectionManager(unsigned short port, uint64_t waitFor)
 	m_StopFlag(false),
 	m_WaitFor(waitFor)
 {
-	// Make sure we are waiting for some clients.
-	SN_CORE_ASSERT(waitFor != 0, "Not waiting for clients!");
+	SN_CORE_ASSERT(waitFor > 0, "[ConnectionManager] Not waiting for \
+		clients!");
 }
 
 ConnectionManager::~ConnectionManager()
@@ -52,64 +52,46 @@ void ConnectionManager::SetMessageCallback(const MessageCallbackFn& callback)
 
 void ConnectionManager::Start()
 {
-	// Set up acceptor. 
-	// 	- Option 'reuse_address' allows the socket to be bound to an
-	// 		address that is already in use.
-	// 	- Option 'linger' specifies if socket should linger on close if
-	// 		unsent data is present.
 	m_Acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 	m_Acceptor.set_option(boost::asio::ip::tcp::acceptor::linger(true, 0));
 
-	// Start IO thread.
 	m_IOThread = std::thread(std::bind(&ConnectionManager::IOWorker, this));
 
-	// Start execution thread.
 	m_ExecutionThread = std::thread(
 		std::bind(&ConnectionManager::ExecutionWorker, this));
 	
-	// Start accepting Connections.
 	AsyncAccept();
 }
 
 void ConnectionManager::Stop()
 {
-	// Tell the execution thread to stop.
 	m_StopFlag = true;
-
-	// Destroy the keep-alive work object, which will cause run() to return
-	// when all I/O work is done.
 	m_IOService.stop();
 
 	if (m_IOThread.joinable())
 	{
 		m_IOThread.join();
-		SN_CORE_TRACE("Connection manager: Joined IO thread.");
+		SN_CORE_TRACE("[ConnectionManager] Joined IO thread.");
 	}
 }
 
 Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 {
-	// Set up resolver and query.
 	boost::asio::ip::tcp::resolver resolver(m_IOService);
 	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(),
 		host, port);
 	
-	// Initialize iterators.
 	boost::asio::ip::tcp::resolver::iterator it = resolver.resolve(query);
 	boost::asio::ip::tcp::resolver::iterator end;
 
-	// Iterate over list of entries from resolving the query.
 	for (boost::asio::ip::tcp::resolver::iterator i = it; i != end; ++i)
 		// If the ConnectionManager already has a Connection 
 		// established with the endpoint.
 		if (m_Connections.count(*i) != 0)
 			return m_Connections[*i];
 
-	// If there are no existing Connections to host, initialize new 
-	// Connection.
 	auto connection = CreateRef<Connection>(GetIOService());
 
-	// Wait for some time for the Connection manager to become available.
 	// TODO: Look into adding a more general Connection timer!
 	for (uint64_t i = 0; i < 64; ++i)
 	{
@@ -117,32 +99,23 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 		boost::asio::connect(connection->GetSocket(), it, ec);
 		if (!ec) break;
 
-		// Otherwise, sleep and try again.
 		std::chrono::milliseconds period(100);
 		std::this_thread::sleep_for(period);
 	}
 
-	// Set Connection socket options. 
-	// 	- Option 'reuse_address' allows the socket to be bound to an
-	// 		address that is already in use.
-	// 	- Option 'linger' specifies if socket should linger on close if
-	// 		unsent data is present.
 	connection->GetSocket().set_option(
 		boost::asio::ip::tcp::socket::reuse_address(true));
 	connection->GetSocket().set_option(
 		boost::asio::ip::tcp::socket::linger(true, 0));
 		
-	// Note that if there were multiple I/O threads, one would have to lock
-	// before accessing the Connection map.
 	boost::asio::ip::tcp::endpoint ep = connection->GetRemoteEndpoint();
 	SN_CORE_ASSERT(m_Connections.count(ep) == 0, 
-		"Connection already established!");
+		"[ConnectionManager] Connection already established!");
 
-	SN_CORE_TRACE("Connection manager: Added connection: {0}:{1}", 
+	SN_CORE_TRACE("[ConnectionManager] Added connection {0}:{1}.", 
 		ep.address().to_string(), ep.port());
 	m_Connections[ep] = connection;
 
-	// Start the Connection by calling the async. read operation.
 	connection->AsyncRead();
 
 	return connection;
@@ -165,7 +138,6 @@ Ref<Connection> ConnectionManager::ConnectionSearch(const std::string& addr,
 
 void ConnectionManager::PushMessage(Ref<Connection> connection, Ref<Message> msg)
 {
-	//Ref<Message> msgPtr(msg.Clone());
 	m_Mutex.lock();
 	m_OutboundQueue.push(std::make_pair(connection, msg));
 	m_Mutex.unlock();
@@ -182,8 +154,6 @@ void ConnectionManager::AsyncAccept()
 {
 	Ref<Connection> connection = CreateRef<Connection>(GetIOService());
 
-	// Set up async. accept operation with handle_accept() as completion
-	// handler.
 	m_Acceptor.async_accept(connection->GetSocket(),
 		std::bind(&ConnectionManager::OnAccept, this,
 		std::placeholders::_1, connection));
@@ -195,27 +165,18 @@ void ConnectionManager::OnAccept(boost::system::error_code const& error,
 {
 	if (!error)
 	{
-		// If there was no error, then we need to insert conn into the
-		// Connection table, but first the next async_accept() is set
-		// up.
 		Ref<Connection> oldConnection = connection;
-
-		// Initialize new Connection.
 		connection.reset(new Connection(GetIOService()));
 
-		// Set up new async. accept operation with handle_accept() as
-		// completion handler.
 		m_Acceptor.async_accept(connection->GetSocket(),
 			std::bind(&ConnectionManager::OnAccept, this,
 			std::placeholders::_1, connection));
 				
-		
-		// Note that if there were multiple I/O threads, we would have
-		// to lock before touching the map.
 		boost::asio::ip::tcp::endpoint ep =
 			oldConnection->GetRemoteEndpoint();
+
 		SN_CORE_ASSERT(m_Connections.count(ep) == 0, 
-			"Connection already established!");
+			"[ConnectionManager] Connection already established!");
 
 		oldConnection->SetDataCallback(
 			std::bind(&ConnectionManager::OnData, this, 
@@ -223,59 +184,54 @@ void ConnectionManager::OnAccept(boost::system::error_code const& error,
 			
 		m_Connections[ep] = oldConnection;
 
-		SN_CORE_TRACE("Connection manager: Accepted connection {0}:{1}",
+		SN_CORE_TRACE("[ConnectionManager] Accepted connection {0}:{1}.",
 			ep.address().to_string(), ep.port());
 
-		// Start read from the accepted Connection.
 		oldConnection->AsyncRead();
 	}
 }
 
 void ConnectionManager::IOWorker()
 {
-	SN_CORE_TRACE("Started IO thread.");
-	// Keep io_service::run() from returning.
-	boost::asio::io_service::work work(m_IOService);
+	SN_CORE_TRACE("[ConnectionManager] Started IO thread.");
 
+	boost::asio::io_service::work work(m_IOService);
 	m_IOService.run();
 
 	if (m_ExecutionThread.joinable())
 	{
 		m_ExecutionThread.join();
-		SN_CORE_TRACE("Connection manager: Joined execution thread.");
+		SN_CORE_TRACE("[ConnectionManager] Joined execution thread.");
 	}
 }
 
 void ConnectionManager::ExecutionWorker()
 {
-	SN_CORE_TRACE("Connection manager: Started execution thread.");
+	SN_CORE_TRACE("[ConnectionManager] Started execution thread.");
 	while (!m_StopFlag)
 	{
-		// TODO: Clean up!
-
-		// Look for pending actions that has been posted locally to 
-		// execute.
 		if (!m_OutboundQueue.empty())
 		{
 			auto [connection, outboundMsg] = m_OutboundQueue.front();
 			m_OutboundQueue.pop();
 
-			SN_CORE_ASSERT(connection, "Connection is null!");
-			SN_CORE_ASSERT(outboundMsg, "Message is null!");
+			SN_CORE_ASSERT(connection, "[ConnectionManager] \
+				Connection is null!");
+			SN_CORE_ASSERT(outboundMsg, "[ConnectionManager] \
+				Message is null!");
 			
 			auto outboundParcel = MessageEncoder::Encode(outboundMsg);
 				
 			connection->AsyncWrite(outboundParcel);
 		}
 
-		// If there's no pending outbound messages, find parcel to 
-		// deserialize and execute.
 		if (!m_InboundQueue.empty())
 		{
 			auto inboundParcel = m_InboundQueue.front();
 			m_InboundQueue.pop();
 
-			SN_CORE_ASSERT(inboundParcel, "Inbound parcel is null!");
+			SN_CORE_ASSERT(inboundParcel, 
+				"[ConnectionManager] Inbound parcel is null!");
 
 			auto inboundMsg = MessageEncoder::Decode(inboundParcel);
 
@@ -285,13 +241,13 @@ void ConnectionManager::ExecutionWorker()
 			}
 			else if (!m_MessageCallback)
 			{
-				SN_CORE_WARN("Connection manager execution \
-					loop: No message callback.");
+				SN_CORE_WARN("[ConnectionManager] No message \
+					callback bound.");
 			}
 			else if (!inboundMsg)
 			{
-				SN_CORE_WARN("Connection manager execution \
-					loop: Message is null.");
+				SN_CORE_WARN("[ConnectionManager] Inbound \
+					message is null.");
 			}
 		}
 	}

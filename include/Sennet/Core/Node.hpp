@@ -1,11 +1,15 @@
 #pragma once
 
+#include <mutex>
+#include <queue>
+
 #include <Sennet/Core/Base.hpp>
 
 #include <Sennet/Core/LayerStack.hpp>
 #include <Sennet/Core/Timestep.hpp>
 
 #include <Sennet/Messages/Message.hpp>
+#include <Sennet/Network/ConnectionManager.hpp>
 
 namespace Sennet
 {
@@ -16,7 +20,7 @@ int main(int argc, char** argv);
 class Node
 {
 public:
-	Node();
+	Node(unsigned short port, uint64_t waitFor);
 	virtual ~Node();
 
 	void OnMessage(Ref<Message> msg);
@@ -30,7 +34,12 @@ public:
 private:
 	void Run();
 
+protected:
+	ConnectionManager m_ConnectionManager;
+
 private:
+	std::queue<Ref<Message>> m_MessageQueue;
+	std::mutex m_Mutex;
 	LayerStack m_LayerStack;
 	bool m_Running = true;
 

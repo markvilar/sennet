@@ -52,6 +52,10 @@ void Application::OnEvent(Event& e)
 	}
 }
 
+void Application::OnMessage(Ref<Message> msg)
+{
+}
+
 void Application::PushLayer(Layer* layer)
 {
 	m_LayerStack.PushLayer(layer);

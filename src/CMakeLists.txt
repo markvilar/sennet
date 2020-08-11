@@ -42,10 +42,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Texture.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/VertexArray.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/Primitives.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/ZED.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/ZED/Conversion.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/ZED/IO.hpp"	
-	"${PROJECT_SOURCE_DIR}/include/Sennet/ZED/Recorder.hpp")
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/ZED.hpp")
 
 # Add sennet as a static library
 add_library(Sennet STATIC
@@ -84,11 +81,7 @@ add_library(Sennet STATIC
 	Renderer/VertexArray.cpp
 	Primitives/Primitives.cpp
 	Primitives/ZED.cpp
-	ZED/Conversion.cpp
-	ZED/IO.cpp 	
-	ZED/Recorder.cpp
-	${HEADER_LIST}
-	)
+	${HEADER_LIST})
 
 # Precompiled headers
 target_precompile_headers(Sennet 
@@ -109,21 +102,17 @@ target_include_directories(Sennet
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	"${PROJECT_SOURCE_DIR}/extern/stb"
 	${Boost_INCLUDE_DIRS} 
-	${CUDA_INCLUDE_DIRS} 
-	${ZED_INCLUDE_DIRS}
 	) 
 		
 # This depends on ZED and Boost features that needs to be linked to the library.
 target_link_libraries(Sennet 
 	PRIVATE 
-	Boost::serialization
-	Boost::thread
 	glad
 	glfw
 	imgui
 	stb
-	${ZED_LIBS}
-	) 
+	spdlog
+	)
 
 # Define macros.
 target_compile_definitions(Sennet

@@ -1,3 +1,4 @@
+#include <chrono>
 #include <functional>
 #include <thread>
 
@@ -29,9 +30,10 @@ int main()
 		std::placeholders::_1));
 	manager.Start();
 
-	if (true)
+	for (int i = 0; i < 20; i++)
 	{
-		// Do something.
+		SN_INFO("Running...");
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 
 	SN_INFO("Server: Finished.");

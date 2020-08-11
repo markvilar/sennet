@@ -24,13 +24,12 @@ int main()
 	SN_INFO("Client attempting to connect.");
 	auto connection = manager.Connect("localhost", "7000");
 	manager.Start();
-
-	SN_INFO("Client: Sending messages.");
-	auto helloMsg = Sennet::CreateRef<Sennet::HelloMessage>("hello world!");
-	auto vec = std::vector<unsigned char>(1920*1080*3, 150);
-
-	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(vec, 1920, 1080, 3);
 	
+	auto helloMsg = Sennet::CreateRef<Sennet::HelloMessage>("hello world!");
+	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(
+		std::vector<unsigned char>(1920*1080*3, 150), 1920, 1080, 3);
+	
+	SN_INFO("Pushing messages.");
 	manager.PushMessage(connection, helloMsg);
 	manager.PushMessage(connection, imageMsg);
 
