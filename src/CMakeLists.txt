@@ -1,85 +1,97 @@
-# Temporaries
-set(TEMP_HEADERS
-	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/imgui_opengl_renderer.h"
-	)
-
-set(TEMP_SRC
-	platform/opengl/imgui_opengl_renderer.cpp
-	)
-
 # Headers
 set(HEADER_LIST 
-	"${PROJECT_SOURCE_DIR}/include/sennet/sennet.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/application.hpp"	
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/base.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/input.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/key_codes.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/layer.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/layer_stack.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/log.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/mouse_codes.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/source_handle.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/core/window.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/events/application_event.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/events/event.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/events/key_event.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/events/mouse_event.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/imgui/imgui_layer.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/messages/hello_world_message.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/messages/message.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/messages/message_encoder.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/network/connection.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/network/connection_manager.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/platform/opengl/opengl_context.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/platform/windows/windows_window.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/platform/linux/linux_window.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/renderer/graphics_context.hpp"	
-	"${PROJECT_SOURCE_DIR}/include/sennet/types/basic_types.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/types/zed.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed/conversion.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed/io.hpp"	
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed/recorder.hpp"
-	"${PROJECT_SOURCE_DIR}/include/sennet/zed/serialization.hpp"
-	)
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Sennet.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Application.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Base.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Input.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/KeyCodes.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Layer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/LayerStack.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Log.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/MouseCodes.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Node.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/SourceHandle.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Timestep.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Window.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/ApplicationEvent.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/Event.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/KeyEvent.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/MouseEvent.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/ImGui/ImGuiLayer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/HelloMessage.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/ImageMessage.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/Message.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Connection.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/ConnectionManager.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLContext.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLRendererAPI.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLShader.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLTexture.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLVertexArray.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Windows/WindowsWindow.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Linux/LinuxWindow.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Buffer.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/GraphicsContext.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/OrthographicCamera.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/OrthographicCameraController.hpp"	
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RenderCommand.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Renderer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RendererAPI.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Shader.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Texture.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/VertexArray.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/Primitives.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/ZED.hpp")
 
 # Add sennet as a static library
-add_library(sennet STATIC
-	core/application.cpp
-	core/layer.cpp
-	core/layer_stack.cpp
-	core/log.cpp
-	core/window.cpp
-	imgui/imgui_layer.cpp
-	messages/hello_world_message.cpp
-	messages/message_encoder.cpp
-	network/connection.cpp
-	network/connection_manager.cpp 
-	platform/opengl/opengl_context.cpp
-	platform/windows/windows_input.cpp
-	platform/windows/windows_window.cpp
-	platform/linux/linux_input.cpp
-	platform/linux/linux_window.cpp
-	renderer/graphics_context.cpp
-	types/basic_types.cpp
-	types/zed.cpp
-	zed/conversion.cpp
-	zed/io.cpp 	
-	zed/recorder.cpp
-	${HEADER_LIST}
-	${TEMP_HEADERS}
-	${TEMP_SRC}
-	)
+add_library(Sennet STATIC
+	Core/Application.cpp
+	Core/Layer.cpp
+	Core/LayerStack.cpp
+	Core/Log.cpp
+	Core/Node.cpp
+	Core/Window.cpp
+	ImGui/ImGuiBuild.cpp
+	ImGui/ImGuiLayer.cpp
+	Messages/HelloMessage.cpp
+	Messages/ImageMessage.cpp
+	Messages/Message.cpp
+	Network/Connection.cpp
+	Network/ConnectionManager.cpp 
+	Platform/OpenGL/OpenGLBuffer.cpp
+	Platform/OpenGL/OpenGLContext.cpp
+	Platform/OpenGL/OpenGLRendererAPI.cpp
+	Platform/OpenGL/OpenGLShader.cpp
+	Platform/OpenGL/OpenGLTexture.cpp
+	Platform/OpenGL/OpenGLVertexArray.cpp
+	Platform/Windows/WindowsInput.cpp
+	Platform/Windows/WindowsWindow.cpp
+	Platform/Linux/LinuxInput.cpp
+	Platform/Linux/LinuxWindow.cpp
+	Renderer/Buffer.cpp
+	Renderer/GraphicsContext.cpp
+	Renderer/OrthographicCamera.cpp
+	Renderer/OrthographicCameraController.cpp
+	Renderer/RenderCommand.cpp
+	Renderer/Renderer.cpp
+	Renderer/RendererAPI.cpp
+	Renderer/Shader.cpp
+	Renderer/Texture.cpp
+	Renderer/VertexArray.cpp
+	Primitives/Primitives.cpp
+	Primitives/ZED.cpp
+	${HEADER_LIST})
 
 # Precompiled headers
-target_precompile_headers(sennet
+target_precompile_headers(Sennet 
 	PRIVATE
-	"${PROJECT_SOURCE_DIR}/include/sennet/snpch.hpp"
-	)
+	"${PROJECT_SOURCE_DIR}/include/Sennet/pch.hpp")
 
 # Include headers and source code from other libraries in sennet. This way we
 # won't have to link all of sennet dependencies into targets that use
 # sennet, but just sennet library itself.
-target_include_directories(sennet 
+target_include_directories(Sennet 
 	PUBLIC 
 	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/extern/glad/include"
@@ -88,29 +100,27 @@ target_include_directories(sennet
 	"${PROJECT_SOURCE_DIR}/extern/imgui"
 	"${PROJECT_SOURCE_DIR}/extern/serializer/include"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
+	"${PROJECT_SOURCE_DIR}/extern/stb"
 	${Boost_INCLUDE_DIRS} 
-	${CUDA_INCLUDE_DIRS} 
-	${ZED_INCLUDE_DIRS}
 	) 
 		
 # This depends on ZED and Boost features that needs to be linked to the library.
-target_link_libraries(sennet 
+target_link_libraries(Sennet 
 	PRIVATE 
-	Boost::serialization
-	Boost::thread
 	glad
 	glfw
 	imgui
-	${ZED_LIBS}
-	) 
+	stb
+	spdlog
+	)
 
 # Define macros.
-target_compile_definitions(sennet
+target_compile_definitions(Sennet
 	PRIVATE
 	)
 
 # All users of this will need at least C++17
-target_compile_features(sennet 
+target_compile_features(Sennet 
 	PUBLIC 
 	cxx_std_17
 	)

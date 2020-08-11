@@ -16,3 +16,6 @@
 [submodule "extern/serializer"]
 	path = extern/serializer
 	url = ../../markvilar/serializer.git
+[submodule "extern/stb"]
+	path = extern/stb
+	url = ../../markvilar/stb.git
