@@ -19,8 +19,11 @@ public:
 	virtual ~Connection();
 
 	boost::asio::ip::tcp::socket& GetSocket();
+
 	boost::asio::ip::tcp::endpoint GetRemoteEndpoint() const;
 	boost::asio::ip::tcp::endpoint GetLocalEndpoint() const;
+	std::pair<std::string, unsigned short> GetRemoteInformation() const;
+	std::pair<std::string, unsigned short> GetLocalInformation() const;
 
 	void SetDataCallback(const DataCallbackFn& callback);
 

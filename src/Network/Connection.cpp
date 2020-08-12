@@ -36,6 +36,18 @@ boost::asio::ip::tcp::endpoint Connection::GetLocalEndpoint() const
 	return m_Socket.local_endpoint();
 }
 
+std::pair<std::string, unsigned short> Connection::GetRemoteInformation() const
+{
+	return {m_Socket.remote_endpoint().address().to_string(),
+		m_Socket.remote_endpoint().port() };
+}
+
+std::pair<std::string, unsigned short> Connection::GetLocalInformation() const
+{
+	return {m_Socket.local_endpoint().address().to_string(),
+		m_Socket.local_endpoint().port() };
+}
+
 void Connection::SetDataCallback(const DataCallbackFn& callback)
 {
 	m_DataCallback = callback;

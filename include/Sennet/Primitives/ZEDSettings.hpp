@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Sennet/pch.hpp>
+#include <serializer/serializer.h>
 
 namespace Sennet
 {
@@ -59,53 +59,12 @@ enum class view
 	side_by_side
 };
 
-
-
-class image
-{
-	// Wrapper for sl::Mat with unsigned char data. Neglects functionality 
-	// of the Stereolabs SDK that is considered unimportant for recording.
-public:
-	image();
-	image(const unsigned char* ptr, const size_t width, const size_t height, 
-		const size_t channels);
-	image(const image& other);
-	~image();
-
-	inline std::vector<unsigned char> get_buffer() const { return m_buffer; }
-	inline unsigned char* get_ptr() { return m_buffer.data(); }
-	inline const unsigned char* get_ptr() const { return m_buffer.data(); }
-	inline size_t get_width() const { return m_width; }
-	inline size_t get_height() const { return m_height; }
-	inline size_t get_channels() const { return m_channels; }
-	inline size_t get_size() const { return m_width * m_height * m_channels; }
-
-	unsigned char get_pixel(const size_t col, const size_t row, 
-		const size_t channel) const;
-	void set_pixel(const size_t col, const size_t row, 
-		const size_t channel, const unsigned char value);
-	void print_pixel(const size_t w, const size_t h) const;
-
-	std::string ToString() const;
-	friend std::ostream& operator<<(std::ostream& os, const image& img);
-	// TODO: Add reset, reshape and get pixel method.
-
-private:
-
-private:
-	std::vector<unsigned char> m_buffer;
-	size_t m_width;
-	size_t m_height;
-	size_t m_channels;
-};
-
-
-class init_params
+class InitParameters
 {
 	// Wrapper for sl::InitParameters. Neglects functionality of the
 	// Stereolabs SDK that is considered unimportant for recording.
 public:
-	init_params(
+	InitParameters(
 		const depth_mode mode=depth_mode::ultra,
 		const unit coord_units=unit::millimeter,
 		const coordinate_system coord_sys=coordinate_system::image,
@@ -120,7 +79,7 @@ public:
 		const bool sdk_verbose=false,
 		const bool sensors_required=false
 	);
-	~init_params() = default;
+	~InitParameters() = default;
 
 	// Depth functions.
 	inline depth_mode get_depth_mode() const { return m_depth_mode; }
@@ -140,7 +99,27 @@ public:
 	inline bool sensors_required() const { return m_sensors_required; }
 
 	std::string ToString() const;
-	friend std::ostream& operator<<(std::ostream& os, const init_params& ip);
+	friend std::ostream& operator<<(std::ostream& os, const InitParameters& ip);
+
+	friend zpp::serializer::access;
+	template <typename Archive, typename Self>
+	static void serialize(Archive& archive, Self& self)
+	{
+		archive(self.m_depth_mode);
+		archive(self.m_coord_units);
+		archive(self.m_coord_sys);
+		archive(self.m_depth_stab);
+		archive(self.m_depth_min);
+		archive(self.m_depth_max);
+		archive(self.m_depth_right);
+
+		archive(self.m_resolution);
+		archive(self.m_camera_fps);
+		archive(self.m_img_enhancement);
+		archive(self.m_disable_self_calib);
+		archive(self.m_sdk_verbose);
+		archive(self.m_sensors_required);
+	}
 
 private:
 	// Depth related members.
@@ -161,12 +140,12 @@ private:
 	bool m_sensors_required;
 };
 
-class recording_params
+class RecordingParameters
 {
 	// Wrapper for sl::RecordingParameters. Neglects functionality of the
 	// Stereolabs SDK that is considered unimportant for recording.
 public:
-	recording_params(
+	RecordingParameters(
 		const std::string filename="myRecording.svo", 
 		const svo_compression_mode comp_mode=svo_compression_mode::h264,
 		const unsigned int target_bit_rate=0,
@@ -187,10 +166,18 @@ public:
 	// TODO: Implement set functions?
 
 	std::string ToString() const;
-	friend std::ostream& operator<<(
-		std::ostream& os, 
-		const recording_params& rp
-		);
+	friend std::ostream& operator<<(std::ostream& os, 
+		const RecordingParameters& rp);
+
+	friend zpp::serializer::access;
+	template <typename Archive, typename Self>
+	static void serialize(Archive& archive, Self& self)
+	{
+		archive(self.m_filename);
+		archive(self.m_compression_mode);
+		archive(self.m_target_bit_rate);
+		archive(self.m_target_frame_rate);
+	}
 
 private:
 	std::string m_filename;
@@ -199,12 +186,12 @@ private:
 	unsigned int m_target_frame_rate;
 };
 
-class runtime_params
+class RuntimeParameters
 {
 	// Wrapper for sl::RuntimeParameters. Neglects functionality of the
 	// Stereolabs SDK that is considered unimportant for recording.
 public:
-	runtime_params(
+	RuntimeParameters(
 		const sensing_mode mode=sensing_mode::standard,
 		const reference_frame ref_frame=reference_frame::camera,
 		const bool depth_enabled=true,
@@ -225,7 +212,19 @@ public:
 
 	std::string ToString() const;
 	friend std::ostream& operator<<(std::ostream& os, 
-		const runtime_params& rp);
+		const RuntimeParameters& rp);
+
+	friend zpp::serializer::access;
+	template <typename Archive, typename Self>
+	static void serialize(Archive& archive, Self& self)
+	{
+		archive(self.m_sensing_mode);
+		archive(self.m_ref_frame);
+		archive(self.m_depth_enabled);
+		archive(self.m_conf_threshold);
+		archive(self.m_text_conf_threshold);
+	}
+
 
 private:
 	sensing_mode m_sensing_mode;

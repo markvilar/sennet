@@ -15,9 +15,10 @@
 
 #include <Sennet/ImGui/ImGuiLayer.hpp>
 
-#include <Sennet/Messages/HelloMessage.hpp>
-#include <Sennet/Messages/ImageMessage.hpp>
+#include <Sennet/Messages/BasicMessage.hpp>
 #include <Sennet/Messages/Message.hpp>
+#include <Sennet/Messages/NetworkMessage.hpp>
+#include <Sennet/Messages/ZEDMessage.hpp>
 
 #include <Sennet/Network/Connection.hpp>
 #include <Sennet/Network/ConnectionManager.hpp>
@@ -31,5 +32,5 @@
 #include <Sennet/Renderer/Texture.hpp>
 #include <Sennet/Renderer/VertexArray.hpp>
 
-#include <Sennet/Primitives/Primitives.hpp>
-#include <Sennet/Primitives/ZED.hpp>
+#include <Sennet/Primitives/Image.hpp>
+#include <Sennet/Primitives/ZEDSettings.hpp>

@@ -1,4 +1,4 @@
-#include <Sennet/Primitives/ZED.hpp>
+#include <Sennet/Primitives/ZEDSettings.hpp>
 
 namespace Sennet
 {
@@ -6,121 +6,7 @@ namespace Sennet
 namespace ZED
 {
 
-image::image()
-	: m_buffer(),
-	m_width(0),
-	m_height(0),
-	m_channels(0)
-{
-}
-
-image::image(const unsigned char* ptr, const size_t width, const size_t height,
-	const size_t channels)
-{
-	m_buffer.assign(ptr, ptr + width*height*channels);
-	m_width = width;
-	m_height = height;
-	m_channels = channels;
-}
-
-image::image(const image& other)
-	: m_buffer(other.get_buffer()),
-	m_width(other.get_width()), 
-	m_height(other.get_height()),
-	m_channels(other.get_channels())
-{
-	// TODO: Debug this to make sure it copies correctly.
-}
-
-image::~image()
-{
-}
-
-unsigned char image::get_pixel(const size_t col, const size_t row, 
-	const size_t channel) const
-{
-	try
-	{
-		size_t width = get_width();
-		size_t height = get_height();
-		size_t channels = get_channels();
-		if (col >= width)
-		{
-			throw std::out_of_range("Sennet::ZED::image : "
-				"width of out range");
-		}
-		else if (row >= height)
-		{
-			throw std::out_of_range("Sennet::ZED::image : "
-				"heigth of out range");
-		}
-		else if (channel >= channels)
-		{
-			throw std::out_of_range("Sennet::ZED::image : "
-				"channel of out range");
-		}
-		else
-		{
-			return m_buffer[col*channels+row*width*channels+channel];
-		}
-	}
-	catch (const std::out_of_range& oor)
-	{
-		std::cout << oor.what() << "\n";
-		return 0;
-	}
-}
-
-void image::set_pixel(const size_t col, const size_t row, 
-	const size_t channel, const unsigned char value)
-{
-	try
-	{
-		size_t width = get_width();
-		size_t height = get_height();
-		size_t channels = get_channels();
-		if (col >= width)
-		{
-			throw std::out_of_range("Sennet::ZED::image : "
-				"width of out range");
-		}
-		else if (row >= height)
-		{
-			throw std::out_of_range("Sennet::ZED::image : "
-				"heigth of out range");
-		}
-		else if (channel >= channels)
-		{
-			throw std::out_of_range("Sennet::ZED::image : "
-				"channel of out range");
-		}
-		else
-		{
-			m_buffer[col*channels+row*width*channels+channel] = 
-				value;
-		}
-	}
-	catch (const std::out_of_range& oor)
-	{
-		std::cout << oor.what() << "\n";
-	}
-}
-
-std::string image::ToString() const
-{
-	std::stringstream ss;
-	ss << "[zed::image] " << static_cast<const void*>(get_ptr()) << ", (" 
-		<< get_width() << "," << get_height() << "," << get_channels() 
-		<< "), size: " << get_size();
-	return ss.str();
-}
-
-std::ostream& operator<<(std::ostream& os, const image& img)
-{
-	return os << img.ToString();
-}
-
-init_params::init_params(
+InitParameters::InitParameters(
 	const depth_mode mode,
 	const unit coord_units,
 	const coordinate_system coord_sys,
@@ -146,10 +32,10 @@ init_params::init_params(
 	// TODO: Add assertions?
 }
 
-std::string init_params::ToString() const
+std::string InitParameters::ToString() const
 {
 	std::stringstream ss;
-	ss << "[init_params] \n" 
+	ss << "[InitParameters] \n" 
 		<< "mode: " << ::ToString(get_depth_mode()) << ", "
 		<< "unit: " << ::ToString(get_coord_units()) << ", "
 		<< "sys.: " << ::ToString(get_coord_sys()) << ", "
@@ -170,12 +56,12 @@ std::string init_params::ToString() const
 	return ss.str();
 }
 
-std::ostream& operator<<(std::ostream& os, const init_params& ip)
+std::ostream& operator<<(std::ostream& os, const InitParameters& ip)
 {
 	return os << ip.ToString();
 }
 
-recording_params::recording_params(
+RecordingParameters::RecordingParameters(
 	const std::string filename,
 	const svo_compression_mode comp_mode,
 	const unsigned int target_bit_rate,
@@ -188,10 +74,10 @@ recording_params::recording_params(
 	// TODO: Add assertions?
 }
 
-std::string recording_params::ToString() const
+std::string RecordingParameters::ToString() const
 {
 	std::stringstream ss;
-	ss << "[recording_params] "
+	ss << "[RecordingParameters] "
 		<< "file: " << get_filename() << ", "
 		<< "compr. mode: " << ::ToString(get_compression_mode()) << ", "
 		<< "target bit rate: " << get_bit_rate() << ", "
@@ -199,12 +85,12 @@ std::string recording_params::ToString() const
 	return ss.str();
 }
 
-std::ostream& operator<<(std::ostream& os, const recording_params& rp)
+std::ostream& operator<<(std::ostream& os, const RecordingParameters& rp)
 {
 	return os << rp.ToString();
 }
 
-runtime_params::runtime_params(
+RuntimeParameters::RuntimeParameters(
 	const sensing_mode mode,
 	const reference_frame ref_frame,
 	const bool depth_enabled,
@@ -218,10 +104,10 @@ runtime_params::runtime_params(
 	// TODO: Add assertions?
 }
 
-std::string runtime_params::ToString() const
+std::string RuntimeParameters::ToString() const
 {
 	std::stringstream ss;
-	ss << "[runtime_params] "
+	ss << "[RuntimeParameters] "
 		<< "sensing mode: " << ::ToString(get_sensing_mode()) << ", "
 		<< "ref. frame: " << ::ToString(get_reference_frame()) << ", "
 		<< "depth enabled: " << std::boolalpha 
@@ -231,7 +117,7 @@ std::string runtime_params::ToString() const
 	return ss.str();
 }
 
-std::ostream& operator<<(std::ostream& os, const runtime_params& rp)
+std::ostream& operator<<(std::ostream& os, const RuntimeParameters& rp)
 {
 	return os << rp.ToString();
 }
