@@ -1,15 +1,15 @@
-#include <Sennet/Messages/HelloMessage.hpp>
+#include <Sennet/Sennet.hpp>
 
 zpp::serializer::register_types<
-	zpp::serializer::make_type<Sennet::HelloMessage,
-	zpp::serializer::make_id("Sennet::HelloMessage")>
+	zpp::serializer::make_type<Sennet::TextMessage,
+	zpp::serializer::make_id("Sennet::TextMessage")>
 > _;
 
 
 int main(int argc, char* argv[])
 {
 	Sennet::Log::Init();
-	auto msg = Sennet::CreateRef<Sennet::HelloMessage>("halllllllo du");
+	auto msg = Sennet::CreateRef<Sennet::TextMessage>("", 0, "halllllllo du");
 	SN_INFO("Original message: {0}", msg->ToString());
 	auto encoding = Sennet::MessageEncoder::Encode(msg);
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Sennet/pch.hpp>
+#include <serializer/serializer.h>
 
 namespace Sennet
 {
@@ -101,6 +101,26 @@ public:
 	std::string ToString() const;
 	friend std::ostream& operator<<(std::ostream& os, const InitParameters& ip);
 
+	friend zpp::serializer::access;
+	template <typename Archive, typename Self>
+	static void serialize(Archive& archive, Self& self)
+	{
+		archive(self.m_depth_mode);
+		archive(self.m_coord_units);
+		archive(self.m_coord_sys);
+		archive(self.m_depth_stab);
+		archive(self.m_depth_min);
+		archive(self.m_depth_max);
+		archive(self.m_depth_right);
+
+		archive(self.m_resolution);
+		archive(self.m_camera_fps);
+		archive(self.m_img_enhancement);
+		archive(self.m_disable_self_calib);
+		archive(self.m_sdk_verbose);
+		archive(self.m_sensors_required);
+	}
+
 private:
 	// Depth related members.
 	depth_mode m_depth_mode;
@@ -146,10 +166,18 @@ public:
 	// TODO: Implement set functions?
 
 	std::string ToString() const;
-	friend std::ostream& operator<<(
-		std::ostream& os, 
-		const RecordingParameters& rp
-		);
+	friend std::ostream& operator<<(std::ostream& os, 
+		const RecordingParameters& rp);
+
+	friend zpp::serializer::access;
+	template <typename Archive, typename Self>
+	static void serialize(Archive& archive, Self& self)
+	{
+		archive(self.m_filename);
+		archive(self.m_compression_mode);
+		archive(self.m_target_bit_rate);
+		archive(self.m_target_frame_rate);
+	}
 
 private:
 	std::string m_filename;
@@ -185,6 +213,18 @@ public:
 	std::string ToString() const;
 	friend std::ostream& operator<<(std::ostream& os, 
 		const RuntimeParameters& rp);
+
+	friend zpp::serializer::access;
+	template <typename Archive, typename Self>
+	static void serialize(Archive& archive, Self& self)
+	{
+		archive(self.m_sensing_mode);
+		archive(self.m_ref_frame);
+		archive(self.m_depth_enabled);
+		archive(self.m_conf_threshold);
+		archive(self.m_text_conf_threshold);
+	}
+
 
 private:
 	sensing_mode m_sensing_mode;

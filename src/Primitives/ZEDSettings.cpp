@@ -1,4 +1,4 @@
-#include <Sennet/Primitives/ZEDParameters.hpp>
+#include <Sennet/Primitives/ZEDSettings.hpp>
 
 namespace Sennet
 {

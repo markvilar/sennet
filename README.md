@@ -59,5 +59,4 @@ cmake --build build --target docs
 I would like to acknowledge Yan Chernikov (TheCherno) for inspiring the system 
 design of this project through the game engine 
 [Hazel](https://github.com/TheCherno/Hazel). A significant portion of the source 
-code of this project is either directly copied or slightly altered from this 
-project.
+code of this project is taken from this project or inspired by it.

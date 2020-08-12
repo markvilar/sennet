@@ -9,10 +9,22 @@ namespace
 {
 
 zpp::serializer::register_types<
-	zpp::serializer::make_type<Sennet::HelloMessage,
-	zpp::serializer::make_id("Sennet::HelloMessage")>,
+	zpp::serializer::make_type<Sennet::TextMessage,
+	zpp::serializer::make_id("Sennet::TextMessage")>,
 	zpp::serializer::make_type<Sennet::ImageMessage,
-	zpp::serializer::make_id("Sennet::ImageMessage")>
+	zpp::serializer::make_id("Sennet::ImageMessage")>,
+	zpp::serializer::make_type<Sennet::ZEDCommandRequest,
+	zpp::serializer::make_id("Sennet::ZEDCommandRequest")>,
+	zpp::serializer::make_type<Sennet::ZEDSettingsRequest,
+	zpp::serializer::make_id("Sennet::ZEDSettingsRequest")>,
+	zpp::serializer::make_type<Sennet::ZEDStateRequest,
+	zpp::serializer::make_id("Sennet::ZEDStateRequest")>,
+	zpp::serializer::make_type<Sennet::ZEDCommandResponse,
+	zpp::serializer::make_id("Sennet::ZEDCommandResponse")>,
+	zpp::serializer::make_type<Sennet::ZEDSettingsResponse,
+	zpp::serializer::make_id("Sennet::ZEDSettingsResponse")>,
+	zpp::serializer::make_type<Sennet::ZEDStateResponse,
+	zpp::serializer::make_id("Sennet::ZEDStateResponse")>
 > _;
 
 }
@@ -25,15 +37,43 @@ int main()
 	auto connection = manager.Connect("localhost", "7000");
 	manager.Start();
 	
-	auto helloMsg = Sennet::CreateRef<Sennet::HelloMessage>("hello world!");
+	auto textMsg = Sennet::CreateRef<Sennet::TextMessage>(
+		connection->GetLocalInformation().first,
+		connection->GetLocalInformation().second,
+		"hello world!");
 
-	auto image = Sennet::Image(std::vector<unsigned char>(1920*1080*3, 150),
-		1920, 1080, 3);
-	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(image);
+	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(
+		connection->GetLocalInformation().first,
+		connection->GetLocalInformation().second,
+		Sennet::Image(std::vector<unsigned char>(1920*1080*3, 150),
+		1920, 1080, 3));
+
+	auto commandRequest = Sennet::CreateRef<Sennet::ZEDCommandRequest>(
+		connection->GetLocalInformation().first,
+		connection->GetLocalInformation().second,
+		Sennet::ZEDCommand::Shutdown);
+
+	auto settingsRequest = Sennet::CreateRef<Sennet::ZEDSettingsRequest>(
+		connection->GetLocalInformation().first,
+		connection->GetLocalInformation().second,
+		Sennet::ZED::InitParameters(),
+		Sennet::ZED::RecordingParameters(),
+		Sennet::ZED::RuntimeParameters());
+
+	auto stateRequest = Sennet::CreateRef<Sennet::ZEDStateRequest>(
+		connection->GetLocalInformation().first,
+		connection->GetLocalInformation().second);
 	
 	SN_INFO("Pushing messages.");
-	manager.PushMessage(connection, helloMsg);
+	manager.PushMessage(connection, textMsg);
 	manager.PushMessage(connection, imageMsg);
+
+	// Sleep a bit in order to avoid bad alloc exception on server end.
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	manager.PushMessage(connection, commandRequest);
+	manager.PushMessage(connection, settingsRequest);
+	manager.PushMessage(connection, stateRequest);
 
 	for (int i = 0; i < 20; i++)
 	{
