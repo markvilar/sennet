@@ -23,8 +23,8 @@ public:
 	Application();
 	virtual ~Application();
 
-	virtual void OnEvent(Event& e);
-	virtual void OnMessage(Ref<Message> msg);
+	void OnEvent(Event& e);
+	void OnMessage(Ref<Message> msg);
 
 	void PushLayer(Layer* layer);
 	void PushOverlay(Layer* overlay);
@@ -34,20 +34,26 @@ public:
 	void Close();
 
 	static Application& Get() { return *s_Instance; }
+	static Application* GetPtr() { return s_Instance; }
 
 private:
-	virtual void Run();
-	virtual bool OnWindowClose(WindowCloseEvent& e);
-	virtual bool OnWindowResize(WindowResizeEvent& e);
-	virtual bool OnWindowIconify(WindowIconifyEvent& e);
+	void Run();
+	bool OnWindowClose(WindowCloseEvent& e);
+	bool OnWindowResize(WindowResizeEvent& e);
+	bool OnWindowIconify(WindowIconifyEvent& e);
 
 protected:
 	Scope<Window> m_Window;
 	ImGuiLayer* m_ImGuiLayer;
 	LayerStack m_LayerStack;
+
 	bool m_Running = true;
 	bool m_Minimized = false;
 	float m_LastFrameTime = 0.0f;
+
+	// Temporary.
+	std::queue<Ref<Message>> m_MessageQueue;
+	std::mutex m_MessageMutex;
 
 private:
 	static Application* s_Instance;

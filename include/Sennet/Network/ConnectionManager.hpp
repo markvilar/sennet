@@ -32,9 +32,9 @@ public:
 	void Stop();
 
 	Ref<Connection> Connect(std::string host, std::string port);
-	Ref<Connection> ConnectionSearch(const std::string& addr, 
+	Ref<Connection> FindConnection(const std::string& addr, 
 		const unsigned short port);
-	void PushMessage(Ref<Connection> conn, Ref<Message> msg);
+	void SubmitMessage(Ref<Connection> conn, Ref<Message> msg);
 
 	void OnData(Ref<MessageEncoding> rawMsg);
 
