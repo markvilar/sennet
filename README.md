@@ -2,21 +2,12 @@
 
 ## Requirements
 The requirements are:
-- Boost 1.72.0
-- C++17 compiler (gcc 7 or higher, clang 8 or higher)
-- ZED SDK 3.0 (available for Windows 10 and Ubuntu 16/18)
-- CUDA 10.2
+- Boost 1.72.0+
+- C++17 compiler
+- CMake 3.16+
 
 ## Configuring, building and testing
-To update submodules:
-```
-git submodule update --remote --merge
-```
-To configure CMake:
-```
-cmake -S . -B build
-```
-Optionally, if you want to specify the root directory of Boost:
+Configure CMake:
 ```
 cmake -S . -B build -DBOOST_ROOT=/path/to/boost
 ```
@@ -24,7 +15,7 @@ To build:
 ```
 cmake --build build
 ```
-To test:
+To build tests:
 ```
 cmake --build build --target test
 ```
@@ -37,10 +28,8 @@ cmake --build build --target docs
 - Add Cmake build configurations.
 - Implement 2D renderer.
 - Implement message register.
-- Implement ZED messages (in separate project?).
 - Implement file handler.
 - Revise application class (non-GUI applications?).
-- HIL-test ZED recorder (multi-thread interaction, changing settings, etc.)
 
 ## DONEs
 - Integrate logger into system.
@@ -54,9 +43,10 @@ cmake --build build --target docs
 - Implement OpenGL render API.
 - Implement shaders.
 - Add event for window iconification.
+- Implement ZED messages (in separate project?).
 
 ## Acknowledgements
 I would like to acknowledge Yan Chernikov (TheCherno) for inspiring the system 
 design of this project through the game engine 
 [Hazel](https://github.com/TheCherno/Hazel). A significant portion of the source 
-code of this project is taken from this project or inspired by it.
+code of this project is adapted from this project or inspired by it.
