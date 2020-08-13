@@ -121,7 +121,7 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 	return connection;
 }
 
-Ref<Connection> ConnectionManager::ConnectionSearch(const std::string& addr,
+Ref<Connection> ConnectionManager::FindConnection(const std::string& addr,
 	const unsigned short port)
 {
 	auto connections = GetConnections();
@@ -136,7 +136,7 @@ Ref<Connection> ConnectionManager::ConnectionSearch(const std::string& addr,
 	return nullptr;
 }
 
-void ConnectionManager::PushMessage(Ref<Connection> connection, Ref<Message> msg)
+void ConnectionManager::SubmitMessage(Ref<Connection> connection, Ref<Message> msg)
 {
 	m_Mutex.lock();
 	m_OutboundQueue.push(std::make_pair(connection, msg));

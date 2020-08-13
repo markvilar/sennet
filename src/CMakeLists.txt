@@ -21,7 +21,6 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/BasicMessage.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/Message.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/NetworkMessage.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/ZEDMessage.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Connection.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/ConnectionManager.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
@@ -42,8 +41,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Shader.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Texture.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/VertexArray.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/Image.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/ZEDSettings.hpp")
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Primitives/Image.hpp")
 
 # Add sennet as a static library
 add_library(Sennet STATIC
@@ -58,7 +56,6 @@ add_library(Sennet STATIC
 	Messages/BasicMessage.cpp
 	Messages/Message.cpp
 	Messages/NetworkMessage.cpp
-	Messages/ZEDMessage.cpp
 	Network/Connection.cpp
 	Network/ConnectionManager.cpp 
 	Platform/OpenGL/OpenGLBuffer.cpp
@@ -82,7 +79,6 @@ add_library(Sennet STATIC
 	Renderer/Texture.cpp
 	Renderer/VertexArray.cpp
 	Primitives/Image.cpp
-	Primitives/ZEDSettings.cpp
 	${HEADER_LIST})
 
 # Precompiled headers

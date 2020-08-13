@@ -54,6 +54,9 @@ void Application::OnEvent(Event& e)
 
 void Application::OnMessage(Ref<Message> msg)
 {
+	m_MessageMutex.lock();
+	m_MessageQueue.push(msg);
+	m_MessageMutex.unlock();
 }
 
 void Application::PushLayer(Layer* layer)
@@ -80,6 +83,7 @@ void Application::Run()
 		float time = glfwGetTime(); // Platform::GetTime
 		Timestep ts = time - m_LastFrameTime;
 
+		// Update layers.
 		if (!m_Minimized)
 		{
 			m_LastFrameTime = time;
@@ -98,6 +102,22 @@ void Application::Run()
 		}
 		
 		m_Window->OnUpdate();
+
+		// Propagate messages through layers.
+		while (!m_MessageQueue.empty())
+		{
+			m_MessageMutex.lock();
+			auto msg = m_MessageQueue.front();
+			m_MessageQueue.pop();
+			m_MessageMutex.unlock();
+
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnMessage(msg);
+				if (msg->Handled)
+					break;
+			}
+		}
 	}
 }
 
@@ -109,14 +129,12 @@ bool Application::OnWindowClose(WindowCloseEvent& e)
 
 bool Application::OnWindowResize(WindowResizeEvent& e)
 {
-	SN_CORE_TRACE("Window Resize: {0}, {1}", e.GetWidth(), e.GetHeight());
 	Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 	return false;
 }
 
 bool Application::OnWindowIconify(WindowIconifyEvent& e)
 {
-	SN_CORE_TRACE("Window Iconified: {0}", e.IsMinimized());
 	m_Minimized = e.IsMinimized();
 	return false;
 }

@@ -20,7 +20,7 @@ int main(int argc, char** argv);
 class Node
 {
 public:
-	Node(unsigned short port, uint64_t waitFor);
+	Node();
 	virtual ~Node();
 
 	void OnMessage(Ref<Message> msg);
@@ -30,24 +30,26 @@ public:
 	void Close();
 
 	static Node& Get() { return *s_Instance; }
+	static Node* GetPtr() { return s_Instance; }
 
 private:
 	void Run();
 
-protected:
-	ConnectionManager m_ConnectionManager;
-
 private:
-	std::queue<Ref<Message>> m_MessageQueue;
-	std::mutex m_Mutex;
 	LayerStack m_LayerStack;
+
 	bool m_Running = true;
+
+	// Temporary.
+	std::queue<Ref<Message>> m_MessageQueue;
+	std::mutex m_MessageMutex;
 
 private:
 	static Node* s_Instance;
 	friend int main(int argc, char** argv);
 };
 
+// To be defined by client.
 Node* CreateNode();
 
 }
