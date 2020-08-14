@@ -14,6 +14,7 @@
 #include <Sennet/Core/MouseCodes.hpp>
 
 #include <Sennet/ImGui/ImGuiLayer.hpp>
+#include <Sennet/ImGui/ImGuiUtilities.hpp>
 
 #include <Sennet/Messages/BasicMessage.hpp>
 #include <Sennet/Messages/Message.hpp>

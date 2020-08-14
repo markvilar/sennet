@@ -214,6 +214,9 @@ public:
 	{
 		ImGui::Begin("Settings");
 		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::SameLine();
+		Sennet::ImGuiHelpMarker("Click and drag the square to adjust "
+			"the respective color component.");
 		ImGui::End();
 	}
 
