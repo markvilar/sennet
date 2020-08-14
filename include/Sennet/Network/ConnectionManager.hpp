@@ -14,17 +14,15 @@ namespace Sennet
 
 class ConnectionManager
 {
+	typedef std::pair<std::string, unsigned short> EndpointData;
 public:
 	using MessageCallbackFn= std::function<void(Ref<Message>&)>;
 
 	ConnectionManager(unsigned short port, uint64_t waitFor = 1);
 	~ConnectionManager();
 	
-	boost::asio::io_service& GetIOService();
-
-	std::queue<Ref<MessageEncoding>>& GetInboundQueue();
-	std::queue<std::pair<Ref<Connection>, Ref<Message>>>& GetOutboundQueue();
-	std::map<boost::asio::ip::tcp::endpoint, Ref<Connection>>& GetConnections();
+	Ref<std::vector<EndpointData>> GetLocalEndpointsData();
+	Ref<std::vector<EndpointData>> GetRemoteEndpointsData();
 	
 	void SetMessageCallback(const MessageCallbackFn& callback);
 		
@@ -50,14 +48,17 @@ private:
 	boost::asio::io_service m_IOService;
 	boost::asio::ip::tcp::acceptor m_Acceptor;
 
-	std::queue<std::pair<Ref<Connection>, Ref<Message>>> m_OutboundQueue;
-	std::queue<Ref<MessageEncoding>> m_InboundQueue;
+	std::queue<std::pair<Ref<Connection>, Ref<Message>>> m_OutQueue;
+	std::queue<Ref<MessageEncoding>> m_InQueue;
 	std::map<boost::asio::ip::tcp::endpoint, Ref<Connection>> m_Connections;
 
-	std::atomic<bool> m_StopFlag;
 	std::thread m_ExecutionThread;
 	std::thread m_IOThread;
-	std::mutex m_Mutex;
+
+	std::atomic<bool> m_StopFlag;
+	std::mutex m_InQueueMutex;
+	std::mutex m_OutQueueMutex;
+	std::mutex m_ConnectionsMutex;
 
 	uint64_t m_WaitFor;
 	
