@@ -34,13 +34,15 @@ public:
 		const unsigned short port);
 	void SubmitMessage(Ref<Connection> conn, Ref<Message> msg);
 
-	void OnData(Ref<MessageEncoding> rawMsg);
+	static ConnectionManager& Get() { return *s_Instance; }
+	static ConnectionManager* GetPtr() { return s_Instance; }
 
+private:
+	void OnData(Ref<MessageEncoding> rawMsg);
 	void AsyncAccept();
 	void OnAccept(const boost::system::error_code& error, 
 		Ref<Connection> conn);
 
-private:
 	void IOWorker();
 	void ExecutionWorker();
 
@@ -61,8 +63,10 @@ private:
 	std::mutex m_ConnectionsMutex;
 
 	uint64_t m_WaitFor;
-	
 	MessageCallbackFn m_MessageCallback;
+
+private:
+	static ConnectionManager* s_Instance;
 };
 
 }

@@ -3,6 +3,8 @@
 namespace Sennet 
 {
 
+ConnectionManager* ConnectionManager::s_Instance = nullptr;
+
 ConnectionManager::ConnectionManager(unsigned short port, uint64_t waitFor)
 	: m_IOService(),
 	m_Acceptor(m_IOService, boost::asio::ip::tcp::endpoint(
@@ -14,6 +16,8 @@ ConnectionManager::ConnectionManager(unsigned short port, uint64_t waitFor)
 	m_StopFlag(false),
 	m_WaitFor(waitFor)
 {
+	SN_CORE_ASSERT(!s_Instance, "ConnectionManager already exists!");
+	s_Instance = this;
 	SN_CORE_ASSERT(waitFor > 0, "[ConnectionManager] Not waiting for \
 		clients!");
 }
