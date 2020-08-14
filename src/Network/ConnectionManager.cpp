@@ -9,8 +9,8 @@ ConnectionManager::ConnectionManager(unsigned short port, uint64_t waitFor)
 		boost::asio::ip::tcp::v4(), port)),
 	m_Connections(),
 	m_ExecutionThread(),
-	m_InboundQueue(),
-	m_OutboundQueue(),
+	m_InQueue(),
+	m_OutQueue(),
 	m_StopFlag(false),
 	m_WaitFor(waitFor)
 {
@@ -23,26 +23,34 @@ ConnectionManager::~ConnectionManager()
 	Stop(); 
 }
 
-boost::asio::io_service& ConnectionManager::GetIOService() 
-{ 
-	return m_IOService; 
-}
-
-std::queue<Ref<MessageEncoding>>& ConnectionManager::GetInboundQueue()
-{ 
-	return m_InboundQueue;
-}
-
-std::queue<std::pair<Ref<Connection>, Ref<Message>>>& 
-	ConnectionManager::GetOutboundQueue()
+Ref<std::vector<ConnectionManager::EndpointData>> 
+	ConnectionManager::GetLocalEndpointsData()
 {
-	return m_OutboundQueue;
+	std::lock_guard<std::mutex> lock(m_ConnectionsMutex);
+	auto data = CreateRef<std::vector<ConnectionManager::EndpointData>>(
+		m_Connections.size());
+	int connectionIndex = 0;
+	for (auto& connection : m_Connections)
+	{
+		data->at(connectionIndex++) = 
+			connection.second->GetLocalInformation();
+	}
+	return data;
 }
 
-std::map<boost::asio::ip::tcp::endpoint, Ref<Connection>>& 
-	ConnectionManager::GetConnections()
+Ref<std::vector<ConnectionManager::EndpointData>> 
+	ConnectionManager::GetRemoteEndpointsData()
 {
-	return m_Connections;
+	std::lock_guard<std::mutex> lock(m_ConnectionsMutex);
+	auto data = CreateRef<std::vector<ConnectionManager::EndpointData>>(
+		m_Connections.size());
+	int connectionIndex = 0;
+	for (auto& connection : m_Connections)
+	{
+		data->at(connectionIndex++) = 
+			connection.second->GetRemoteInformation();
+	}
+	return data;
 }
 
 void ConnectionManager::SetMessageCallback(const MessageCallbackFn& callback)
@@ -90,7 +98,7 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 		if (m_Connections.count(*i) != 0)
 			return m_Connections[*i];
 
-	auto connection = CreateRef<Connection>(GetIOService());
+	auto connection = CreateRef<Connection>(m_IOService);
 
 	// TODO: Look into adding a more general Connection timer!
 	for (uint64_t i = 0; i < 64; ++i)
@@ -124,9 +132,9 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 Ref<Connection> ConnectionManager::FindConnection(const std::string& addr,
 	const unsigned short port)
 {
-	auto connections = GetConnections();
-	auto it = connections.begin();
-	while (it != connections.end())
+	std::lock_guard<std::mutex> lock(m_ConnectionsMutex);
+	auto it = m_Connections.begin();
+	while (it != m_Connections.end())
 	{
 		if (it->first.address().to_string() == addr and 
 			it->first.port() == port)
@@ -138,22 +146,19 @@ Ref<Connection> ConnectionManager::FindConnection(const std::string& addr,
 
 void ConnectionManager::SubmitMessage(Ref<Connection> connection, Ref<Message> msg)
 {
-	m_Mutex.lock();
-	m_OutboundQueue.push(std::make_pair(connection, msg));
-	m_Mutex.unlock();
+	std::lock_guard<std::mutex> lock(m_OutQueueMutex);
+	m_OutQueue.push(std::make_pair(connection, msg));
 }
 
 void ConnectionManager::OnData(Ref<MessageEncoding> rawMsg)
 {
-	m_Mutex.lock();
-	m_InboundQueue.push(rawMsg);
-	m_Mutex.unlock();
+	std::lock_guard<std::mutex> lock(m_InQueueMutex);
+	m_InQueue.push(rawMsg);
 }
 
 void ConnectionManager::AsyncAccept()
 {
-	Ref<Connection> connection = CreateRef<Connection>(GetIOService());
-
+	Ref<Connection> connection = CreateRef<Connection>(m_IOService);
 	m_Acceptor.async_accept(connection->GetSocket(),
 		std::bind(&ConnectionManager::OnAccept, this,
 		std::placeholders::_1, connection));
@@ -166,7 +171,7 @@ void ConnectionManager::OnAccept(boost::system::error_code const& error,
 	if (!error)
 	{
 		Ref<Connection> oldConnection = connection;
-		connection.reset(new Connection(GetIOService()));
+		connection.reset(new Connection(m_IOService));
 
 		m_Acceptor.async_accept(connection->GetSocket(),
 			std::bind(&ConnectionManager::OnAccept, this,
@@ -175,14 +180,14 @@ void ConnectionManager::OnAccept(boost::system::error_code const& error,
 		boost::asio::ip::tcp::endpoint ep =
 			oldConnection->GetRemoteEndpoint();
 
+		m_ConnectionsMutex.lock();
 		SN_CORE_ASSERT(m_Connections.count(ep) == 0, 
 			"[ConnectionManager] Connection already established!");
-
 		oldConnection->SetDataCallback(
 			std::bind(&ConnectionManager::OnData, this, 
 			std::placeholders::_1));
-			
 		m_Connections[ep] = oldConnection;
+		m_ConnectionsMutex.unlock();
 
 		SN_CORE_TRACE("[ConnectionManager] Accepted connection {0}:{1}.",
 			ep.address().to_string(), ep.port());
@@ -210,46 +215,49 @@ void ConnectionManager::ExecutionWorker()
 	SN_CORE_TRACE("[ConnectionManager] Started execution thread.");
 	while (!m_StopFlag)
 	{
-		if (!m_OutboundQueue.empty())
+		m_OutQueueMutex.lock();
+		if (!m_OutQueue.empty())
 		{
-			auto [connection, outboundMsg] = m_OutboundQueue.front();
-			m_OutboundQueue.pop();
+			auto [connection, outMsg] = m_OutQueue.front();
+			m_OutQueue.pop();
 
-			SN_CORE_ASSERT(connection, "[ConnectionManager] \
-				Connection is null!");
-			SN_CORE_ASSERT(outboundMsg, "[ConnectionManager] \
-				Message is null!");
+			SN_CORE_ASSERT(connection, 
+				"[ConnectionManager] Connection is null!");
+			SN_CORE_ASSERT(outMsg, 
+				"[ConnectionManager] Outbound message is null!");
 			
-			auto outboundParcel = MessageEncoder::Encode(outboundMsg);
-				
-			connection->AsyncWrite(outboundParcel);
+			auto outParcel = MessageEncoder::Encode(outMsg);
+			connection->AsyncWrite(outParcel);
 		}
+		m_OutQueueMutex.unlock();
 
-		if (!m_InboundQueue.empty())
+		m_InQueueMutex.lock();
+		if (!m_InQueue.empty())
 		{
-			auto inboundParcel = m_InboundQueue.front();
-			m_InboundQueue.pop();
+			auto inParcel = m_InQueue.front();
+			m_InQueue.pop();
 
-			SN_CORE_ASSERT(inboundParcel, 
-				"[ConnectionManager] Inbound parcel is null!");
+			SN_CORE_ASSERT(inParcel, 
+				"[ConnectionManager] Parcel is null!");
 
-			auto inboundMsg = MessageEncoder::Decode(inboundParcel);
+			auto inMsg = MessageEncoder::Decode(inParcel);
 
-			if (m_MessageCallback && inboundMsg)
+			if (m_MessageCallback && inMsg)
 			{
-				m_MessageCallback(inboundMsg);
+				m_MessageCallback(inMsg);
 			}
 			else if (!m_MessageCallback)
 			{
 				SN_CORE_WARN("[ConnectionManager] No message \
 					callback bound.");
 			}
-			else if (!inboundMsg)
+			else if (!inMsg)
 			{
 				SN_CORE_WARN("[ConnectionManager] Inbound \
 					message is null.");
 			}
 		}
+		m_InQueueMutex.unlock();
 	}
 }
 
