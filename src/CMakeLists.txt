@@ -18,6 +18,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/KeyEvent.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/MouseEvent.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/ImGui/ImGuiLayer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/ImGui/ImGuiUtilities.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/BasicMessage.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/Message.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/NetworkMessage.hpp"
@@ -53,6 +54,7 @@ add_library(Sennet STATIC
 	Core/Window.cpp
 	ImGui/ImGuiBuild.cpp
 	ImGui/ImGuiLayer.cpp
+	ImGui/ImGuiUtilities.cpp
 	Messages/BasicMessage.cpp
 	Messages/Message.cpp
 	Messages/NetworkMessage.cpp
