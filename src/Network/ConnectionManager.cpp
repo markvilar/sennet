@@ -16,10 +16,9 @@ ConnectionManager::ConnectionManager(unsigned short port, uint64_t waitFor)
 	m_StopFlag(false),
 	m_WaitFor(waitFor)
 {
-	SN_CORE_ASSERT(!s_Instance, "ConnectionManager already exists!");
+	SN_CORE_ASSERT(!s_Instance, "Connection Manager already exists!");
 	s_Instance = this;
-	SN_CORE_ASSERT(waitFor > 0, "[ConnectionManager] Not waiting for \
-		clients!");
+	SN_CORE_ASSERT(waitFor > 0, "Not waiting for clients!");
 }
 
 ConnectionManager::~ConnectionManager()
@@ -83,7 +82,7 @@ void ConnectionManager::Stop()
 	if (m_IOThread.joinable())
 	{
 		m_IOThread.join();
-		SN_CORE_TRACE("[ConnectionManager] Joined IO thread.");
+		SN_CORE_TRACE("Joined IO thread.");
 	}
 }
 
@@ -122,9 +121,9 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 		
 	boost::asio::ip::tcp::endpoint ep = connection->GetRemoteEndpoint();
 	SN_CORE_ASSERT(m_Connections.count(ep) == 0, 
-		"[ConnectionManager] Connection already established!");
+		"Connection already established!");
 
-	SN_CORE_TRACE("[ConnectionManager] Added connection {0}:{1}.", 
+	SN_CORE_TRACE("Added connection {0}:{1}.", 
 		ep.address().to_string(), ep.port());
 	m_Connections[ep] = connection;
 
@@ -166,7 +165,6 @@ void ConnectionManager::AsyncAccept()
 	m_Acceptor.async_accept(connection->GetSocket(),
 		std::bind(&ConnectionManager::OnAccept, this,
 		std::placeholders::_1, connection));
-		
 }
 
 void ConnectionManager::OnAccept(boost::system::error_code const& error,
@@ -186,14 +184,14 @@ void ConnectionManager::OnAccept(boost::system::error_code const& error,
 
 		m_ConnectionsMutex.lock();
 		SN_CORE_ASSERT(m_Connections.count(ep) == 0, 
-			"[ConnectionManager] Connection already established!");
+			"Connection already established!");
 		oldConnection->SetDataCallback(
 			std::bind(&ConnectionManager::OnData, this, 
 			std::placeholders::_1));
 		m_Connections[ep] = oldConnection;
 		m_ConnectionsMutex.unlock();
 
-		SN_CORE_TRACE("[ConnectionManager] Accepted connection {0}:{1}.",
+		SN_CORE_TRACE("Accepted connection {0}:{1}.", 
 			ep.address().to_string(), ep.port());
 
 		oldConnection->AsyncRead();
@@ -202,7 +200,7 @@ void ConnectionManager::OnAccept(boost::system::error_code const& error,
 
 void ConnectionManager::IOWorker()
 {
-	SN_CORE_TRACE("[ConnectionManager] Started IO thread.");
+	SN_CORE_TRACE("Started IO thread.");
 
 	boost::asio::io_service::work work(m_IOService);
 	m_IOService.run();
@@ -210,13 +208,13 @@ void ConnectionManager::IOWorker()
 	if (m_ExecutionThread.joinable())
 	{
 		m_ExecutionThread.join();
-		SN_CORE_TRACE("[ConnectionManager] Joined execution thread.");
+		SN_CORE_TRACE("Joined message processing thread.");
 	}
 }
 
 void ConnectionManager::ExecutionWorker()
 {
-	SN_CORE_TRACE("[ConnectionManager] Started execution thread.");
+	SN_CORE_TRACE("Started message processing thread.");
 	while (!m_StopFlag)
 	{
 		m_OutQueueMutex.lock();
@@ -225,10 +223,8 @@ void ConnectionManager::ExecutionWorker()
 			auto [connection, outMsg] = m_OutQueue.front();
 			m_OutQueue.pop();
 
-			SN_CORE_ASSERT(connection, 
-				"[ConnectionManager] Connection is null!");
-			SN_CORE_ASSERT(outMsg, 
-				"[ConnectionManager] Outbound message is null!");
+			SN_CORE_ASSERT(connection, "Invalid connection!");
+			SN_CORE_ASSERT(outMsg, "Invalid outbound message!");
 			
 			auto outParcel = MessageEncoder::Encode(outMsg);
 			connection->AsyncWrite(outParcel);
@@ -241,8 +237,7 @@ void ConnectionManager::ExecutionWorker()
 			auto inParcel = m_InQueue.front();
 			m_InQueue.pop();
 
-			SN_CORE_ASSERT(inParcel, 
-				"[ConnectionManager] Parcel is null!");
+			SN_CORE_ASSERT(inParcel, "Invalid inbound parcel!");
 
 			auto inMsg = MessageEncoder::Decode(inParcel);
 
@@ -252,13 +247,7 @@ void ConnectionManager::ExecutionWorker()
 			}
 			else if (!m_MessageCallback)
 			{
-				SN_CORE_WARN("[ConnectionManager] No message \
-					callback bound.");
-			}
-			else if (!inMsg)
-			{
-				SN_CORE_WARN("[ConnectionManager] Inbound \
-					message is null.");
+				SN_CORE_WARN("No message callback bound.");
 			}
 		}
 		m_InQueueMutex.unlock();

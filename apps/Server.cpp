@@ -59,20 +59,6 @@ int main()
 
 	for (int i = 0; i < 20; i++)
 	{
-		auto localEndpoints = manager.GetLocalEndpointsData();
-		auto remoteEndpoints = manager.GetRemoteEndpointsData();
-
-		SN_TRACE("Local endpoints: ");
-		for (auto endpoint : *localEndpoints)
-		{
-			SN_TRACE("{0}:{1}", endpoint.first, endpoint.second);
-		}
-
-		SN_TRACE("Remote endpoints: ");
-		for (auto endpoint : *remoteEndpoints)
-		{
-			SN_TRACE("{0}:{1}", endpoint.first, endpoint.second);
-		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 

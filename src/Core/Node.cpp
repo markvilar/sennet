@@ -21,7 +21,6 @@ Node::~Node()
 
 void Node::OnMessage(Ref<Message> msg)
 {
-	SN_CORE_TRACE("[Node] Got message {0}", msg->ToString());
 	m_MessageMutex.lock();
 	m_MessageQueue.push(msg);
 	m_MessageMutex.unlock();
@@ -39,7 +38,6 @@ void Node::Close()
 
 void Node::Run()
 {
-	SN_CORE_TRACE("[Node] Running.");
 	while (m_Running)
 	{
 		// Propagate messages through layers.
