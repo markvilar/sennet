@@ -20,7 +20,7 @@ int main(int argc, char** argv);
 class Application
 {
 public:
-	Application();
+	Application(bool verbose = false);
 	virtual ~Application();
 
 	void OnEvent(Event& e);
@@ -54,6 +54,7 @@ protected:
 	// Temporary.
 	std::queue<Ref<Message>> m_MessageQueue;
 	std::mutex m_MessageMutex;
+	bool m_Verbose;
 
 private:
 	static Application* s_Instance;

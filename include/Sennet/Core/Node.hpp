@@ -20,7 +20,7 @@ int main(int argc, char** argv);
 class Node
 {
 public:
-	Node();
+	Node(bool verbose = false);
 	virtual ~Node();
 
 	void OnMessage(Ref<Message> msg);
@@ -43,6 +43,7 @@ private:
 	// Temporary.
 	std::queue<Ref<Message>> m_MessageQueue;
 	std::mutex m_MessageMutex;
+	bool m_Verbose;
 
 private:
 	static Node* s_Instance;
