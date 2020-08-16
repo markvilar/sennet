@@ -244,7 +244,8 @@ private:
 class Sandbox : public Sennet::Application
 {
 public:
-	Sandbox()
+	Sandbox(bool verbose)
+		: Application(verbose)
 	{
 		PushLayer(new ExampleLayer());
 	}
@@ -256,14 +257,14 @@ public:
 
 Sennet::Application* Sennet::CreateApplication()
 {
-	return new Sandbox();
+	bool verbose = true;
+	return new Sandbox(verbose);
 }
 
 
 int Sennet::main(int argc, char** argv)
 {
 	Sennet::Log::Init();
-
 	auto app = Sennet::CreateApplication();
 	app->Run();
 	return 0;

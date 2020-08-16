@@ -14,7 +14,8 @@ namespace Sennet
 
 Application* Application::s_Instance = nullptr;
 
-Application::Application()
+Application::Application(bool verbose)
+	: m_Verbose(verbose)
 {
 	SN_CORE_ASSERT(!s_Instance, "Application already exists!");
 	s_Instance = this;
@@ -77,6 +78,8 @@ void Application::Close()
 
 void Application::Run()
 {
+	if (m_Verbose)
+		SN_CORE_TRACE("Application: Running.");
 	while (m_Running)
 	{
 		// Temporary.
@@ -111,6 +114,8 @@ void Application::Run()
 			m_MessageQueue.pop();
 			m_MessageMutex.unlock();
 
+			SN_CORE_TRACE("Application: Propagating message {0}",
+				msg->ToString());
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnMessage(msg);
@@ -119,6 +124,9 @@ void Application::Run()
 			}
 		}
 	}
+
+	if(m_Verbose)
+		SN_CORE_TRACE("Application: Stopped running.");
 }
 
 bool Application::OnWindowClose(WindowCloseEvent& e)
