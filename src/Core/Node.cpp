@@ -14,6 +14,8 @@ Node::Node(bool verbose)
 {
 	SN_CORE_ASSERT(!s_Instance, "Node already exists!");
 	s_Instance = this;
+	SN_CORE_ASSERT(m_RunTimeout > 0, 
+		"Node run timeout must be larger than zero!");
 }
 
 Node::~Node()
@@ -63,6 +65,10 @@ void Node::Run()
 					break;
 			}
 		}
+
+		// Sleep the main thread for a bit.
+		std::this_thread::sleep_for(std::chrono::milliseconds(
+			m_RunTimeout));
 	}
 	if (m_Verbose)
 		SN_CORE_TRACE("Node: Stopped running.");
