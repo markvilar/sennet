@@ -57,6 +57,7 @@ private:
 	std::thread m_ExecutionThread;
 	std::thread m_IOThread;
 
+	unsigned short m_ExecutionTimeout = 10;
 	std::atomic<bool> m_StopFlag;
 	std::mutex m_InQueueMutex;
 	std::mutex m_OutQueueMutex;

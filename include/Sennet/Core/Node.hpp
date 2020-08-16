@@ -39,6 +39,7 @@ private:
 	LayerStack m_LayerStack;
 
 	bool m_Running = true;
+	unsigned short m_RunTimeout = 10;
 
 	// Temporary.
 	std::queue<Ref<Message>> m_MessageQueue;

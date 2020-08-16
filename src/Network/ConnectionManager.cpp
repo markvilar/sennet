@@ -231,6 +231,9 @@ void ConnectionManager::ExecutionWorker()
 		}
 		m_OutQueueMutex.unlock();
 
+		std::this_thread::sleep_for(std::chrono::milliseconds(
+			m_ExecutionTimeout));
+
 		m_InQueueMutex.lock();
 		if (!m_InQueue.empty())
 		{
@@ -251,6 +254,9 @@ void ConnectionManager::ExecutionWorker()
 			}
 		}
 		m_InQueueMutex.unlock();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(
+			m_ExecutionTimeout));
 	}
 }
 
