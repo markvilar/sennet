@@ -55,6 +55,8 @@ void Application::OnEvent(Event& e)
 
 void Application::OnMessage(Ref<Message> msg)
 {
+	if (m_Verbose)
+		SN_CORE_TRACE("Application: Got message {0}.", msg->ToString());
 	m_MessageMutex.lock();
 	m_MessageQueue.push(msg);
 	m_MessageMutex.unlock();
