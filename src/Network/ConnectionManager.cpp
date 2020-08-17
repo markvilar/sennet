@@ -123,6 +123,10 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 	SN_CORE_ASSERT(m_Connections.count(ep) == 0, 
 		"Connection already established!");
 
+	connection->SetDataCallback(
+		std::bind(&ConnectionManager::OnData, this, 
+		std::placeholders::_1));
+
 	SN_CORE_TRACE("Added connection {0}:{1}.", 
 		ep.address().to_string(), ep.port());
 	m_Connections[ep] = connection;
