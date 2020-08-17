@@ -71,12 +71,12 @@ OpenGLTexture2D::OpenGLTexture2D(const Image& image)
 	if (channels == 4)
 	{
 		internalFormat = GL_RGBA8;
-		dataFormat = GL_RGBA;
+		dataFormat = GL_BGRA;
 	}
 	else if (channels == 3)
 	{
 		internalFormat = GL_RGB8;
-		dataFormat = GL_RGB;
+		dataFormat = GL_BGR;
 	}
 
 	SN_CORE_ASSERT(internalFormat & dataFormat, "Texture format is not \
