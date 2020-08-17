@@ -115,9 +115,13 @@ void Application::Run()
 			auto msg = m_MessageQueue.front();
 			m_MessageQueue.pop();
 			m_MessageMutex.unlock();
+			
+			if (m_Verbose)
+			{
+				SN_CORE_TRACE("Application: Propagating message {0}",
+					msg->ToString());
+			}
 
-			SN_CORE_TRACE("Application: Propagating message {0}",
-				msg->ToString());
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnMessage(msg);
