@@ -143,10 +143,14 @@ public:
 
 		auto textureShader = m_ShaderLibrary.Load(
 			"../../assets/shaders/Texture.glsl");
-			
+		
+		Sennet::Image image(std::vector<unsigned char>(1920*1080*4, 5),
+			1920, 1080, 4);
 
-		m_CheckerboardTexture = Sennet::Texture2D::Create(
-			"../../assets/textures/checkerboard.png");
+		m_ImageTexture = Sennet::Texture2D::Create(image);
+		
+		//m_CheckerboardTexture = Sennet::Texture2D::Create(
+			//"../../assets/textures/checkerboard.png");
 
 		m_CartographTexture = Sennet::Texture2D::Create(
 			"../../assets/textures/cartographer.png");
@@ -196,7 +200,7 @@ public:
 		auto textureShader = m_ShaderLibrary.Get("Texture");
 
 		// Square.
-		m_CheckerboardTexture->Bind();
+		m_ImageTexture->Bind();
 		Sennet::Renderer::Submit(textureShader, m_SquareVa, 
 			glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
@@ -233,7 +237,7 @@ private:
 	Sennet::Ref<Sennet::Shader> m_FlatColorShader;
 	Sennet::Ref<Sennet::VertexArray> m_SquareVa;
 
-	Sennet::Ref<Sennet::Texture2D> m_CheckerboardTexture;
+	Sennet::Ref<Sennet::Texture2D> m_ImageTexture;
 	Sennet::Ref<Sennet::Texture2D> m_CartographTexture;
 
 	Sennet::OrthographicCameraController m_CameraController;
@@ -257,7 +261,7 @@ public:
 
 Sennet::Application* Sennet::CreateApplication()
 {
-	bool verbose = true;
+	bool verbose = false;
 	return new Sandbox(verbose);
 }
 
