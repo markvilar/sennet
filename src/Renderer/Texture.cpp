@@ -23,4 +23,19 @@ Ref<Texture2D> Texture2D::Create(const std::string& path)
 	return nullptr;
 }
 
+Ref<Texture2D> Texture2D::Create(const Image& image)
+{
+	switch (Renderer::GetAPI())
+	{
+		case RendererAPI::API::None: 
+			SN_CORE_ASSERT(false, "Renderer API None is currently \
+				not supported!");
+		case RendererAPI::API::OpenGL:
+			return CreateRef<OpenGLTexture2D>(image);
+	}
+	
+	SN_CORE_ASSERT(false, "Unknown Renderer API.");
+	return nullptr;
+}
+
 }
