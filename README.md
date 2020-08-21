@@ -10,7 +10,7 @@ The requirements are:
 - C++17 compiler
 - CMake 3.16+
 
-## Configuring, building and testing
+## CMake configuration and building
 Configure CMake:
 ```
 cmake -S . -B build -DBOOST_ROOT=/path/to/boost
