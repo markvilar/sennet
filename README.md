@@ -6,16 +6,15 @@ sensor networking.
 
 ## Requirements
 The requirements are:
-- Boost 1.72.0+
 - C++17 compiler
 - CMake 3.16+
 
 ## CMake configuration and building
-Configure CMake:
+To build Sennet, first configure CMake by setting the source and build directory:
 ```
-cmake -S . -B build -DBOOST_ROOT=/path/to/boost
+cmake -S . -B build
 ```
-To build:
+Then build the library by issuing the following command:
 ```
 cmake --build build
 ```
