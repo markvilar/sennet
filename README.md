@@ -1,4 +1,8 @@
-# sennet
+# Sennet
+
+Sennet is a static, cross-platform library for creating C++ applications 
+with graphics and networking functionality that is developed with focus on 
+sensor networking.
 
 ## Requirements
 The requirements are:
@@ -6,7 +10,7 @@ The requirements are:
 - C++17 compiler
 - CMake 3.16+
 
-## Configuring, building and testing
+## CMake configuration and building
 Configure CMake:
 ```
 cmake -S . -B build -DBOOST_ROOT=/path/to/boost
@@ -15,20 +19,19 @@ To build:
 ```
 cmake --build build
 ```
-To build tests:
-```
-cmake --build build --target test
-```
-To build docs:
-```
-cmake --build build --target docs
-```
 
 ## TODOs
 - Add Cmake build configurations.
+- Move current network system from Boost.Asio to Asio standalone.
+- Improve and expand network system:
+    - Implement Endpoint.
+    - Implement Service.
+    - Implement Session.
+    - Implement Message Queue.
+    - Implement Message Register.
 - Implement 2D renderer.
-- Implement message register.
-- Implement file handler.
+    - Implement batch rendering.
+    - Add rendering thread and rendering submission.
 - Revise application class (non-GUI applications?).
 
 ## DONEs
