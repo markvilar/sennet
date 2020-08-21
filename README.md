@@ -22,11 +22,10 @@ cmake --build build
 
 ## TODOs
 - Add Cmake build configurations.
-- Move current network system from Boost.Asio to Asio standalone.
 - Improve and expand network system:
     - Implement Endpoint.
     - Implement Service.
-    - Implement Session.
+    - Implement Session (connection map etc.).
     - Implement Message Queue.
     - Implement Message Register.
 - Implement 2D renderer.
@@ -47,6 +46,7 @@ cmake --build build
 - Implement shaders.
 - Add event for window iconification.
 - Implement ZED messages (in separate project?).
+- Move current network system from Boost.Asio to Asio standalone.
 
 ## Acknowledgements
 I would like to acknowledge Yan Chernikov (TheCherno) for inspiring the system 

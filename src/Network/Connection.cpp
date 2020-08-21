@@ -1,9 +1,10 @@
+#include <Sennet/pch.hpp>
 #include <Sennet/Network/Connection.hpp>
 
 namespace Sennet
 {
 
-Connection::Connection(boost::asio::io_service& service)
+Connection::Connection(asio::io_service& service)
 	: m_Socket(service),
 	m_InSize(0),
 	m_InBuffer(nullptr)
@@ -14,24 +15,24 @@ Connection::~Connection()
 {
 	if (m_Socket.is_open())
 	{
-		boost::system::error_code ec;
-		m_Socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
+		asio::error_code ec;
+		m_Socket.shutdown(asio::ip::tcp::socket::shutdown_both,
 			ec);
 		m_Socket.close(ec);
 	}
 }
 
-boost::asio::ip::tcp::socket& Connection::GetSocket()
+asio::ip::tcp::socket& Connection::GetSocket()
 { 
 	return m_Socket; 
 }
 
-boost::asio::ip::tcp::endpoint Connection::GetRemoteEndpoint() const
+asio::ip::tcp::endpoint Connection::GetRemoteEndpoint() const
 {
 	return m_Socket.remote_endpoint();
 }
 
-boost::asio::ip::tcp::endpoint Connection::GetLocalEndpoint() const
+asio::ip::tcp::endpoint Connection::GetLocalEndpoint() const
 {
 	return m_Socket.local_endpoint();
 }
@@ -62,8 +63,8 @@ void Connection::AsyncRead()
 	m_InSize = 0;
 	m_InBuffer = CreateRef<MessageEncoding>();
 
-	boost::asio::async_read(m_Socket,
-		boost::asio::buffer(&m_InSize, sizeof(m_InSize)),
+	asio::async_read(m_Socket,
+		asio::buffer(&m_InSize, sizeof(m_InSize)),
 		std::bind(&Connection::OnReadSize, shared_from_this(),
 		std::placeholders::_1));
 }
@@ -74,18 +75,18 @@ void Connection::AsyncWrite(Ref<MessageEncoding> outBuffer)
 	std::shared_ptr<uint64_t> outSize(new uint64_t(outBuffer->size()));
 
 	// Set up buffers for the out size and out buffer.
-	std::vector<boost::asio::const_buffer> buffers;
-	buffers.push_back(boost::asio::buffer(&*outSize, sizeof(*outSize)));
-	buffers.push_back(boost::asio::buffer(*outBuffer));
+	std::vector<asio::const_buffer> buffers;
+	buffers.push_back(asio::buffer(&*outSize, sizeof(*outSize)));
+	buffers.push_back(asio::buffer(*outBuffer));
 
 	// Set up async. write operation with on_write() as completion
 	// handler.
-	boost::asio::async_write(m_Socket, buffers,
+	asio::async_write(m_Socket, buffers,
 		std::bind(&Connection::OnWrite, shared_from_this(),
 		std::placeholders::_1, outSize, outBuffer));
 }
 
-void Connection::OnReadSize(const boost::system::error_code& error)
+void Connection::OnReadSize(const asio::error_code& error)
 {
 	// Return if an error has occured.
 	if (error) return;
@@ -98,12 +99,12 @@ void Connection::OnReadSize(const boost::system::error_code& error)
 
 	// Set up async. read operation for the in data with on_read_data()
 	// as completion handler.
-	boost::asio::async_read(m_Socket, boost::asio::buffer(*m_InBuffer),
+	asio::async_read(m_Socket, asio::buffer(*m_InBuffer),
 		std::bind(&Connection::OnReadData, shared_from_this(),
 		std::placeholders::_1));
 }
 
-void Connection::OnReadData(const boost::system::error_code& error)
+void Connection::OnReadData(const asio::error_code& error)
 {
 	// Return if an error has occured.
 	if (error)
@@ -131,7 +132,7 @@ void Connection::OnReadData(const boost::system::error_code& error)
 	AsyncRead();
 }
 
-void Connection::OnWrite(const boost::system::error_code& error,
+void Connection::OnWrite(const asio::error_code& error,
 	Ref<uint64_t> outSize, Ref<MessageEncoding> outBuffer)
 {
 	if (error)

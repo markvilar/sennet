@@ -7,7 +7,7 @@ project(Sennet VERSION 1.0 LANGUAGES CXX C)
 #include(SetUpConfigurations)
 
 # Package options
-option(Boost_USE_STATIC_LIBS "Link with the Boost static libraries" ON)
+# option()
 
 # If main project
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -21,8 +21,6 @@ endif()
 
 # Find packages
 find_package(Git QUIET REQUIRED)
-find_package(Threads REQUIRED)
-find_package(Boost COMPONENTS chrono system REQUIRED)
 
 # Update Git submodules
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
