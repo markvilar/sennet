@@ -19,3 +19,6 @@
 [submodule "extern/stb"]
 	path = extern/stb
 	url = ../../markvilar/stb.git
+[submodule "extern/asio"]
+	path = extern/asio
+	url = ../../markvilar/asio.git

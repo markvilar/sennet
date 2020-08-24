@@ -1,7 +1,6 @@
 #pragma once
-#include <Sennet/pch.hpp>
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 #include <Sennet/Core/Base.hpp>
 #include <Sennet/Messages/Message.hpp>
@@ -15,13 +14,13 @@ class Connection : public std::enable_shared_from_this<Connection>
 	typedef std::function<void(Ref<MessageEncoding>)> DataCallbackFn;
 
 public:
-	Connection(boost::asio::io_service& service);
+	Connection(asio::io_service& service);
 	virtual ~Connection();
 
-	boost::asio::ip::tcp::socket& GetSocket();
+	asio::ip::tcp::socket& GetSocket();
 
-	boost::asio::ip::tcp::endpoint GetRemoteEndpoint() const;
-	boost::asio::ip::tcp::endpoint GetLocalEndpoint() const;
+	asio::ip::tcp::endpoint GetRemoteEndpoint() const;
+	asio::ip::tcp::endpoint GetLocalEndpoint() const;
 	std::pair<std::string, unsigned short> GetRemoteInformation() const;
 	std::pair<std::string, unsigned short> GetLocalInformation() const;
 
@@ -31,14 +30,13 @@ public:
 	void AsyncWrite(Ref<MessageEncoding> outBuffer);
 
 private:
-	void OnReadSize(const boost::system::error_code& error);
-	void OnReadData(const boost::system::error_code& error);
-	void OnWrite(const boost::system::error_code& error,
-		Ref<uint64_t> outSize,
+	void OnReadSize(const asio::error_code& error);
+	void OnReadData(const asio::error_code& error);
+	void OnWrite(const asio::error_code& error, Ref<uint64_t> outSize,
 		Ref<MessageEncoding> outBuffer);
 
 private:
-	boost::asio::ip::tcp::socket m_Socket;
+	asio::ip::tcp::socket m_Socket;
 	uint64_t m_InSize;
 	Ref<MessageEncoding> m_InBuffer;
 

@@ -94,6 +94,7 @@ target_precompile_headers(Sennet
 target_include_directories(Sennet 
 	PUBLIC 
 	"${PROJECT_SOURCE_DIR}/include"
+	"${PROJECT_SOURCE_DIR}/extern/asio/asio/include"
 	"${PROJECT_SOURCE_DIR}/extern/glad/include"
 	"${PROJECT_SOURCE_DIR}/extern/glfw/include"
 	"${PROJECT_SOURCE_DIR}/extern/glm"
@@ -101,7 +102,6 @@ target_include_directories(Sennet
 	"${PROJECT_SOURCE_DIR}/extern/serializer/include"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	"${PROJECT_SOURCE_DIR}/extern/stb"
-	${Boost_INCLUDE_DIRS} 
 	) 
 		
 # This depends on ZED and Boost features that needs to be linked to the library.

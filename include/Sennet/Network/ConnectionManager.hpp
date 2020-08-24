@@ -1,12 +1,11 @@
 #pragma once
-#include <Sennet/pch.hpp>
 
-#include <boost/asio.hpp>
+#include <map>
+
+#include <asio.hpp>
 
 #include <Sennet/Core/Base.hpp>
-
 #include <Sennet/Messages/Message.hpp>
-
 #include <Sennet/Network/Connection.hpp>
 
 namespace Sennet 
@@ -40,19 +39,18 @@ public:
 private:
 	void OnData(Ref<MessageEncoding> rawMsg);
 	void AsyncAccept();
-	void OnAccept(const boost::system::error_code& error, 
-		Ref<Connection> conn);
+	void OnAccept(const asio::error_code& error, Ref<Connection> conn);
 
 	void IOWorker();
 	void ExecutionWorker();
 
 private:
-	boost::asio::io_service m_IOService;
-	boost::asio::ip::tcp::acceptor m_Acceptor;
+	asio::io_service m_IOService;
+	asio::ip::tcp::acceptor m_Acceptor;
 
 	std::queue<std::pair<Ref<Connection>, Ref<Message>>> m_OutQueue;
 	std::queue<Ref<MessageEncoding>> m_InQueue;
-	std::map<boost::asio::ip::tcp::endpoint, Ref<Connection>> m_Connections;
+	std::map<asio::ip::tcp::endpoint, Ref<Connection>> m_Connections;
 
 	std::thread m_ExecutionThread;
 	std::thread m_IOThread;

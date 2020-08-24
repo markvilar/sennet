@@ -1,3 +1,4 @@
+#include <Sennet/pch.hpp>
 #include <Sennet/Network/ConnectionManager.hpp>
 
 namespace Sennet 
@@ -7,8 +8,7 @@ ConnectionManager* ConnectionManager::s_Instance = nullptr;
 
 ConnectionManager::ConnectionManager(unsigned short port, uint64_t waitFor)
 	: m_IOService(),
-	m_Acceptor(m_IOService, boost::asio::ip::tcp::endpoint(
-		boost::asio::ip::tcp::v4(), port)),
+	m_Acceptor(m_IOService, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
 	m_Connections(),
 	m_ExecutionThread(),
 	m_InQueue(),
@@ -63,8 +63,8 @@ void ConnectionManager::SetMessageCallback(const MessageCallbackFn& callback)
 
 void ConnectionManager::Start()
 {
-	m_Acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
-	m_Acceptor.set_option(boost::asio::ip::tcp::acceptor::linger(true, 0));
+	m_Acceptor.set_option(asio::ip::tcp::acceptor::reuse_address(true));
+	m_Acceptor.set_option(asio::ip::tcp::acceptor::linger(true, 0));
 
 	m_IOThread = std::thread(std::bind(&ConnectionManager::IOWorker, this));
 
@@ -88,14 +88,14 @@ void ConnectionManager::Stop()
 
 Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 {
-	boost::asio::ip::tcp::resolver resolver(m_IOService);
-	boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(),
+	asio::ip::tcp::resolver resolver(m_IOService);
+	asio::ip::tcp::resolver::query query(asio::ip::tcp::v4(),
 		host, port);
 	
-	boost::asio::ip::tcp::resolver::iterator it = resolver.resolve(query);
-	boost::asio::ip::tcp::resolver::iterator end;
+	asio::ip::tcp::resolver::iterator it = resolver.resolve(query);
+	asio::ip::tcp::resolver::iterator end;
 
-	for (boost::asio::ip::tcp::resolver::iterator i = it; i != end; ++i)
+	for (asio::ip::tcp::resolver::iterator i = it; i != end; ++i)
 		// If the ConnectionManager already has a Connection 
 		// established with the endpoint.
 		if (m_Connections.count(*i) != 0)
@@ -106,8 +106,8 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 	// TODO: Look into adding a more general Connection timer!
 	for (uint64_t i = 0; i < 64; ++i)
 	{
-		boost::system::error_code ec;
-		boost::asio::connect(connection->GetSocket(), it, ec);
+		asio::error_code ec;
+		asio::connect(connection->GetSocket(), it, ec);
 		if (!ec) break;
 
 		std::chrono::milliseconds period(100);
@@ -115,11 +115,11 @@ Ref<Connection> ConnectionManager::Connect(std::string host, std::string port)
 	}
 
 	connection->GetSocket().set_option(
-		boost::asio::ip::tcp::socket::reuse_address(true));
+		asio::ip::tcp::socket::reuse_address(true));
 	connection->GetSocket().set_option(
-		boost::asio::ip::tcp::socket::linger(true, 0));
+		asio::ip::tcp::socket::linger(true, 0));
 		
-	boost::asio::ip::tcp::endpoint ep = connection->GetRemoteEndpoint();
+	asio::ip::tcp::endpoint ep = connection->GetRemoteEndpoint();
 	SN_CORE_ASSERT(m_Connections.count(ep) == 0, 
 		"Connection already established!");
 
@@ -171,7 +171,7 @@ void ConnectionManager::AsyncAccept()
 		std::placeholders::_1, connection));
 }
 
-void ConnectionManager::OnAccept(boost::system::error_code const& error,
+void ConnectionManager::OnAccept(asio::error_code const& error,
 	Ref<Connection> connection)
 {
 	if (!error)
@@ -183,7 +183,7 @@ void ConnectionManager::OnAccept(boost::system::error_code const& error,
 			std::bind(&ConnectionManager::OnAccept, this,
 			std::placeholders::_1, connection));
 				
-		boost::asio::ip::tcp::endpoint ep =
+		asio::ip::tcp::endpoint ep =
 			oldConnection->GetRemoteEndpoint();
 
 		m_ConnectionsMutex.lock();
@@ -206,7 +206,7 @@ void ConnectionManager::IOWorker()
 {
 	SN_CORE_TRACE("Started IO thread.");
 
-	boost::asio::io_service::work work(m_IOService);
+	asio::io_service::work work(m_IOService);
 	m_IOService.run();
 
 	if (m_ExecutionThread.joinable())
