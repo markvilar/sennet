@@ -4,47 +4,20 @@
 
 #include <Sennet/Sennet.hpp>
 
-// Register messages.
-namespace
-{
-
-zpp::serializer::register_types<
-	zpp::serializer::make_type<Sennet::TextMessage,
-	zpp::serializer::make_id("Sennet::TextMessage")>,
-	zpp::serializer::make_type<Sennet::ImageMessage,
-	zpp::serializer::make_id("Sennet::ImageMessage")>
-> _;
-
-}
-
 int main()
 {
 	Sennet::Log::Init();
-	Sennet::ConnectionManager manager(6000, 1);
-	SN_INFO("Client attempting to connect.");
-	auto connection = manager.Connect("localhost", "7000");
-	manager.Start();
-	
-	auto textMsg = Sennet::CreateRef<Sennet::TextMessage>(
-		connection->GetLocalInformation().first,
-		connection->GetLocalInformation().second,
-		"hello world!");
+	Sennet::Client client;
+	bool status = client.Connect("127.0.0.1", 6000);
 
-	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(
-		connection->GetLocalInformation().first,
-		connection->GetLocalInformation().second,
-		Sennet::Image(std::vector<unsigned char>(1920*1080*3, 150),
-		1920, 1080, 3));
-
-	SN_INFO("Submitting messages.");
-	manager.SubmitMessage(connection, textMsg);
-	manager.SubmitMessage(connection, imageMsg);
-
-	for (int i = 0; i < 20; i++)
+	while (true)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		if (client.IsConnected())
+		{
+			client.Send(Sennet::CreateRef<Sennet::TextMessage>());
+			SN_INFO("Sent message!");
+		}
 	}
 
-	SN_INFO("Client: Finished.");
 	return 0;
 }

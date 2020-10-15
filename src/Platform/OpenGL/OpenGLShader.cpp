@@ -1,11 +1,11 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Platform/OpenGL/OpenGLShader.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Platform/OpenGL/OpenGLShader.hpp"
 
 #include <fstream>
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 
-#include <glm/gtc/type_ptr.hpp>
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Sennet
 {

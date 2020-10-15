@@ -1,13 +1,13 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Core/Application.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Core/Application.hpp"
 
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
-#include <Sennet/Core/Input.hpp>
-#include <Sennet/Core/Log.hpp>
-#include <Sennet/Core/Timestep.hpp>
+#include "Sennet/Core/Input.hpp"
+#include "Sennet/Core/Log.hpp"
+#include "Sennet/Core/Timestep.hpp"
 
-#include <Sennet/Renderer/Renderer.hpp>
+#include "Sennet/Renderer/Renderer.hpp"
 
 namespace Sennet
 {

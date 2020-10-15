@@ -1,15 +1,15 @@
 #pragma once
 
-#include <Sennet/Core/Base.hpp>
+#include "Sennet/Core/Base.hpp"
 
-#include <Sennet/Core/LayerStack.hpp>
-#include <Sennet/Core/Timestep.hpp>
-#include <Sennet/Core/Window.hpp>
+#include "Sennet/Core/LayerStack.hpp"
+#include "Sennet/Core/Timestep.hpp"
+#include "Sennet/Core/Window.hpp"
 
-#include <Sennet/Events/Event.hpp>
-#include <Sennet/Events/ApplicationEvent.hpp>
+#include "Sennet/Events/Event.hpp"
+#include "Sennet/Events/ApplicationEvent.hpp"
 
-#include <Sennet/ImGui/ImGuiLayer.hpp>
+#include "Sennet/ImGui/ImGuiLayer.hpp"
 
 namespace Sennet
 {

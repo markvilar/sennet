@@ -4,12 +4,12 @@
 #include <vector>
 #include <string>
 
-#include <serializer/serializer.h>
+#include "serializer/serializer.h"
 
 namespace Sennet
 {
 
-using MessageEncoding = std::vector<unsigned char>;
+using MessageEncoding = std::vector<uint8_t>;
 
 enum class MessageType
 {

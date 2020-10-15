@@ -1,9 +1,9 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Renderer/VertexArray.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Renderer/VertexArray.hpp"
 
-#include <Sennet/Renderer/Renderer.hpp>
+#include "Sennet/Renderer/Renderer.hpp"
 
-#include <Sennet/Platform/OpenGL/OpenGLVertexArray.hpp>
+#include "Sennet/Platform/OpenGL/OpenGLVertexArray.hpp"
 
 namespace Sennet
 {

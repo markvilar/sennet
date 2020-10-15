@@ -1,10 +1,10 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Platform/OpenGL/OpenGLTexture.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Platform/OpenGL/OpenGLTexture.hpp"
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "stb_image.h"
 
 namespace Sennet
 {

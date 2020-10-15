@@ -3,13 +3,12 @@
 #include <mutex>
 #include <queue>
 
-#include <Sennet/Core/Base.hpp>
+#include "Sennet/Core/Base.hpp"
 
-#include <Sennet/Core/LayerStack.hpp>
-#include <Sennet/Core/Timestep.hpp>
+#include "Sennet/Core/LayerStack.hpp"
+#include "Sennet/Core/Timestep.hpp"
 
-#include <Sennet/Messages/Message.hpp>
-#include <Sennet/Network/ConnectionManager.hpp>
+#include "Sennet/Messages/Message.hpp"
 
 namespace Sennet
 {

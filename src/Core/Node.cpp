@@ -1,7 +1,7 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Core/Node.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Core/Node.hpp"
 
-#include <Sennet/Core/Log.hpp>
+#include "Sennet/Core/Log.hpp"
 
 namespace Sennet
 {

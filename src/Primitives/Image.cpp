@@ -1,4 +1,4 @@
-#include <Sennet/Primitives/Image.hpp>
+#include "Sennet/Primitives/Image.hpp"
 
 namespace Sennet
 {

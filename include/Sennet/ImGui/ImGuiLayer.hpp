@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Sennet/Core/Layer.hpp>
+#include "Sennet/Core/Layer.hpp"
 
-#include <Sennet/Events/ApplicationEvent.hpp>
-#include <Sennet/Events/KeyEvent.hpp>
-#include <Sennet/Events/MouseEvent.hpp>
+#include "Sennet/Events/ApplicationEvent.hpp"
+#include "Sennet/Events/KeyEvent.hpp"
+#include "Sennet/Events/MouseEvent.hpp"
 
 namespace Sennet
 {

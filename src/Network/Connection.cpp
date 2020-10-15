@@ -1,14 +1,16 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Network/Connection.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Network/Connection.hpp"
 
 namespace Sennet
 {
 
-Connection::Connection(asio::io_service& service)
-	: m_Socket(service),
-	m_InSize(0),
-	m_InBuffer(nullptr)
+Connection::Connection(Owner parent, asio::io_context& context, 
+	TSQueue<Ref<Message>>& messagesIn)
+	: m_Context(context),
+	m_MessagesIn(messagesIn),
+	m_Socket(context)
 {
+	m_Owner = parent;
 }
 
 Connection::~Connection()
@@ -16,8 +18,7 @@ Connection::~Connection()
 	if (m_Socket.is_open())
 	{
 		asio::error_code ec;
-		m_Socket.shutdown(asio::ip::tcp::socket::shutdown_both,
-			ec);
+		m_Socket.shutdown(asio::ip::tcp::socket::shutdown_both, ec);
 		m_Socket.close(ec);
 	}
 }
@@ -37,108 +38,107 @@ asio::ip::tcp::endpoint Connection::GetLocalEndpoint() const
 	return m_Socket.local_endpoint();
 }
 
-std::pair<std::string, unsigned short> Connection::GetRemoteInformation() const
+void Connection::ConnectToClient(const uint32_t& id)
 {
-	return {m_Socket.remote_endpoint().address().to_string(),
-		m_Socket.remote_endpoint().port() };
-}
-
-std::pair<std::string, unsigned short> Connection::GetLocalInformation() const
-{
-	return {m_Socket.local_endpoint().address().to_string(),
-		m_Socket.local_endpoint().port() };
-}
-
-void Connection::SetDataCallback(const DataCallbackFn& callback)
-{
-	m_DataCallback = callback;
-}
-
-void Connection::AsyncRead()
-{
-	// Check that the in buffer is NULL.
-	SN_CORE_ASSERT(m_InBuffer == nullptr, "In buffer is not null!");
-
-	// Set up attributes for a new read.
-	m_InSize = 0;
-	m_InBuffer = CreateRef<MessageEncoding>();
-
-	asio::async_read(m_Socket,
-		asio::buffer(&m_InSize, sizeof(m_InSize)),
-		std::bind(&Connection::OnReadSize, shared_from_this(),
-		std::placeholders::_1));
-}
-
-void Connection::AsyncWrite(Ref<MessageEncoding> outBuffer)
-{
-	// Get out buffer size.
-	std::shared_ptr<uint64_t> outSize(new uint64_t(outBuffer->size()));
-
-	// Set up buffers for the out size and out buffer.
-	std::vector<asio::const_buffer> buffers;
-	buffers.push_back(asio::buffer(&*outSize, sizeof(*outSize)));
-	buffers.push_back(asio::buffer(*outBuffer));
-
-	// Set up async. write operation with on_write() as completion
-	// handler.
-	asio::async_write(m_Socket, buffers,
-		std::bind(&Connection::OnWrite, shared_from_this(),
-		std::placeholders::_1, outSize, outBuffer));
-}
-
-void Connection::OnReadSize(const asio::error_code& error)
-{
-	// Return if an error has occured.
-	if (error) return;
-
-	// Check that the in buffer is valid.
-	SN_CORE_ASSERT(m_InBuffer, "In on_read_size: In buffer is null!");
-
-	// Resize the in buffer to the in size.
-	(*m_InBuffer).resize(m_InSize);
-
-	// Set up async. read operation for the in data with on_read_data()
-	// as completion handler.
-	asio::async_read(m_Socket, asio::buffer(*m_InBuffer),
-		std::bind(&Connection::OnReadData, shared_from_this(),
-		std::placeholders::_1));
-}
-
-void Connection::OnReadData(const asio::error_code& error)
-{
-	// Return if an error has occured.
-	if (error)
+	if (m_Owner == Owner::Server)
 	{
-		SN_CORE_ERROR("Error in on_read_data: {0}", error.message());
-		return;
+		if (m_Socket.is_open())
+		{
+			m_ID = id;
+			StartRead();
+		}
 	}
-
-	// Extract raw message.
-	Ref<MessageEncoding> rawMsg = nullptr;
-	std::swap(m_InBuffer, rawMsg);
-
-	if (m_DataCallback)
-	{
-		SN_CORE_ASSERT(rawMsg, 
-			"In on_read_data: Raw message point is null");
-		m_DataCallback(rawMsg);
-	}
-	else if (!m_DataCallback)
-	{
-		SN_CORE_WARN("In on_read_data: No data callback.");
-	}
-
-	// Start next async. read operation.
-	AsyncRead();
 }
 
-void Connection::OnWrite(const asio::error_code& error,
-	Ref<uint64_t> outSize, Ref<MessageEncoding> outBuffer)
+void Connection::ConnectToServer(
+	const asio::ip::tcp::resolver::results_type& endpoints)
 {
-	if (error)
+	if (m_Owner == Owner::Client)
 	{
-		SN_CORE_ERROR("Error in on_write: {0}", error.message());
+		asio::async_connect(m_Socket, endpoints, 
+			std::bind(&Connection::StartRead, this));
 	}
+}
+
+void Connection::Disconnect()
+{
+	if (IsConnected())
+	{
+		asio::post(m_Context, [this]() { m_Socket.close(); });
+	}
+}
+
+bool Connection::IsConnected() const
+{
+	return m_Socket.is_open();
+}
+
+void Connection::Send(Ref<Message> message)
+{
+	asio::post(m_Context, std::bind(&Connection::StartWrite, this,
+		message));
+}
+
+void Connection::StartWrite(Ref<Message> message)
+{
+	bool writingMessages = !m_MessagesOut.empty();
+	m_MessagesOut.push_back(message);
+	if (!writingMessages)
+	{
+		WriteMessageSize();
+	}
+}
+
+void Connection::WriteMessageSize()
+{
+}
+
+void Connection::WriteMessage()
+{
+}
+
+void Connection::StartRead()
+{
+	asio::async_read(m_Socket, 
+		asio::buffer(&m_BufferSize, sizeof(m_BufferSize)),
+		std::bind(&Connection::ReadMessageSize, 
+		this, std::placeholders::_1));
+}
+
+void Connection::ReadMessageSize(const std::error_code& error)
+{
+	if (!error)
+	{
+		SN_CORE_ASSERT(m_Buffer, "Buffer is not reset.");
+		m_Buffer->resize(m_BufferSize);
+		asio::async_read(m_Socket, asio::buffer(*m_Buffer),
+			std::bind(&Connection::ReadMessage, this,
+			std::placeholders::_1));
+	}
+	else
+	{
+		SN_CORE_ERROR("[Connection] Error: {0}", error.message());
+		m_Socket.close();
+	}
+}
+
+void Connection::ReadMessage(const std::error_code& error)
+{
+	if (!error)
+	{
+		auto message = MessageEncoder::Decode(m_Buffer);
+		AddToIncomingMessageQueue(message);
+	}
+	else
+	{
+		SN_CORE_ERROR("[Connection] Error: {0}", error.message());
+	}
+}
+
+void Connection::AddToIncomingMessageQueue(Ref<Message> message)
+{
+	m_MessagesIn.push_back(message);
+	StartRead();
 }
 
 }

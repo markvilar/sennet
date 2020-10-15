@@ -1,10 +1,10 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Platform/OpenGL/OpenGLContext.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Platform/OpenGL/OpenGLContext.hpp"
 
-#include <Sennet/Core/Base.hpp>
-#include <Sennet/Core/Log.hpp>
+#include "Sennet/Core/Base.hpp"
+#include "Sennet/Core/Log.hpp"
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 
 namespace Sennet
 {

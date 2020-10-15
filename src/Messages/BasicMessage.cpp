@@ -1,4 +1,4 @@
-#include <Sennet/Messages/BasicMessage.hpp>
+#include "Sennet/Messages/BasicMessage.hpp"
 
 namespace Sennet
 {

@@ -1,9 +1,9 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Renderer/Texture.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Renderer/Texture.hpp"
 
-#include <Sennet/Renderer/Renderer.hpp>
+#include "Sennet/Renderer/Renderer.hpp"
 
-#include <Sennet/Platform/OpenGL/OpenGLTexture.hpp>
+#include "Sennet/Platform/OpenGL/OpenGLTexture.hpp"
 
 namespace Sennet
 {

@@ -1,12 +1,12 @@
 #pragma once
-#include <Sennet/pch.hpp>
+#include "Sennet/pch.hpp"
 
-#include <Sennet/Core/Base.hpp>
-#include <Sennet/Core/Timestep.hpp>
+#include "Sennet/Core/Base.hpp"
+#include "Sennet/Core/Timestep.hpp"
 
-#include <Sennet/Events/Event.hpp>
+#include "Sennet/Events/Event.hpp"
 
-#include <Sennet/Messages/Message.hpp>
+#include "Sennet/Messages/Message.hpp"
 
 namespace Sennet
 {

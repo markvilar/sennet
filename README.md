@@ -25,8 +25,9 @@ cmake --build build
     - Implement Endpoint.
     - Implement Service.
     - Implement Session (connection map etc.).
-    - Implement Message Queue.
+    - Implement Message Queue (thread-safe queue).
     - Implement Message Register.
+    - Implement Bit Conversion Procedure (might not be necessary).
 - Implement 2D renderer.
     - Implement batch rendering.
     - Add rendering thread and rendering submission.

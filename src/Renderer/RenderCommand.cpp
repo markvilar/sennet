@@ -1,5 +1,5 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Renderer/RenderCommand.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Renderer/RenderCommand.hpp"
 
 namespace Sennet
 {

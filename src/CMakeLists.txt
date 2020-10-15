@@ -22,8 +22,13 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/BasicMessage.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/Message.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/NetworkMessage.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Client.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Connection.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/ConnectionManager.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Endpoint.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Server.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Socket.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/TSMap.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/TSQueue.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLContext.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLRendererAPI.hpp"
@@ -58,8 +63,11 @@ add_library(Sennet STATIC
 	Messages/BasicMessage.cpp
 	Messages/Message.cpp
 	Messages/NetworkMessage.cpp
+	Network/Client.cpp
 	Network/Connection.cpp
-	Network/ConnectionManager.cpp 
+	Network/Endpoint.cpp
+	Network/Server.cpp
+	Network/Socket.cpp
 	Platform/OpenGL/OpenGLBuffer.cpp
 	Platform/OpenGL/OpenGLContext.cpp
 	Platform/OpenGL/OpenGLRendererAPI.cpp
@@ -104,7 +112,6 @@ target_include_directories(Sennet
 	"${PROJECT_SOURCE_DIR}/extern/stb"
 	) 
 		
-# This depends on ZED and Boost features that needs to be linked to the library.
 target_link_libraries(Sennet 
 	PRIVATE 
 	glad
