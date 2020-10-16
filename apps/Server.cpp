@@ -2,7 +2,17 @@
 #include <functional>
 #include <thread>
 
-#include <Sennet/Sennet.hpp>
+#include "Sennet/Sennet.hpp"
+
+namespace
+{
+
+zpp::serializer::register_types<
+	zpp::serializer::make_type<Sennet::TextMessage,
+	zpp::serializer::make_id("Sennet::TextMessage")>
+> _;
+
+}
 
 class CustomServer : public Sennet::Server
 {
@@ -22,6 +32,7 @@ protected:
 	virtual void OnMessage(Sennet::Ref<Sennet::Connection> client, 
 		Sennet::Ref<Sennet::Message> message) 
 	{
+		SN_CORE_INFO("[Server] Message: {}", message->GetMessageType());
 	}
 };
 

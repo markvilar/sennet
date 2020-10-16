@@ -11,7 +11,7 @@ namespace Sennet
 
 using MessageEncoding = std::vector<uint8_t>;
 
-enum class MessageType
+enum class MessageType : uint8_t
 {
 	None 				= 0,
 	TextMessage 			= 1,

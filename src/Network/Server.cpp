@@ -66,7 +66,6 @@ void Server::MessageClient(Ref<Connection> client, Ref<Message> message)
 	{
 		OnClientDisconnect(client);
 		client.reset();
-		// TODO: Remove from map.
 	}
 }
 
@@ -89,8 +88,8 @@ void Server::MessageAllClients(Ref<Message> message)
 
 	if (hasInvalidClients)
 	{
-		m_Connections.erase(std::remove(m_Connections.begin(), m_Connections.end(),
-			nullptr));
+		m_Connections.erase(std::remove(m_Connections.begin(), 
+			m_Connections.end(), nullptr));
 	}
 }
 
@@ -132,7 +131,7 @@ void Server::OnAccept(const std::error_code& error, Ref<Connection> connection)
 {
 	if (!error)
 	{
-		SN_CORE_INFO("[Server] New connection: {}", 
+		SN_CORE_INFO("[Server] New connection: {0}", 
 			connection->GetRemoteEndpoint());
 
 		if (OnClientConnect(connection))
@@ -148,7 +147,7 @@ void Server::OnAccept(const std::error_code& error, Ref<Connection> connection)
 	}
 	else
 	{
-		SN_CORE_ERROR("[Server] Accept Error: {}", error.message());
+		SN_CORE_ERROR("[Server] Accept Error: {0}", error.message());
 	}
 
 	AsyncAccept();

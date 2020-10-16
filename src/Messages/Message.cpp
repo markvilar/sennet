@@ -15,32 +15,32 @@ Ref<MessageEncoding> MessageEncoder::Encode(const Ref<Message>& msg)
 	}
 	catch (const serializer::out_of_range& e)
 	{
-		SN_CORE_WARN("Encoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Encoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::undeclared_polymorphic_type_error& e)
 	{
-		SN_CORE_WARN("Encoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Encoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::attempt_to_serialize_null_pointer_error& e)
 	{
-		SN_CORE_WARN("Encoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Encoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::polymorphic_type_mismatch_error& e)
 	{
-		SN_CORE_WARN("Encoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Encoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::attempt_to_serialize_valueless_variant& e)
 	{
-		SN_CORE_WARN("Encoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Encoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::variant_index_out_of_range& e)
 	{
-		SN_CORE_WARN("Encoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Encoding exception: {0}", e.what());
 		return nullptr;
 	}
 
@@ -59,32 +59,32 @@ Ref<Message> MessageEncoder::Decode(const Ref<MessageEncoding>& rawMsg)
 	}
 	catch (const serializer::out_of_range& e)
 	{
-		SN_CORE_WARN("Decoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Decoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::undeclared_polymorphic_type_error& e)
 	{
-		SN_CORE_WARN("Decoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Decoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::attempt_to_serialize_null_pointer_error& e)
 	{
-		SN_CORE_WARN("Decoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Decoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::polymorphic_type_mismatch_error& e)
 	{
-		SN_CORE_WARN("Decoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Decoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::attempt_to_serialize_valueless_variant& e)
 	{
-		SN_CORE_WARN("Decoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Decoding exception: {0}", e.what());
 		return nullptr;
 	}
 	catch (const serializer::variant_index_out_of_range& e)
 	{
-		SN_CORE_WARN("Decoding exception: {0}", e.what());
+		SN_CORE_WARN("[Encoder] Decoding exception: {0}", e.what());
 		return nullptr;
 	}
 

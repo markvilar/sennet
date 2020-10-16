@@ -3,7 +3,6 @@
 // TODO: Move definitions to build system.
 #define SN_DEBUG
 #define SN_ENABLE_ASSERTS
-#define SN_NETWORK_ASIO
 #define GLFW_INCLUDE_NONE
 
 #include <memory>

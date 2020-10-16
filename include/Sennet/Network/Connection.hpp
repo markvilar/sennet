@@ -41,8 +41,8 @@ public:
 
 private:
 	void StartWrite(Ref<Message> message);
-	void WriteMessageSize();
 	void WriteMessage();
+	void OnWriteMessage(const std::error_code& error);
 
 	void StartRead();
 	void ReadMessageSize(const std::error_code& error);
@@ -55,7 +55,7 @@ private:
 	asio::io_context& m_Context;
 
 	Owner m_Owner = Owner::Server;
-	uint32_t m_ID = 0;
+	uint32_t m_Id = 0;
 
 	uint64_t m_BufferSize = 0;
 	Ref<MessageEncoding> m_Buffer = nullptr;
