@@ -9,7 +9,6 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/LayerStack.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/MouseCodes.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Node.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/SourceHandle.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Timestep.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Window.hpp"
@@ -19,15 +18,10 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/MouseEvent.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/ImGui/ImGuiLayer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/ImGui/ImGuiUtilities.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/BasicMessage.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/Message.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/NetworkMessage.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Client.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Connection.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Endpoint.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Message.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Server.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Socket.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/TSMap.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/TSQueue.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLContext.hpp"
@@ -55,19 +49,10 @@ add_library(Sennet STATIC
 	Core/Layer.cpp
 	Core/LayerStack.cpp
 	Core/Log.cpp
-	Core/Node.cpp
 	Core/Window.cpp
 	ImGui/ImGuiBuild.cpp
 	ImGui/ImGuiLayer.cpp
 	ImGui/ImGuiUtilities.cpp
-	Messages/BasicMessage.cpp
-	Messages/Message.cpp
-	Messages/NetworkMessage.cpp
-	Network/Client.cpp
-	Network/Connection.cpp
-	Network/Endpoint.cpp
-	Network/Server.cpp
-	Network/Socket.cpp
 	Platform/OpenGL/OpenGLBuffer.cpp
 	Platform/OpenGL/OpenGLContext.cpp
 	Platform/OpenGL/OpenGLRendererAPI.cpp

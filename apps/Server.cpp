@@ -4,49 +4,62 @@
 
 #include "Sennet/Sennet.hpp"
 
-namespace
+enum class CustomMessageTypes : uint32_t
 {
+	ServerAccept,
+	ServerDeny,
+	ServerPing,
+	MessageAll,
+	ServerMessage,
+};
 
-zpp::serializer::register_types<
-	zpp::serializer::make_type<Sennet::TextMessage,
-	zpp::serializer::make_id("Sennet::TextMessage")>
-> _;
-
-}
-
-class CustomServer : public Sennet::Server
+class CustomServer : public Sennet::Server<CustomMessageTypes>
 {
 public:
-	CustomServer(uint16_t port) : Sennet::Server(port) {}
+	CustomServer(uint16_t port) : Sennet::Server<CustomMessageTypes>(port)
+	{
+	}
 
 protected:
-	virtual bool OnClientConnect(Sennet::Ref<Sennet::Connection> client) 
-	{ 
-		return true; 
+	virtual bool OnClientConnect(
+		Sennet::Ref<Sennet::Connection<CustomMessageTypes>> client)
+		override 
+	{
+		return true;
 	}
-	
-	virtual void OnClientDisconnect(Sennet::Ref<Sennet::Connection> client) 
+
+	virtual void OnClientDisconnect(
+		Sennet::Ref<Sennet::Connection<CustomMessageTypes>>) 
+		override
 	{
 	}
-	
-	virtual void OnMessage(Sennet::Ref<Sennet::Connection> client, 
-		Sennet::Ref<Sennet::Message> message) 
+
+	virtual void OnMessage(
+		Sennet::Ref<Sennet::Connection<CustomMessageTypes>> client,
+		Sennet::Message<CustomMessageTypes>& message) 
+		override
 	{
-		SN_CORE_INFO("[Server] Message: {}", message->GetMessageType());
+		switch (message.Header.ID)
+		{
+		case CustomMessageTypes::ServerPing:
+			SN_INFO("[{0}] Server Ping.", client->GetID());
+			// Bounce message back to client.
+			client->Send(message);
+			break;
+		}
 	}
 };
 
 int main()
 {
 	Sennet::Log::Init();
-	CustomServer server(6000);
-
+	CustomServer server(60000);
 	server.Start();
+
 	while (true)
 	{
 		server.Update();
 	}
 
-	SN_INFO("Main finished.");
 	return 0;
 }

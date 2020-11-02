@@ -20,11 +20,10 @@ int main(int argc, char** argv);
 class Application
 {
 public:
-	Application(bool verbose = false);
+	Application();
 	virtual ~Application();
 
 	void OnEvent(Event& e);
-	void OnMessage(Ref<Message> msg);
 
 	void PushLayer(Layer* layer);
 	void PushOverlay(Layer* overlay);
@@ -34,7 +33,6 @@ public:
 	void Close();
 
 	static Application& Get() { return *s_Instance; }
-	static Application* GetPtr() { return s_Instance; }
 
 private:
 	void Run();
@@ -50,11 +48,6 @@ protected:
 	bool m_Running = true;
 	bool m_Minimized = false;
 	float m_LastFrameTime = 0.0f;
-
-	// Temporary.
-	std::queue<Ref<Message>> m_MessageQueue;
-	std::mutex m_MessageMutex;
-	bool m_Verbose;
 
 private:
 	static Application* s_Instance;

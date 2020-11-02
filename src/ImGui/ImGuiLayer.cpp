@@ -55,7 +55,7 @@ void ImGuiLayer::OnDetach()
 
 void ImGuiLayer::OnImGuiRender()
 {
-	static bool show = true;
+	static bool show = false;
 	ImGui::ShowDemoWindow(&show);
 }
 

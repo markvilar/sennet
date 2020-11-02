@@ -5,7 +5,6 @@
 #include "Sennet/Core/Application.hpp"
 #include "Sennet/Core/Layer.hpp"
 #include "Sennet/Core/Log.hpp"
-#include "Sennet/Core/Node.hpp"
 #include "Sennet/Core/SourceHandle.hpp"
 #include "Sennet/Core/Timestep.hpp"
 
@@ -16,16 +15,10 @@
 #include "Sennet/ImGui/ImGuiLayer.hpp"
 #include "Sennet/ImGui/ImGuiUtilities.hpp"
 
-#include "Sennet/Messages/BasicMessage.hpp"
-#include "Sennet/Messages/Message.hpp"
-#include "Sennet/Messages/NetworkMessage.hpp"
-
 #include "Sennet/Network/Client.hpp"
 #include "Sennet/Network/Connection.hpp"
-#include "Sennet/Network/Endpoint.hpp"
+#include "Sennet/Network/Message.hpp"
 #include "Sennet/Network/Server.hpp"
-#include "Sennet/Network/Socket.hpp"
-#include "Sennet/Network/TSMap.hpp"
 #include "Sennet/Network/TSQueue.hpp"
 
 #include "Sennet/Renderer/Buffer.hpp"

@@ -6,8 +6,6 @@
 
 #include "Sennet/Events/Event.hpp"
 
-#include "Sennet/Messages/Message.hpp"
-
 namespace Sennet
 {
 
@@ -22,7 +20,6 @@ public:
 	virtual void OnUpdate(Timestep ts) {}
 	virtual void OnImGuiRender() {}
 	virtual void OnEvent(Event& e) {}
-	virtual void OnMessage(Ref<Message> msg) {}
 
 	inline const std::string& GetName() const { return m_DebugName; }
 

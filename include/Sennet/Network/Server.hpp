@@ -3,47 +3,187 @@
 // Temporary.
 #include "asio.hpp"
 
-#include "Sennet/Messages/Message.hpp"
-
 #include "Sennet/Network/Connection.hpp"
-#include "Sennet/Network/Endpoint.hpp"
+#include "Sennet/Network/Message.hpp"
 #include "Sennet/Network/TSMap.hpp"
 #include "Sennet/Network/TSQueue.hpp"
 
 namespace Sennet
 {
 
+template <typename T>
 class Server
 {
 	// Server class interface.
-
 public:
-	Server(uint16_t port);
-	virtual ~Server();
+	Server(uint16_t port)
+		: m_Acceptor(m_Context, 
+			asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+	{
+	}
 
-	bool Start();
-	void Stop();
+	virtual ~Server()
+	{
+		Stop();
+	}
 
-	void MessageClient(Ref<Connection> client, Ref<Message> message);
-	void MessageAllClients(Ref<Message> message);
+	bool Start()
+	{
+		try
+		{
+			WaitForClientConnection();
 
-	void Update(uint64_t maxMessages = -1);
+			m_ContextThread = std::thread(
+				[this]()
+				{
+					m_Context.run();
+				});
+		}
+		catch (std::exception& e)
+		{
+			SN_CORE_ERROR("[Server] Exception: {0}", e.what());
+			return false;
+		}
 
-	static Server& Get() { return *s_Instance; }
+		SN_CORE_INFO("[Server] Started!");
+		return true;
+	}
+
+	void Stop()
+	{
+		m_Context.stop();
+		
+		if (m_ContextThread.joinable())
+		{
+			m_ContextThread.join();
+		}
+
+		SN_CORE_INFO("[Server] Stopped!");
+	}
+
+	// ASYNC - Instruct asio to wait for connection.
+	void WaitForClientConnection()
+	{
+		m_Acceptor.async_accept(
+			[this](std::error_code ec, asio::ip::tcp::socket socket)
+			{
+				if (!ec)
+				{
+					SN_CORE_INFO("[Server] New Connection: "
+						"{0}", socket.remote_endpoint());
+
+					auto newConn = CreateRef<Connection<T>>(
+						Connection<T>::Owner::Server,
+						m_Context,
+						std::move(socket),
+						m_MessagesIn);
+					
+					
+					if (OnClientConnect(newConn))
+					{
+						m_Connections.push_back(newConn);
+						m_Connections.back()->
+							ConnectToClient(
+								m_IDCounter++
+							);
+						SN_CORE_INFO("[Server] " 
+							"Connection {0} "
+							"Approved.", 
+							m_Connections.back()->
+							GetID()
+							);
+					}
+					else
+					{
+						SN_CORE_INFO("[Server] "
+							"Connection Denied.");
+					}
+				}
+				else
+				{
+					SN_CORE_ERROR("[Server] New Connection "
+						"Error: {0}", ec.message());
+				}
+
+				WaitForClientConnection();
+			});
+	}
+
+	void MessageClient(Ref<Connection<T>> client, const Message<T>& message)
+	{
+		if (client && client->IsConnected())
+		{
+			client->Send(message);
+		}
+		else
+		{
+			OnClientDisconnect(client);
+			client.reset();
+			m_Connections.erase(
+				std::remove(m_Connections.begin(),
+				m_Connections.end(), client),
+				m_Connections.end());
+		}
+	}
+
+	void MessageAllClients(const Message<T>& message, 
+		Ref<Connection<T>> ignoreClient = nullptr)
+	{
+		bool invalidClientExists = false;
+		for (auto& client : m_Connections)
+		{
+			if (client && client->IsConnected())
+			{
+				if (client != ignoreClient)
+				{
+					client->Send(message);
+				}
+			}
+			else
+			{
+				OnClientDisconnect(client);
+				client.reset();
+				invalidClientExists = true;
+			}
+		}
+
+		if (invalidClientExists)
+		{
+			m_Connections.erase(
+				std::remove(m_Connections.begin(),
+				m_Connections.end(), nullptr),
+				m_Connections.end());
+		}
+	}
+
+	void Update(uint64_t maxMessages = -1)
+	{
+		uint64_t messageCount = 0;
+		while (messageCount < maxMessages && !m_MessagesIn.empty())
+		{
+			auto message = m_MessagesIn.pop_front();
+			OnMessage(message.Remote, message.Msg);
+
+			messageCount++;
+		}
+	}
 
 protected:
-	virtual bool OnClientConnect(Ref<Connection> client);
-	virtual void OnClientDisconnect(Ref<Connection> client);
-	virtual void OnMessage(Ref<Connection> client, Ref<Message> message);
+	virtual bool OnClientConnect(Ref<Connection<T>> client)
+	{
+		return false;
+	}
 
-private:
-	void AsyncAccept();
-	void OnAccept(const std::error_code& error, Ref<Connection> client);
+	virtual void OnClientDisconnect(Ref<Connection<T>> client)
+	{
+	}
 
-private:
-	TSQueue<Ref<Message>> m_InQueue;
-	std::deque<Ref<Connection>> m_Connections;
-	uint32_t m_IDCounter = 10000;
+	virtual void OnMessage(Ref<Connection<T>> client, Message<T>& message)
+	{
+	}
+
+protected:
+	TSQueue<OwnedMessage<T>> m_MessagesIn;
 
 	// Temporary.
 	asio::io_context m_Context;
@@ -52,9 +192,8 @@ private:
 	// Temporary.
 	asio::ip::tcp::acceptor m_Acceptor;
 
-private:
-	static Server* s_Instance;
-
+	uint32_t m_IDCounter = 10000;
+	std::deque<Ref<Connection<T>>> m_Connections;
 };
 
 }

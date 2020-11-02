@@ -251,8 +251,8 @@ private:
 class Sandbox : public Sennet::Application
 {
 public:
-	Sandbox(bool verbose)
-		: Application(verbose)
+	Sandbox()
+		: Application()
 	{
 		PushLayer(new Sandbox2D());
 	}
@@ -264,8 +264,7 @@ public:
 
 Sennet::Application* Sennet::CreateApplication()
 {
-	bool verbose = false;
-	return new Sandbox(verbose);
+	return new Sandbox();
 }
 
 

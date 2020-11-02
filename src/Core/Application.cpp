@@ -14,8 +14,7 @@ namespace Sennet
 
 Application* Application::s_Instance = nullptr;
 
-Application::Application(bool verbose)
-	: m_Verbose(verbose)
+Application::Application()
 {
 	SN_CORE_ASSERT(!s_Instance, "Application already exists!");
 	s_Instance = this;
@@ -53,15 +52,6 @@ void Application::OnEvent(Event& e)
 	}
 }
 
-void Application::OnMessage(Ref<Message> msg)
-{
-	if (m_Verbose)
-		SN_CORE_TRACE("Application: Got message {0}.", msg->ToString());
-	m_MessageMutex.lock();
-	m_MessageQueue.push(msg);
-	m_MessageMutex.unlock();
-}
-
 void Application::PushLayer(Layer* layer)
 {
 	m_LayerStack.PushLayer(layer);
@@ -80,8 +70,6 @@ void Application::Close()
 
 void Application::Run()
 {
-	if (m_Verbose)
-		SN_CORE_TRACE("Application: Running.");
 	while (m_Running)
 	{
 		// Temporary.
@@ -107,32 +95,7 @@ void Application::Run()
 		}
 		
 		m_Window->OnUpdate();
-
-		// Propagate messages through layers.
-		while (!m_MessageQueue.empty())
-		{
-			m_MessageMutex.lock();
-			auto msg = m_MessageQueue.front();
-			m_MessageQueue.pop();
-			m_MessageMutex.unlock();
-			
-			if (m_Verbose)
-			{
-				SN_CORE_TRACE("Application: Propagating message {0}",
-					msg->ToString());
-			}
-
-			for (Layer* layer : m_LayerStack)
-			{
-				layer->OnMessage(msg);
-				if (msg->Handled)
-					break;
-			}
-		}
 	}
-
-	if(m_Verbose)
-		SN_CORE_TRACE("Application: Stopped running.");
 }
 
 bool Application::OnWindowClose(WindowCloseEvent& e)
