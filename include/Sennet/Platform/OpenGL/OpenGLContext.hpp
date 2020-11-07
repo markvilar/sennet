@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Sennet/Renderer/GraphicsContext.hpp>
+#include "Sennet/Renderer/GraphicsContext.hpp"
 
 #include <GLFW/glfw3.h>
 

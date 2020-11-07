@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Sennet/Renderer/Texture.hpp>
+#include "Sennet/Renderer/Texture.hpp"
 
-#include <Sennet/Primitives/Image.hpp>
+#include "Sennet/Primitives/Image.hpp"
 
 namespace Sennet
 {

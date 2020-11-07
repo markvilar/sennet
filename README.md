@@ -21,6 +21,8 @@ cmake --build build
 
 ## TODOs
 - Add Cmake build configurations.
+- Add allocation exception to message encoder.
+- Add move constructor to image.
 - Improve and expand network system:
     - Implement Endpoint.
     - Implement Socket.
@@ -30,7 +32,8 @@ cmake --build build
 - Implement 2D renderer.
     - Implement batch rendering.
     - Add rendering thread and rendering submission.
-- Revise application class (non-GUI applications?).
+- Implement visual profiling metrics.
+- Implement memory allocation metrics.
 
 ## DONEs
 - Integrate logger into system.

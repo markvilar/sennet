@@ -5,7 +5,6 @@
 #include "Sennet/Core/Application.hpp"
 #include "Sennet/Core/Layer.hpp"
 #include "Sennet/Core/Log.hpp"
-#include "Sennet/Core/SourceHandle.hpp"
 #include "Sennet/Core/Timestep.hpp"
 
 #include "Sennet/Core/Input.hpp"
@@ -26,6 +25,7 @@
 #include "Sennet/Renderer/OrthographicCameraController.hpp"
 #include "Sennet/Renderer/RenderCommand.hpp"
 #include "Sennet/Renderer/Renderer.hpp"
+#include "Sennet/Renderer/Renderer2D.hpp"
 #include "Sennet/Renderer/Shader.hpp"
 #include "Sennet/Renderer/Texture.hpp"
 #include "Sennet/Renderer/VertexArray.hpp"

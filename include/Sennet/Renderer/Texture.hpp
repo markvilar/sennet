@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include <Sennet/Core/Base.hpp>
+#include "Sennet/Core/Base.hpp"
 
-#include <Sennet/Primitives/Image.hpp>
+#include "Sennet/Primitives/Image.hpp"
 
 namespace Sennet
 {

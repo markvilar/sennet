@@ -4,7 +4,8 @@
 #include "Sennet/Core/Input.hpp"
 
 #include "Sennet/Core/Application.hpp"
-#include "GLFW/glfw3.h"
+
+#include <GLFW/glfw3.h>
 
 namespace Sennet
 {
