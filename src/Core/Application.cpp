@@ -66,6 +66,7 @@ void Application::PushOverlay(Layer* layer)
 
 void Application::Close()
 {
+	m_Running = false;
 }
 
 void Application::Run()
