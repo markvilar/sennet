@@ -5,7 +5,6 @@
 
 #include "Sennet/Network/Connection.hpp"
 #include "Sennet/Network/Message.hpp"
-#include "Sennet/Network/TSMap.hpp"
 #include "Sennet/Network/TSQueue.hpp"
 
 namespace Sennet
