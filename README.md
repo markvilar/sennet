@@ -21,14 +21,12 @@ cmake --build build
 
 ## TODOs
 - Add Cmake build configurations.
-- Add allocation exception to message encoder.
 - Add move constructor to image.
 - Improve and expand network system:
     - Implement Endpoint.
     - Implement Socket.
     - Implement NetworkContext.
     - Implement bit conversion procedure.
-- Implement templated message system.
 - Implement 2D renderer.
     - Implement batch rendering.
     - Add rendering thread and rendering submission.
@@ -50,3 +48,4 @@ cmake --build build
 - Move current network system from Boost.Asio to Asio standalone.
 - Implement thread-safe queue.
 - Implement server and client class.
+- Implement templated message system.

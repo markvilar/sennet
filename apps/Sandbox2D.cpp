@@ -12,36 +12,6 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
-	// Square.
-	m_SquareVA = Sennet::VertexArray::Create();
-
-	float squareVertices[4 * 3] = 
-	{
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
-	};
-	
-	Sennet::Ref<Sennet::VertexBuffer> squareVB(
-		Sennet::VertexBuffer::Create(squareVertices,
-		sizeof(squareVertices)));
-
-	squareVB->SetLayout({
-		{ Sennet::ShaderDataType::Float3, "a_Position" }
-	});
-	m_SquareVA->AddVertexBuffer(squareVB);
-
-	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-
-	Sennet::Ref<Sennet::IndexBuffer> squareIB(
-		Sennet::IndexBuffer::Create(squareIndices,
-		sizeof(squareIndices) / sizeof(uint32_t)));
-	m_SquareVA->SetIndexBuffer(squareIB);
-
-	m_FlatColorShader = Sennet::Shader::Create(
-		"../../assets/shaders/FlatColor.glsl");
-
 	m_CheckerboardTexture = Sennet::Texture2D::Create(
 		"../../assets/textures/Checkerboard-600x600.png");
 }
