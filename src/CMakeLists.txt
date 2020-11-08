@@ -9,7 +9,6 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/LayerStack.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/MouseCodes.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/SourceHandle.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Timestep.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/ApplicationEvent.hpp"
@@ -37,6 +36,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/OrthographicCameraController.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RenderCommand.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Renderer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Renderer2D.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RendererAPI.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Shader.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Texture.hpp"
@@ -69,6 +69,7 @@ add_library(Sennet STATIC
 	Renderer/OrthographicCameraController.cpp
 	Renderer/RenderCommand.cpp
 	Renderer/Renderer.cpp
+	Renderer/Renderer2D.cpp
 	Renderer/RendererAPI.cpp
 	Renderer/Shader.cpp
 	Renderer/Texture.cpp

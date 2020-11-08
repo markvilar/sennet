@@ -2,8 +2,8 @@
 
 #include <glm/glm.hpp>
 
-#include <Sennet/Core/Base.hpp>
-#include <Sennet/Renderer/VertexArray.hpp>
+#include "Sennet/Core/Base.hpp"
+#include "Sennet/Renderer/VertexArray.hpp"
 
 namespace Sennet
 {
