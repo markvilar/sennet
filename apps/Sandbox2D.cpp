@@ -5,6 +5,12 @@
 
 #include <imgui.h>
 
+#define PROFILE_SCOPE(name) Sennet::Timer timer##__LINE__(	\
+		name, [&](ProfileResult profileResult)		\
+	{							\
+		m_ProfileResults.push_back(profileResult);	\
+	});							
+
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f)
 {
@@ -22,25 +28,37 @@ void Sandbox2D::OnDetach()
 
 void Sandbox2D::OnUpdate(Sennet::Timestep ts)
 {
-	// Update.
-	m_CameraController.OnUpdate(ts);
+	PROFILE_SCOPE("Sennet::OnUpdate");
+
+	// Update camera.
+	{
+		PROFILE_SCOPE("CameraController::OnUpdate");
+		m_CameraController.OnUpdate(ts);
+	}
 
 	// Render.
-	Sennet::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
-	Sennet::RenderCommand::Clear();
+	{
+		PROFILE_SCOPE("Renderer Prep");
+		Sennet::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
+		Sennet::RenderCommand::Clear();
+	}
 
-	Sennet::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Sennet::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, 
-		{ 0.8f, 0.2f, 0.3f, 1.0f });
-	Sennet::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, 
-		{ 0.2f, 0.3f, 0.8f, 1.0f });
-	Sennet::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, 
-		m_CheckerboardTexture);
-	Sennet::Renderer2D::EndScene();
+	{
+		PROFILE_SCOPE("Renderer Draw");
+		Sennet::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Sennet::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, 
+			{ 0.8f, 0.2f, 0.3f, 1.0f });
+		Sennet::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, 
+			m_SquareColor);
+		Sennet::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, 
+			{ 10.0f, 10.0f }, m_CheckerboardTexture);
+		Sennet::Renderer2D::EndScene();
+	}
 }
 
 void Sandbox2D::OnImGuiRender()
 {
+	/*
 	static bool dockspaceOpen = true;
 	static bool opt_fullscreen_persistant = true;
 	bool opt_fullscreen = opt_fullscreen_persistant;
@@ -104,6 +122,21 @@ void Sandbox2D::OnImGuiRender()
 
 		ImGui::End();
 	}
+
+	ImGui::End();
+	*/
+
+	ImGui::Begin("Settings");
+	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+
+	for (auto& result : m_ProfileResults)
+	{
+		char label[50];
+		strcpy(label, "%.3f ms   ");
+		strcat(label, result.Name);
+		ImGui::Text(label, result.Time);
+	}
+	m_ProfileResults.clear();
 
 	ImGui::End();
 }
