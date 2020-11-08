@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Sennet/Core/Base.hpp>
-#include <Sennet/Renderer/Buffer.hpp>
+#include "Sennet/Core/Base.hpp"
+#include "Sennet/Renderer/Buffer.hpp"
 
 namespace Sennet
 {

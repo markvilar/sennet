@@ -2,66 +2,64 @@
 #include <functional>
 #include <thread>
 
-#include <Sennet/Sennet.hpp>
+#include "Sennet/Sennet.hpp"
 
-// Register messages.
-namespace
+enum class CustomMessageTypes : uint32_t
 {
+	ServerAccept,
+	ServerDeny,
+	ServerPing,
+	MessageAll,
+	ServerMessage,
+};
 
-zpp::serializer::register_types<
-	zpp::serializer::make_type<Sennet::TextMessage,
-	zpp::serializer::make_id("Sennet::TextMessage")>,
-	zpp::serializer::make_type<Sennet::ImageMessage,
-	zpp::serializer::make_id("Sennet::ImageMessage")>
-> _;
-
-}
-
-bool OnTextMessage(Sennet::Ref<Sennet::TextMessage> msg)
+class CustomServer : public Sennet::Server<CustomMessageTypes>
 {
-	SN_TRACE("Server: Dispatched to OnTextMessage!");
-	SN_TRACE("[{0}]: {1}:{2}, Message: {3}", 
-		std::this_thread::get_id(),
-		msg->GetSender().first,
-		msg->GetSender().second, 
-		msg->ToString());
-	return false;
-}
+public:
+	CustomServer(uint16_t port) : Sennet::Server<CustomMessageTypes>(port)
+	{
+	}
 
-bool OnImageMessage(Sennet::Ref<Sennet::ImageMessage> msg)
-{
-	SN_TRACE("Server: Dispatched to OnImageMessage!");
-	SN_TRACE("[{0}]: {1}:{2}, Message: {3}", 
-		std::this_thread::get_id(),
-		msg->GetSender().first, 
-		msg->GetSender().second, 
-		msg->ToString());
-	return false;
-}
+protected:
+	virtual bool OnClientConnect(
+		Sennet::Ref<Sennet::Connection<CustomMessageTypes>> client)
+		override 
+	{
+		return true;
+	}
 
-void OnMessage(Sennet::Ref<Sennet::Message> msg)
-{
-	SN_TRACE("Server: {0}", msg->ToString());
-	Sennet::MessageDispatcher dispatcher(msg);
-	dispatcher.Dispatch<Sennet::TextMessage>(
-		std::bind(OnTextMessage, std::placeholders::_1));
-	dispatcher.Dispatch<Sennet::ImageMessage>(
-		std::bind(OnImageMessage, std::placeholders::_1));
-}
+	virtual void OnClientDisconnect(
+		Sennet::Ref<Sennet::Connection<CustomMessageTypes>>) 
+		override
+	{
+	}
+
+	virtual void OnMessage(
+		Sennet::Ref<Sennet::Connection<CustomMessageTypes>> client,
+		Sennet::Message<CustomMessageTypes>& message) 
+		override
+	{
+		switch (message.Header.ID)
+		{
+		case CustomMessageTypes::ServerPing:
+			SN_INFO("[{0}] Server Ping.", client->GetID());
+			// Bounce message back to client.
+			client->Send(message);
+			break;
+		}
+	}
+};
 
 int main()
 {
 	Sennet::Log::Init();
-	Sennet::ConnectionManager manager(7000, 1);
-	manager.SetMessageCallback(std::bind(OnMessage, 
-		std::placeholders::_1));
-	manager.Start();
+	CustomServer server(60000);
+	server.Start();
 
-	for (int i = 0; i < 20; i++)
+	while (true)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		server.Update();
 	}
 
-	SN_INFO("Server: Finished.");
 	return 0;
 }

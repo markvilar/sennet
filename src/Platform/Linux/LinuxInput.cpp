@@ -1,9 +1,10 @@
 #if defined(SN_PLATFORM_LINUX)
 
-#include <Sennet/pch.hpp>
-#include <Sennet/Core/Input.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Core/Input.hpp"
 
-#include <Sennet/Core/Application.hpp>
+#include "Sennet/Core/Application.hpp"
+
 #include <GLFW/glfw3.h>
 
 namespace Sennet

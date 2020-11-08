@@ -8,11 +8,6 @@ add_executable(Sandbox Sandbox.cpp)
 target_compile_features(Sandbox PRIVATE cxx_std_17)
 target_link_libraries(Sandbox PRIVATE Sennet Sandbox2D)
 
-# Serialization
-add_executable(Serialization Serialization.cpp)
-target_compile_features(Serialization PRIVATE cxx_std_17)
-target_link_libraries(Serialization PRIVATE Sennet)
-
 # Server
 add_executable(Server Server.cpp)
 target_compile_features(Server PRIVATE cxx_std_17)

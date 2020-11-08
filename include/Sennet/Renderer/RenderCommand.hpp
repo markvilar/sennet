@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Sennet/Renderer/RendererAPI.hpp>
+#include "Sennet/Renderer/RendererAPI.hpp"
 
 namespace Sennet
 {

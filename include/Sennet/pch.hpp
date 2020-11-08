@@ -14,12 +14,13 @@
 #include <memory>
 #include <mutex>
 #include <vector>
+#include <unordered_map>
 #include <sstream>
 #include <string>
 #include <thread>
 #include <queue>
 
-#include <Sennet/Core/Log.hpp>
+#include "Sennet/Core/Log.hpp"
 
 #ifdef SN_PLATFORM_WINDOWS
 	#include <Windows.h>

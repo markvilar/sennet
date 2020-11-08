@@ -9,8 +9,6 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/LayerStack.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Log.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/MouseCodes.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Node.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/SourceHandle.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Timestep.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Window.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/ApplicationEvent.hpp"
@@ -19,11 +17,11 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Events/MouseEvent.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/ImGui/ImGuiLayer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/ImGui/ImGuiUtilities.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/BasicMessage.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/Message.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Messages/NetworkMessage.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Client.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Connection.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/ConnectionManager.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Message.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Server.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/TSQueue.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLContext.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLRendererAPI.hpp"
@@ -38,6 +36,7 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/OrthographicCameraController.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RenderCommand.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Renderer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Renderer2D.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RendererAPI.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Shader.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Texture.hpp"
@@ -50,16 +49,10 @@ add_library(Sennet STATIC
 	Core/Layer.cpp
 	Core/LayerStack.cpp
 	Core/Log.cpp
-	Core/Node.cpp
 	Core/Window.cpp
 	ImGui/ImGuiBuild.cpp
 	ImGui/ImGuiLayer.cpp
 	ImGui/ImGuiUtilities.cpp
-	Messages/BasicMessage.cpp
-	Messages/Message.cpp
-	Messages/NetworkMessage.cpp
-	Network/Connection.cpp
-	Network/ConnectionManager.cpp 
 	Platform/OpenGL/OpenGLBuffer.cpp
 	Platform/OpenGL/OpenGLContext.cpp
 	Platform/OpenGL/OpenGLRendererAPI.cpp
@@ -76,6 +69,7 @@ add_library(Sennet STATIC
 	Renderer/OrthographicCameraController.cpp
 	Renderer/RenderCommand.cpp
 	Renderer/Renderer.cpp
+	Renderer/Renderer2D.cpp
 	Renderer/RendererAPI.cpp
 	Renderer/Shader.cpp
 	Renderer/Texture.cpp
@@ -104,7 +98,6 @@ target_include_directories(Sennet
 	"${PROJECT_SOURCE_DIR}/extern/stb"
 	) 
 		
-# This depends on ZED and Boost features that needs to be linked to the library.
 target_link_libraries(Sennet 
 	PRIVATE 
 	glad

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Sennet/pch.hpp>
+#include "Sennet/pch.hpp"
 
-#include <Sennet/Core/Base.hpp>
+#include "Sennet/Core/Base.hpp"
 
 namespace Sennet
 {

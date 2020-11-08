@@ -1,10 +1,10 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Renderer/Buffer.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Renderer/Buffer.hpp"
 
-#include <Sennet/Renderer/Renderer.hpp>
-#include <Sennet/Renderer/RendererAPI.hpp>
+#include "Sennet/Renderer/Renderer.hpp"
+#include "Sennet/Renderer/RendererAPI.hpp"
 
-#include <Sennet/Platform/OpenGL/OpenGLBuffer.hpp>
+#include "Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
 
 namespace Sennet
 {

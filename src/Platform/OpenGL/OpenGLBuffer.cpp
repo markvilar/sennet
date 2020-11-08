@@ -1,7 +1,7 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Platform/OpenGL/OpenGLBuffer.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 
 namespace Sennet
 {

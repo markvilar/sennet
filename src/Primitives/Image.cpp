@@ -1,4 +1,4 @@
-#include <Sennet/Primitives/Image.hpp>
+#include "Sennet/Primitives/Image.hpp"
 
 namespace Sennet
 {
@@ -11,14 +11,14 @@ Image::Image()
 {
 }
 
-Image::Image(const std::vector<unsigned char> data, const size_t width, 
-	const size_t height, const size_t channels)
+Image::Image(const std::vector<uint8_t>& data, const uint32_t& width, 
+	const uint32_t& height, const uint32_t& channels)
 	: m_Buffer(data), m_Width(width), m_Height(height), m_Channels(channels)
 {
 }
 
-Image::Image(const unsigned char* ptr, const size_t width, const size_t height,
-	const size_t channels)
+Image::Image(const uint8_t* ptr, const uint32_t& width, const uint32_t& height,
+	const uint32_t& channels)
 {
 	m_Buffer.assign(ptr, ptr + width*height*channels);
 	m_Width = width;
@@ -39,8 +39,8 @@ Image::~Image()
 {
 }
 
-unsigned char Image::GetPixel(const size_t col, const size_t row, 
-	const size_t channel) const
+unsigned char Image::GetPixel(const uint32_t& col, const uint32_t& row, 
+	const uint32_t& channel) const
 {
 	SN_CORE_ASSERT(col < m_Width, "[Image] Coloumn out of range.");
 	SN_CORE_ASSERT(row < m_Height, "[Image] Row out of range.");
@@ -49,8 +49,8 @@ unsigned char Image::GetPixel(const size_t col, const size_t row,
 	return m_Buffer[col*m_Channels + row*m_Width*m_Channels + channel];
 }
 
-void Image::SetPixel(const size_t col, const size_t row, const size_t channel,
-	const unsigned char value)
+void Image::SetPixel(const uint32_t& col, const uint32_t& row, 
+	const uint32_t& channel, const uint8_t& value)
 {
 	SN_CORE_ASSERT(col < m_Width, "[Image] Coloumn out of range.");
 	SN_CORE_ASSERT(row < m_Height, "[Image] Row out of range.");

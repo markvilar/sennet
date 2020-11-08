@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Sennet/Core/Window.hpp>
-#include <Sennet/Renderer/GraphicsContext.hpp>
+#include "Sennet/Core/Window.hpp"
+#include "Sennet/Renderer/GraphicsContext.hpp"
 
 // Forward declaration.
 struct GLFWwindow;

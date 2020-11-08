@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Sennet/Core/Base.hpp>
-#include <Sennet/Core/Timestep.hpp>
+#include "Sennet/Core/Base.hpp"
+#include "Sennet/Core/Timestep.hpp"
 
-#include <Sennet/Events/ApplicationEvent.hpp>
-#include <Sennet/Events/MouseEvent.hpp>
+#include "Sennet/Events/ApplicationEvent.hpp"
+#include "Sennet/Events/MouseEvent.hpp"
 
-#include <Sennet/Renderer/OrthographicCamera.hpp>
+#include "Sennet/Renderer/OrthographicCamera.hpp"
 
 namespace Sennet
 {
