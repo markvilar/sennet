@@ -11,6 +11,8 @@
 #include "Sennet/Core/KeyCodes.hpp"
 #include "Sennet/Core/MouseCodes.hpp"
 
+#include "Sennet/Debug/Instrumentor.hpp"
+
 #include "Sennet/ImGui/ImGuiLayer.hpp"
 #include "Sennet/ImGui/ImGuiUtilities.hpp"
 
