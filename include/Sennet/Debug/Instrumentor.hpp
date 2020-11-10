@@ -219,7 +219,6 @@ class InstrumentationUtils
 
 }
 
-#define SN_PROFILE 1
 #if SN_PROFILE
 	#if defined(__GNUC__) || (defined(__MWERKS__) \
 		&& (__MWERKS__ >= 0x3000)) || (defined(__ICC) \
@@ -250,7 +249,7 @@ class InstrumentationUtils
 	#define SN_PROFILE_FUNCTION() \
 		SN_PROFILE_SCOPE(SN_FUNC_SIG);
 #else
-	#define SN_PROFILE_BEGIN_SESSION()
+	#define SN_PROFILE_BEGIN_SESSION(name, filepath)
 	#define SN_PROFILE_END_SESSION()
 	#define SN_PROFILE_SCOPE(name)
 	#define SN_PROFILE_FUNCTION()

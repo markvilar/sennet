@@ -30,7 +30,6 @@ cmake --build build
 - Implement 2D renderer.
     - Implement batch rendering.
     - Add rendering thread and rendering submission.
-- Implement visual profiling metrics.
 - Implement memory allocation metrics.
 
 ## DONEs
@@ -49,3 +48,4 @@ cmake --build build
 - Implement thread-safe queue.
 - Implement server and client class.
 - Implement templated message system.
+- Implement visual profiling metrics.
