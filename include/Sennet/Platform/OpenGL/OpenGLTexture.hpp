@@ -2,8 +2,6 @@
 
 #include "Sennet/Renderer/Texture.hpp"
 
-#include "Sennet/Primitives/Image.hpp"
-
 #include <glad/glad.h>
 
 namespace Sennet
@@ -14,7 +12,6 @@ class OpenGLTexture2D : public Texture2D
 public:
 	OpenGLTexture2D(const uint32_t& width, const uint32_t& height);
 	OpenGLTexture2D(const std::string& path);
-	OpenGLTexture2D(const Image& image);
 	~OpenGLTexture2D();
 
 	virtual uint32_t GetWidth() const override { return m_Width; }

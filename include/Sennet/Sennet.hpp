@@ -31,5 +31,3 @@
 #include "Sennet/Renderer/Shader.hpp"
 #include "Sennet/Renderer/Texture.hpp"
 #include "Sennet/Renderer/VertexArray.hpp"
-
-#include "Sennet/Primitives/Image.hpp"
