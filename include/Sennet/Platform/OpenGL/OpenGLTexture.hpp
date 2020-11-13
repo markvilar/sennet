@@ -10,7 +10,9 @@ namespace Sennet
 class OpenGLTexture2D : public Texture2D
 {
 public:
-	OpenGLTexture2D(const uint32_t& width, const uint32_t& height);
+	OpenGLTexture2D(const uint32_t& width, const uint32_t& height,
+		const InternalFormat internalFormat, 
+		const DataFormat dataFormat);
 	OpenGLTexture2D(const std::string& path);
 	~OpenGLTexture2D();
 
@@ -29,7 +31,8 @@ private:
 	uint32_t m_Width;
 	uint32_t m_Height;
 	uint32_t m_RendererID;
-	GLenum m_InternalFormat, m_DataFormat;
+	InternalFormat m_InternalFormat;
+	DataFormat m_DataFormat;
 };
 
 }

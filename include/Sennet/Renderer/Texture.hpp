@@ -10,6 +10,24 @@ namespace Sennet
 class Texture
 {
 public:
+	enum class InternalFormat : uint8_t
+	{
+		None 	= 0,
+		RGBA8 	= 1,
+		BGRA8	= 2,
+		RGB8	= 3,
+		BGR8	= 4,
+	};
+
+	enum class DataFormat : uint8_t
+	{
+		None 	= 0,
+		RGBA 	= 1,
+		BGRA	= 2,
+		RGB	= 3,
+		BGR	= 4,
+	};
+	
 	virtual ~Texture() = default;
 
 	virtual uint32_t GetWidth() const = 0;
@@ -27,9 +45,13 @@ public:
 class Texture2D : public Texture
 {
 public:
-	static Ref<Texture2D> Create(const uint32_t& width, 
-		const uint32_t& height);
+	static Ref<Texture2D> Create(const uint32_t width, 
+		const uint32_t height);
+	static Ref<Texture2D> Create(const uint32_t width, 
+		const uint32_t height, const InternalFormat internalFormat,
+		const DataFormat dataFormat);
 	static Ref<Texture2D> Create(const std::string& path);
 };
+
 
 }
