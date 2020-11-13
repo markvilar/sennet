@@ -17,6 +17,9 @@ GLenum SennetToOpenGL(const Texture::InternalFormat& internalFormat)
 		case Texture::InternalFormat::RGBA8:
 			glInternalFormat = GL_RGBA8;
 			break;
+		case Texture::InternalFormat::RGB8:
+			glInternalFormat = GL_RGB8;
+			break;
 	}
 	SN_CORE_ASSERT(glInternalFormat, "Invalid OpenGL internal format.");
 	return glInternalFormat;
@@ -29,6 +32,15 @@ GLenum SennetToOpenGL(const Texture::DataFormat& dataFormat)
 	{
 		case Texture::DataFormat::RGBA:
 			glDataFormat = GL_RGBA;
+			break;
+		case Texture::DataFormat::BGRA:
+			glDataFormat = GL_BGRA;
+			break;
+		case Texture::DataFormat::RGB:
+			glDataFormat = GL_RGB;
+			break;
+		case Texture::DataFormat::BGR:
+			glDataFormat = GL_BGR;
 			break;
 	}
 	SN_CORE_ASSERT(glDataFormat, "Invalid OpenGL data format.");

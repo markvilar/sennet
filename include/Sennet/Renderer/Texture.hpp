@@ -14,9 +14,7 @@ public:
 	{
 		None 	= 0,
 		RGBA8 	= 1,
-		BGRA8	= 2,
-		RGB8	= 3,
-		BGR8	= 4,
+		RGB8	= 2,
 	};
 
 	enum class DataFormat : uint8_t
