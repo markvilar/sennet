@@ -4,8 +4,6 @@
 
 #include "Sennet/Core/Base.hpp"
 
-#include "Sennet/Primitives/Image.hpp"
-
 namespace Sennet
 {
 
@@ -32,7 +30,6 @@ public:
 	static Ref<Texture2D> Create(const uint32_t& width, 
 		const uint32_t& height);
 	static Ref<Texture2D> Create(const std::string& path);
-	static Ref<Texture2D> Create(const Image& image);
 };
 
 }
