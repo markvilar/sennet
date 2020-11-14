@@ -51,6 +51,27 @@ struct Message
 	}
 
 	template <typename D>
+	friend Message<T>& operator<<(Message<T>& message, 
+		const std::vector<D>& data)
+	{
+		static_assert(std::is_standard_layout<D>::value,
+			"Data is too complex to be pushed into vector.");
+		uint64_t i = message.Body.size();
+		uint64_t vectorSize = data.size();
+
+		// Resize body.
+		message.Body.resize(message.Body.size() + vectorSize);
+
+		// Copy data into vector.
+		std::memcpy(message.Body.data() + i, data.data(), vectorSize);
+
+		// Update header size.
+		message.Header.Size = message.Size();
+
+		return message;
+	}
+
+	template <typename D>
 	friend Message<T>& operator>>(Message<T>& message, D& data)
 	{
 		static_assert(std::is_standard_layout<D>::value,
@@ -60,6 +81,26 @@ struct Message
 
 		// Copy data from vector.
 		std::memcpy(&data, message.Body.data() + i, sizeof(D));
+
+		// Resize body.
+		message.Body.resize(i);
+
+		// Update header size.
+		message.Header.Size = message.Size();
+
+		return message;
+	}
+
+	template <typename D>
+	friend Message<T>& operator>>(Message<T>& message, std::vector<D>& data)
+	{
+		static_assert(std::is_standard_layout<D>::value,
+			"Data is too complex to be pushed into vector.");
+		uint64_t vecSize = data.size();
+		uint64_t i = message.Body.size() - vecSize;
+
+		// Copy data from vector.
+		std::memcpy(data.data(), message.Body.data() + i, vecSize);
 
 		// Resize body.
 		message.Body.resize(i);
