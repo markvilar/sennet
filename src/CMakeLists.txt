@@ -41,7 +41,9 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/RendererAPI.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Shader.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Texture.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/VertexArray.hpp")
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/VertexArray.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Synchronization/Synchronizer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Sennet/Synchronization/Timestamp.hpp")
 
 # Add sennet as a static library
 add_library(Sennet STATIC

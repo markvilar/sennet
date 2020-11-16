@@ -9,6 +9,7 @@
 
 #include <array>
 #include <atomic>
+#include <fstream>
 #include <functional>
 #include <map>
 #include <memory>
