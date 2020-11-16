@@ -35,7 +35,7 @@ int main()
 	Sennet::Log::Init();
 
 	CustomClient client;
-	client.Connect("127.0.0.1", 60000);
+	client.Connect("10.42.0.35", 60000);
 
 	bool quit = false;
 	bool sent = false;

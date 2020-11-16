@@ -31,3 +31,6 @@
 #include "Sennet/Renderer/Shader.hpp"
 #include "Sennet/Renderer/Texture.hpp"
 #include "Sennet/Renderer/VertexArray.hpp"
+
+#include "Sennet/Synchronization/Synchronizer.hpp"
+#include "Sennet/Synchronization/Timestamp.hpp"
