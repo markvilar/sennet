@@ -56,14 +56,15 @@ public:
 		InternalEndSession();
 	}
 
-	void WriteEntry(const Timestamp& local, const Timestamp& remote)
+	void WriteEntry(const std::string localName, const Timestamp& local, 
+		const std::string remoteName, const Timestamp& remote)
 	{
 		std::stringstream json;
 		json << std::setprecision(6) << std::fixed;
 		json << ",{";
-		json << "\"local\":\"" << local.GetName() << "\",";
+		json << "\"local\":\"" << localName << "\",";
 		json << "\"localtime\":" << local.GetMilliseconds() << ",";
-		json << "\"remote\":\"" << remote.GetName() << "\",";
+		json << "\"remote\":\"" << remoteName << "\",";
 		json << "\"remotetime\":" << remote.GetMilliseconds();
 		json << "}";
 
