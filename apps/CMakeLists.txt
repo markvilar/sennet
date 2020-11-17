@@ -20,6 +20,6 @@ target_link_libraries(Sandbox2D PRIVATE Sennet)
 target_compile_features(Sandbox2D PUBLIC cxx_std_17)
 
 # UHINode
-add_executable(UHINode UHINode.cpp)
-target_compile_features(UHINode PRIVATE cxx_std_17)
-target_link_libraries(UHINode PRIVATE Sennet)
+add_executable(SynchronizationNode SynchronizationNode.cpp)
+target_compile_features(SynchronizationNode PRIVATE cxx_std_17)
+target_link_libraries(SynchronizationNode PRIVATE Sennet)
