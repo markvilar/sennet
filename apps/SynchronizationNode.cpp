@@ -52,11 +52,13 @@ protected:
 		case DefaultMessageTypes::ServerSynchronize:
 			SN_INFO("[{0}] Server Synchronize.", client->GetID());
 
-			Sennet::Timestamp ts("UHI");
+			Sennet::Timestamp ts;
+			ts.Grab();
 
 			Sennet::Message<DefaultMessageTypes> reply;
-			reply.Header.ID = DefaultMessageTypes::ServerSynchronize;
-			reply << ts;
+			reply.Header.ID = 
+				DefaultMessageTypes::ServerSynchronize;
+			reply << ts.GetMilliseconds();
 			client->Send(reply);
 			break;
 		}

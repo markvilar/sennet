@@ -7,8 +7,13 @@ namespace Sennet {
 class Timestamp
 {
 public:
-	Timestamp(const char* name)
-		: m_Name(name)
+	Timestamp() = default;
+	~Timestamp() = default;
+
+	void SetMilliseconds(const uint64_t ms) { m_Milliseconds = ms; }
+	uint64_t GetMilliseconds() const { return m_Milliseconds; }
+
+	virtual void Grab() 
 	{
 		auto now = std::chrono::steady_clock::now();
 		auto nowMs = std::chrono::time_point_cast
@@ -18,12 +23,7 @@ public:
 			<std::chrono::milliseconds>(epoch).count();
 	}
 
-	const char* GetName() const { return m_Name; }
-	uint64_t GetMilliseconds() const { return m_Milliseconds; }
-
-	~Timestamp() = default;
-private:
-	const char* m_Name;
+public:
 	uint64_t m_Milliseconds = 0; // Time since epoch in milliseconds.
 };
 
