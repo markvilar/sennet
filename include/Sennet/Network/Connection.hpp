@@ -8,6 +8,10 @@
 namespace Sennet
 {
 
+// Forward declaration.
+template <typename T>
+class Server;
+
 template <typename T> 
 class Connection : public std::enable_shared_from_this<Connection<T>>
 {
@@ -26,6 +30,19 @@ public:
 		m_MessagesIn(messagesIn)
 	{
 		m_Owner = parent;
+
+		if (m_Owner == Owner::Server)
+		{
+			m_HandshakeOut = uint64_t(
+				std::chrono::system_clock::now()
+				.time_since_epoch().count());
+			m_HandshakeCheck = Scramble(m_HandshakeOut);
+		}
+		else
+		{
+			m_HandshakeOut = 0;
+			m_HandshakeCheck = 0;
+		}
 	}
 
 	virtual ~Connection()
@@ -37,14 +54,15 @@ public:
 		return m_ID; 
 	}
 
-	void ConnectToClient(const uint32_t& id = 0)
+	void ConnectToClient(Server<T>* server, const uint32_t& id = 0)
 	{
 		if (m_Owner == Owner::Server)
 		{
 			if (m_Socket.is_open())
 			{
 				m_ID = id;
-				ReadHeader();
+				WriteValidation();
+				ReadValidation(server);
 			}
 		}
 	}
@@ -60,7 +78,7 @@ public:
 				{
 					if (!ec)
 					{
-						ReadHeader();
+						ReadValidation();
 					}
 				});
 		}
@@ -228,6 +246,76 @@ private:
 		ReadHeader();
 	}
 
+	uint64_t Scramble(const uint64_t input)
+	{
+		uint64_t output = input ^ 0xDEADBEEFC0DECAFE;
+		output = (output & 0xF0F0F0F0F0F0F0) >> 4 
+			| (output & 0xF0F0F0F0F0F0F0) << 4;
+		return output ^ 0xC0DEFACE12345678;
+	}
+
+	void WriteValidation()
+	{
+		asio::async_write(m_Socket, 
+			asio::buffer(&m_HandshakeOut, sizeof(m_HandshakeOut)), 
+			[this](std::error_code ec, uint64_t length)
+			{
+				if (!ec)
+				{
+					if (m_Owner == Owner::Client)
+					{
+						ReadHeader();
+					}
+				}
+				else
+				{
+					m_Socket.close();
+				}
+			});
+	}
+	
+	void ReadValidation(Server<T>* server = nullptr)
+	{
+		asio::async_read(m_Socket, 
+			asio::buffer(&m_HandshakeIn, sizeof(m_HandshakeIn)),
+			[this, server](std::error_code ec, uint64_t length)
+			{
+				if (ec)
+				{
+					SN_CORE_WARN("Client Disconnected "
+						"(ReadValidation).");
+					m_Socket.close();
+					return;
+				}
+				
+				if (m_Owner == Owner::Server)
+				{
+					if (m_HandshakeIn == m_HandshakeCheck)
+					{
+						SN_CORE_INFO("Client "
+							"Validated.");
+						server->OnClientValidated(this
+							->shared_from_this());
+
+						ReadHeader();
+					}
+					else
+					{
+						SN_CORE_WARN("Client "
+							"Disconnected (Fail "
+							"Validation).");
+						m_Socket.close();
+					}
+				}
+				else
+				{
+					m_HandshakeOut = Scramble(
+						m_HandshakeIn);
+					WriteValidation();
+				}
+			});
+	}
+
 protected:
 	// Temporary.
 	asio::ip::tcp::socket m_Socket;
@@ -244,6 +332,11 @@ protected:
 
 	// Message used to temporarily store incoming messages.
 	Message<T> m_MessageTemporaryIn;
+
+	// Handshake validation.
+	uint64_t m_HandshakeOut = 0;
+	uint64_t m_HandshakeIn = 0;
+	uint64_t m_HandshakeCheck = 0;
 };
 
 }

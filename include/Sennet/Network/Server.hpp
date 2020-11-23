@@ -66,42 +66,35 @@ public:
 		m_Acceptor.async_accept(
 			[this](std::error_code ec, asio::ip::tcp::socket socket)
 			{
-				if (!ec)
-				{
-					SN_CORE_INFO("[Server] New Connection: "
-						"{0}", socket.remote_endpoint());
 
-					auto newConn = CreateRef<Connection<T>>(
-						Connection<T>::Owner::Server,
-						m_Context,
-						std::move(socket),
-						m_MessagesIn);
-					
-					
-					if (OnClientConnect(newConn))
-					{
-						m_Connections.push_back(newConn);
-						m_Connections.back()->
-							ConnectToClient(
-								m_IDCounter++
-							);
-						SN_CORE_INFO("[Server] " 
-							"Connection {0} "
-							"Approved.", 
-							m_Connections.back()->
-							GetID()
-							);
-					}
-					else
-					{
-						SN_CORE_INFO("[Server] "
-							"Connection Denied.");
-					}
-				}
-				else
+				if (ec)
 				{
 					SN_CORE_ERROR("[Server] New Connection "
 						"Error: {0}", ec.message());
+					WaitForClientConnection();
+				}
+
+				SN_CORE_INFO("[Server] New Connection: {0}",
+					 socket.remote_endpoint());
+
+				auto newConn = CreateRef<Connection<T>>(
+					Connection<T>::Owner::Server,
+					m_Context, std::move(socket),
+					m_MessagesIn);
+					
+				if (OnClientConnect(newConn))
+				{
+					m_Connections.push_back(newConn);
+					m_Connections.back()->ConnectToClient(
+						this, m_IDCounter++);
+					SN_CORE_INFO("[Server] Connection {0} "
+						"Approved.", 
+						m_Connections.back()->GetID());
+				}
+				else
+				{
+					SN_CORE_INFO("[Server] "
+						"Connection Denied.");
 				}
 
 				WaitForClientConnection();
@@ -155,8 +148,13 @@ public:
 		}
 	}
 
-	void Update(uint64_t maxMessages = -1)
+	void Update(const uint64_t maxMessages = -1, const bool wait = false)
 	{
+		if (wait)
+		{
+			m_MessagesIn.wait();
+		}
+
 		uint64_t messageCount = 0;
 		while (messageCount < maxMessages && !m_MessagesIn.empty())
 		{
@@ -165,6 +163,10 @@ public:
 
 			messageCount++;
 		}
+	}
+
+	virtual void OnClientValidated(Ref<Connection<T>> client)
+	{
 	}
 
 protected:
