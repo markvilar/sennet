@@ -1,21 +1,20 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Core/Application.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Core/Application.hpp"
 
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
-#include <Sennet/Core/Input.hpp>
-#include <Sennet/Core/Log.hpp>
-#include <Sennet/Core/Timestep.hpp>
+#include "Sennet/Core/Input.hpp"
+#include "Sennet/Core/Log.hpp"
+#include "Sennet/Core/Timestep.hpp"
 
-#include <Sennet/Renderer/Renderer.hpp>
+#include "Sennet/Renderer/Renderer.hpp"
 
 namespace Sennet
 {
 
 Application* Application::s_Instance = nullptr;
 
-Application::Application(bool verbose)
-	: m_Verbose(verbose)
+Application::Application()
 {
 	SN_CORE_ASSERT(!s_Instance, "Application already exists!");
 	s_Instance = this;
@@ -53,15 +52,6 @@ void Application::OnEvent(Event& e)
 	}
 }
 
-void Application::OnMessage(Ref<Message> msg)
-{
-	if (m_Verbose)
-		SN_CORE_TRACE("Application: Got message {0}.", msg->ToString());
-	m_MessageMutex.lock();
-	m_MessageQueue.push(msg);
-	m_MessageMutex.unlock();
-}
-
 void Application::PushLayer(Layer* layer)
 {
 	m_LayerStack.PushLayer(layer);
@@ -76,12 +66,11 @@ void Application::PushOverlay(Layer* layer)
 
 void Application::Close()
 {
+	m_Running = false;
 }
 
 void Application::Run()
 {
-	if (m_Verbose)
-		SN_CORE_TRACE("Application: Running.");
 	while (m_Running)
 	{
 		// Temporary.
@@ -107,32 +96,7 @@ void Application::Run()
 		}
 		
 		m_Window->OnUpdate();
-
-		// Propagate messages through layers.
-		while (!m_MessageQueue.empty())
-		{
-			m_MessageMutex.lock();
-			auto msg = m_MessageQueue.front();
-			m_MessageQueue.pop();
-			m_MessageMutex.unlock();
-			
-			if (m_Verbose)
-			{
-				SN_CORE_TRACE("Application: Propagating message {0}",
-					msg->ToString());
-			}
-
-			for (Layer* layer : m_LayerStack)
-			{
-				layer->OnMessage(msg);
-				if (msg->Handled)
-					break;
-			}
-		}
 	}
-
-	if(m_Verbose)
-		SN_CORE_TRACE("Application: Stopped running.");
 }
 
 bool Application::OnWindowClose(WindowCloseEvent& e)

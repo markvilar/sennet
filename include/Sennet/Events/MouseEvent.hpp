@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Sennet/Core/Input.hpp>
-#include <Sennet/Events/Event.hpp>
+#include "Sennet/Core/Input.hpp"
+#include "Sennet/Events/Event.hpp"
 
 namespace Sennet
 {

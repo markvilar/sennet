@@ -2,49 +2,79 @@
 #include <functional>
 #include <thread>
 
-#include <Sennet/Sennet.hpp>
+#include "Sennet/Sennet.hpp"
 
-// Register messages.
-namespace
+enum class CustomMessageTypes : uint32_t
 {
+	ServerAccept,
+	ServerDeny,
+	ServerPing,
+	MessageAll,
+	ServerMessage,
+};
 
-zpp::serializer::register_types<
-	zpp::serializer::make_type<Sennet::TextMessage,
-	zpp::serializer::make_id("Sennet::TextMessage")>,
-	zpp::serializer::make_type<Sennet::ImageMessage,
-	zpp::serializer::make_id("Sennet::ImageMessage")>
-> _;
+class CustomClient : public Sennet::Client<CustomMessageTypes>
+{
+public:
+	void PingServer()
+	{
+		Sennet::Message<CustomMessageTypes> message;
+		message.Header.ID = CustomMessageTypes::ServerPing;
+		std::chrono::system_clock::time_point time = 
+			std::chrono::system_clock::now();
 
-}
+		message << time;
+		SN_INFO("Message size: {0}", message.Size());
+		SN_INFO("Message body size: {0}", message.Body.size());
+		Send(message);
+	}
+};
 
 int main()
 {
 	Sennet::Log::Init();
-	Sennet::ConnectionManager manager(6000, 1);
-	SN_INFO("Client attempting to connect.");
-	auto connection = manager.Connect("localhost", "7000");
-	manager.Start();
-	
-	auto textMsg = Sennet::CreateRef<Sennet::TextMessage>(
-		connection->GetLocalInformation().first,
-		connection->GetLocalInformation().second,
-		"hello world!");
 
-	auto imageMsg = Sennet::CreateRef<Sennet::ImageMessage>(
-		connection->GetLocalInformation().first,
-		connection->GetLocalInformation().second,
-		Sennet::Image(std::vector<unsigned char>(1920*1080*3, 150),
-		1920, 1080, 3));
+	CustomClient client;
+	client.Connect("10.42.0.35", 60000);
 
-	SN_INFO("Submitting messages.");
-	manager.SubmitMessage(connection, textMsg);
-	manager.SubmitMessage(connection, imageMsg);
-
-	for (int i = 0; i < 20; i++)
+	bool quit = false;
+	bool sent = false;
+	while (!quit)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		if (client.IsConnected())
+		{
+			if (!sent)
+			{
+				std::this_thread::sleep_for(
+					std::chrono::seconds(1));
+				SN_INFO("Pinging server!");
+				client.PingServer();
+				sent = true;
+			}
+			if (!client.Incoming().empty())
+			{
+				auto message = client.Incoming().pop_front().Msg;
+
+				switch (message.Header.ID)
+				{
+				case CustomMessageTypes::ServerPing:
+					std::chrono::system_clock::time_point t =
+						std::chrono::system_clock::now();
+					std::chrono::system_clock::time_point z;
+					message >> z;
+					auto time = std::chrono::duration<double>
+						(t - z).count();
+					SN_INFO("Ping: {0}", time);
+					break;
+				}
+			}
+		}
+		else
+		{
+			SN_INFO("Server Down.");
+			quit = true;
+		}
 	}
 
-	SN_INFO("Client: Finished.");
 	return 0;
 }

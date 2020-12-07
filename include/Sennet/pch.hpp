@@ -9,17 +9,20 @@
 
 #include <array>
 #include <atomic>
+#include <fstream>
 #include <functional>
 #include <map>
 #include <memory>
 #include <mutex>
 #include <vector>
+#include <unordered_map>
 #include <sstream>
 #include <string>
 #include <thread>
 #include <queue>
 
-#include <Sennet/Core/Log.hpp>
+#include "Sennet/Core/Log.hpp"
+#include "Sennet/Debug/Instrumentor.hpp"
 
 #ifdef SN_PLATFORM_WINDOWS
 	#include <Windows.h>

@@ -1,9 +1,9 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Renderer/Shader.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Renderer/Shader.hpp"
 
-#include <Sennet/Renderer/Renderer.hpp>
+#include "Sennet/Renderer/Renderer.hpp"
 
-#include <Sennet/Platform/OpenGL/OpenGLShader.hpp>
+#include "Sennet/Platform/OpenGL/OpenGLShader.hpp"
 
 namespace Sennet
 {

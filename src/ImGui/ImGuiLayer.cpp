@@ -1,15 +1,15 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/ImGui/ImGuiLayer.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/ImGui/ImGuiLayer.hpp"
 
-#include <imgui.h>
-#include <examples/imgui_impl_glfw.h>
-#include <examples/imgui_impl_opengl3.h>
+#include "imgui.h"
+#include "examples/imgui_impl_glfw.h"
+#include "examples/imgui_impl_opengl3.h"
 
-#include <Sennet/Core/Application.hpp>
+#include "Sennet/Core/Application.hpp"
 
 // TEMPORARY
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
+#include "GLFW/glfw3.h"
+#include "glad/glad.h"
 
 namespace Sennet
 {
@@ -55,8 +55,6 @@ void ImGuiLayer::OnDetach()
 
 void ImGuiLayer::OnImGuiRender()
 {
-	static bool show = true;
-	ImGui::ShowDemoWindow(&show);
 }
 
 void ImGuiLayer::Begin()

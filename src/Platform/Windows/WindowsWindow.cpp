@@ -1,13 +1,13 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Platform/Windows/WindowsWindow.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Platform/Windows/WindowsWindow.hpp"
 
-#include <Sennet/Core/Input.hpp>
+#include "Sennet/Core/Input.hpp"
 
-#include <Sennet/Events/ApplicationEvent.hpp>
-#include <Sennet/Events/KeyEvent.hpp>
-#include <Sennet/Events/MouseEvent.hpp>
+#include "Sennet/Events/ApplicationEvent.hpp"
+#include "Sennet/Events/KeyEvent.hpp"
+#include "Sennet/Events/MouseEvent.hpp"
 
-#include <Sennet/Platform/OpenGL/OpenGLContext.hpp>
+#include "Sennet/Platform/OpenGL/OpenGLContext.hpp"
 
 namespace Sennet
 {

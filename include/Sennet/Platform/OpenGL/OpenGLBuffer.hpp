@@ -1,5 +1,5 @@
 #pragma once
-#include <Sennet/Renderer/Buffer.hpp>
+#include "Sennet/Renderer/Buffer.hpp"
 
 namespace Sennet
 {

@@ -1,11 +1,11 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Platform/OpenGL/OpenGLShader.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Platform/OpenGL/OpenGLShader.hpp"
 
 #include <fstream>
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 
-#include <glm/gtc/type_ptr.hpp>
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Sennet
 {
@@ -188,6 +188,26 @@ void OpenGLShader::Bind() const
 void OpenGLShader::Unbind() const
 {
 	glUseProgram(0);
+}
+
+void OpenGLShader::SetInt(const std::string& name, const int value)
+{
+	UploadUniformInt(name, value);
+}
+
+void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value) 
+{
+	UploadUniformFloat3(name, value);
+}
+
+void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
+{
+	UploadUniformFloat4(name, value);
+}
+
+void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
+{
+	UploadUniformMat4(name, value);
 }
 
 void OpenGLShader::UploadUniformInt(const std::string& name, int value)

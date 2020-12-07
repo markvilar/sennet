@@ -1,7 +1,7 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Renderer/OrthographicCamera.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Renderer/OrthographicCamera.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace Sennet
 {

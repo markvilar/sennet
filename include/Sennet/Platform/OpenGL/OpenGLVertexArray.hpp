@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Sennet/Renderer/VertexArray.hpp>
+#include "Sennet/Renderer/VertexArray.hpp"
 
 namespace Sennet
 {

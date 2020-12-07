@@ -1,8 +1,8 @@
-#include <Sennet/pch.hpp>
-#include <Sennet/Renderer/OrthographicCameraController.hpp>
+#include "Sennet/pch.hpp"
+#include "Sennet/Renderer/OrthographicCameraController.hpp"
 
-#include <Sennet/Core/Input.hpp>
-#include <Sennet/Core/KeyCodes.hpp>
+#include "Sennet/Core/Input.hpp"
+#include "Sennet/Core/KeyCodes.hpp"
 
 namespace Sennet
 {

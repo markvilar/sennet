@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Sennet/Core/Base.hpp>
-#include <Sennet/Core/KeyCodes.hpp>
-#include <Sennet/Core/MouseCodes.hpp>
+#include "Sennet/Core/Base.hpp"
+#include "Sennet/Core/KeyCodes.hpp"
+#include "Sennet/Core/MouseCodes.hpp"
 
 namespace Sennet
 {

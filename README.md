@@ -21,16 +21,16 @@ cmake --build build
 
 ## TODOs
 - Add Cmake build configurations.
+- Add move constructor to image.
 - Improve and expand network system:
     - Implement Endpoint.
-    - Implement Service.
-    - Implement Session (connection map etc.).
-    - Implement Message Queue.
-    - Implement Message Register.
+    - Implement Socket.
+    - Implement NetworkContext.
+    - Implement bit conversion procedure.
 - Implement 2D renderer.
     - Implement batch rendering.
     - Add rendering thread and rendering submission.
-- Revise application class (non-GUI applications?).
+- Implement memory allocation metrics.
 
 ## DONEs
 - Integrate logger into system.
@@ -44,11 +44,8 @@ cmake --build build
 - Implement OpenGL render API.
 - Implement shaders.
 - Add event for window iconification.
-- Implement ZED messages (in separate project?).
 - Move current network system from Boost.Asio to Asio standalone.
-
-## Acknowledgements
-I would like to acknowledge Yan Chernikov (TheCherno) for inspiring the system 
-design of this project through the game engine 
-[Hazel](https://github.com/TheCherno/Hazel). A significant portion of the source 
-code of this project is adapted from this project or inspired by it.
+- Implement thread-safe queue.
+- Implement server and client class.
+- Implement templated message system.
+- Implement visual profiling metrics.

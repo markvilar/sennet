@@ -2,11 +2,11 @@
 
 #include <glm/glm.hpp>
 
-#include <Sennet/Core/Base.hpp>
+#include "Sennet/Core/Base.hpp"
 
-#include <Sennet/Renderer/OrthographicCamera.hpp>
-#include <Sennet/Renderer/RendererAPI.hpp>
-#include <Sennet/Renderer/Shader.hpp>
+#include "Sennet/Renderer/OrthographicCamera.hpp"
+#include "Sennet/Renderer/RendererAPI.hpp"
+#include "Sennet/Renderer/Shader.hpp"
 
 namespace Sennet
 {
@@ -32,7 +32,7 @@ private:
 		glm::mat4 ViewProjectionMatrix;
 	};
 
-	static SceneData* m_SceneData;
+	static Scope<SceneData> s_SceneData;
 };
 
 }

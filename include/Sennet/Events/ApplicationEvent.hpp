@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Sennet/Events/Event.hpp>
+#include "Sennet/Events/Event.hpp"
 
 namespace Sennet
 {

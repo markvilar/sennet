@@ -1,4 +1,4 @@
-#include <Sennet/Core/LayerStack.hpp>
+#include "Sennet/Core/LayerStack.hpp"
 
 namespace Sennet
 {
