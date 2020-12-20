@@ -21,9 +21,9 @@ public:
 	{
 		None 	= 0,
 		RGBA 	= 1,
-		BGRA	= 2,
-		RGB	= 3,
-		BGR	= 4,
+		BGRA    = 2,
+		RGB	    = 3,
+		BGR	    = 4,
 	};
 	
 	virtual ~Texture() = default;

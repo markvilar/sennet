@@ -19,7 +19,7 @@ target_include_directories(Sandbox2D PUBLIC)
 target_link_libraries(Sandbox2D PRIVATE Sennet)
 target_compile_features(Sandbox2D PUBLIC cxx_std_17)
 
-# UHINode
+# Synchronization node
 add_executable(SynchronizationNode SynchronizationNode.cpp)
 target_compile_features(SynchronizationNode PRIVATE cxx_std_17)
 target_link_libraries(SynchronizationNode PRIVATE Sennet)
