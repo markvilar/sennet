@@ -38,16 +38,15 @@ public:
 	virtual void Bind(uint32_t slot = 0) const = 0;
 	virtual void Unbind() const = 0;
 
+    virtual bool operator==(const Texture& other) const = 0;
 };
 
 class Texture2D : public Texture
 {
 public:
-	static Ref<Texture2D> Create(const uint32_t width, 
-		const uint32_t height);
-	static Ref<Texture2D> Create(const uint32_t width, 
-		const uint32_t height, const InternalFormat internalFormat,
-		const DataFormat dataFormat);
+	static Ref<Texture2D> Create(const uint32_t width, const uint32_t height);
+	static Ref<Texture2D> Create(const uint32_t width, const uint32_t height, 
+        const InternalFormat internalFormat, const DataFormat dataFormat);
 	static Ref<Texture2D> Create(const std::string& path);
 };
 
