@@ -38,26 +38,23 @@ void Sandbox2D::OnUpdate(Sennet::Timestep ts)
 	}
 
 	{
+        static float rotation = 0.0f;
+        rotation += ts * 50.0f;
+
 		SN_PROFILE_SCOPE("Renderer Draw");
+
 		Sennet::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-        /*
-		Sennet::Renderer2D::DrawRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, 
-			glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
-        */
-
+		Sennet::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, 
+            glm::radians(rotation), { 0.9f, 0.1f, 0.2f, 1.0f });
 		Sennet::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, 
 			{ 0.8f, 0.2f, 0.3f, 1.0f });
-
-		Sennet::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, 
-			m_QuadColor);
-
-		Sennet::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.0f }, 
+		Sennet::Renderer2D::DrawQuad({ 0.5f, 0.0f }, { 0.5f, 0.75f }, 
+            m_QuadColor);
+		Sennet::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, 
             m_CheckerboardTexture, 5.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-		
-        Sennet::Renderer2D::DrawQuad({ -0.5f, -0.5f, 0.1f }, { 1.0f, 1.0f }, 
-            m_CheckerboardTexture, 1.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-
+        Sennet::Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, 
+            { 1.0f, 1.0f }, glm::radians(45.0f), m_CheckerboardTexture, 1.0f, 
+            glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
 		Sennet::Renderer2D::EndScene();
 	}
 }
