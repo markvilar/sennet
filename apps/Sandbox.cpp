@@ -1,12 +1,4 @@
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <imgui.h>
-
-#include <Sennet/Sennet.hpp>
-
-// Temporary.
-#include <Sennet/Platform/OpenGL/OpenGLShader.hpp>
+#include "Sennet/Sennet.hpp"
 
 #include "Sandbox2D.hpp"
 
