@@ -110,8 +110,8 @@ target_link_libraries(Sennet
 	glad
 	glfw
 	imgui
-	stb
-	spdlog)
+	spdlog
+	stb)
 
 # Define macros.
 target_compile_definitions(Sennet

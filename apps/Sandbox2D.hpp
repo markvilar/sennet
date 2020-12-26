@@ -18,8 +18,6 @@ public:
 private:
 	Sennet::OrthographicCameraController m_CameraController;
 
-	Sennet::Ref<Sennet::Shader> m_FlatColorShader;
-	Sennet::Ref<Sennet::VertexArray> m_SquareVA;
 	Sennet::Ref<Sennet::Texture2D> m_CheckerboardTexture;
 	Sennet::Ref<Sennet::Texture2D> m_SpriteSheet;
 
