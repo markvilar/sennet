@@ -3,7 +3,7 @@
 
 #include "Sennet/Renderer/Renderer.hpp"
 
-#include "Sennet/Platform/OpenGL/OpenGLVertexArray.hpp"
+#include "Platform/OpenGL/OpenGLVertexArray.hpp"
 
 namespace Sennet
 {

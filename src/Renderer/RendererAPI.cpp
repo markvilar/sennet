@@ -1,7 +1,7 @@
 #include "Sennet/pch.hpp"
 #include "Sennet/Renderer/RendererAPI.hpp"
 
-#include "Sennet/Platform/OpenGL/OpenGLRendererAPI.hpp"
+#include "Platform/OpenGL/OpenGLRendererAPI.hpp"
 
 namespace Sennet
 {

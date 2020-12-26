@@ -1,5 +1,4 @@
-# Headers
-set(HEADER_LIST 
+set(SENNET_HDR
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Sennet.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Application.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Core/Base.hpp"
@@ -23,14 +22,6 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Message.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/Server.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Network/TSQueue.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLBuffer.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLContext.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLRendererAPI.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLShader.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLTexture.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/OpenGL/OpenGLVertexArray.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Windows/WindowsWindow.hpp"
-	"${PROJECT_SOURCE_DIR}/include/Sennet/Platform/Linux/LinuxWindow.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/Buffer.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/GraphicsContext.hpp"	
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Renderer/OrthographicCamera.hpp"	
@@ -45,38 +36,56 @@ set(HEADER_LIST
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Synchronization/Synchronizer.hpp"
 	"${PROJECT_SOURCE_DIR}/include/Sennet/Synchronization/Timestamp.hpp")
 
+set(SENNET_SRC
+	"Core/Application.cpp"
+	"Core/Layer.cpp"
+	"Core/LayerStack.cpp"
+	"Core/Log.cpp"
+	"Core/Window.cpp"
+	"ImGui/ImGuiBuild.cpp"
+	"ImGui/ImGuiLayer.cpp"
+	"ImGui/ImGuiUtilities.cpp"
+	"Renderer/Buffer.cpp"
+	"Renderer/GraphicsContext.cpp"
+	"Renderer/OrthographicCamera.cpp"
+	"Renderer/OrthographicCameraController.cpp"
+	"Renderer/RenderCommand.cpp"
+	"Renderer/Renderer.cpp"
+	"Renderer/Renderer2D.cpp"
+	"Renderer/RendererAPI.cpp"
+	"Renderer/Shader.cpp"
+	"Renderer/Texture.cpp"
+	"Renderer/VertexArray.cpp")
+
+
+set(PLATFORM_HDR
+	"${PROJECT_SOURCE_DIR}/include/Platform/OpenGL/OpenGLBuffer.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Platform/OpenGL/OpenGLContext.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Platform/OpenGL/OpenGLRendererAPI.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Platform/OpenGL/OpenGLShader.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Platform/OpenGL/OpenGLTexture.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Platform/OpenGL/OpenGLVertexArray.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Platform/Windows/WindowsWindow.hpp"
+	"${PROJECT_SOURCE_DIR}/include/Platform/Linux/LinuxWindow.hpp")
+
+set(PLATFORM_SRC
+	"Platform/OpenGL/OpenGLBuffer.cpp"
+	"Platform/OpenGL/OpenGLContext.cpp"
+	"Platform/OpenGL/OpenGLRendererAPI.cpp"
+	"Platform/OpenGL/OpenGLShader.cpp"
+	"Platform/OpenGL/OpenGLTexture.cpp"
+	"Platform/OpenGL/OpenGLVertexArray.cpp"
+	"Platform/Windows/WindowsInput.cpp"
+	"Platform/Windows/WindowsWindow.cpp"
+	"Platform/Linux/LinuxInput.cpp"
+	"Platform/Linux/LinuxWindow.cpp")
+
 # Add sennet as a static library
 add_library(Sennet STATIC
-	Core/Application.cpp
-	Core/Layer.cpp
-	Core/LayerStack.cpp
-	Core/Log.cpp
-	Core/Window.cpp
-	ImGui/ImGuiBuild.cpp
-	ImGui/ImGuiLayer.cpp
-	ImGui/ImGuiUtilities.cpp
-	Platform/OpenGL/OpenGLBuffer.cpp
-	Platform/OpenGL/OpenGLContext.cpp
-	Platform/OpenGL/OpenGLRendererAPI.cpp
-	Platform/OpenGL/OpenGLShader.cpp
-	Platform/OpenGL/OpenGLTexture.cpp
-	Platform/OpenGL/OpenGLVertexArray.cpp
-	Platform/Windows/WindowsInput.cpp
-	Platform/Windows/WindowsWindow.cpp
-	Platform/Linux/LinuxInput.cpp
-	Platform/Linux/LinuxWindow.cpp
-	Renderer/Buffer.cpp
-	Renderer/GraphicsContext.cpp
-	Renderer/OrthographicCamera.cpp
-	Renderer/OrthographicCameraController.cpp
-	Renderer/RenderCommand.cpp
-	Renderer/Renderer.cpp
-	Renderer/Renderer2D.cpp
-	Renderer/RendererAPI.cpp
-	Renderer/Shader.cpp
-	Renderer/Texture.cpp
-	Renderer/VertexArray.cpp
-	${HEADER_LIST})
+	${SENNET_HDR}
+	${SENNET_SRC}
+	${PLATFORM_HDR}
+	${PLATFORM_SRC})
 
 # Precompiled headers
 target_precompile_headers(Sennet 

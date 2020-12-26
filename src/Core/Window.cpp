@@ -3,9 +3,9 @@
 #include "Sennet/Core/Window.hpp"
 
 #if defined(SN_PLATFORM_WINDOWS)
-	#include "Sennet/Platform/Windows/WindowsWindow.hpp"
+	#include "Platform/Windows/WindowsWindow.hpp"
 #elif defined(SN_PLATFORM_LINUX)
-	#include "Sennet/Platform/Linux/LinuxWindow.hpp"
+	#include "Platform/Linux/LinuxWindow.hpp"
 #endif
 
 namespace Sennet

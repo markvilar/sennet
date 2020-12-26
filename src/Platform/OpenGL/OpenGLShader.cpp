@@ -1,5 +1,5 @@
 #include "Sennet/pch.hpp"
-#include "Sennet/Platform/OpenGL/OpenGLShader.hpp"
+#include "Platform/OpenGL/OpenGLShader.hpp"
 
 #include <fstream>
 

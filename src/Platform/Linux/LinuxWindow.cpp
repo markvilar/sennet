@@ -1,5 +1,5 @@
 #include "Sennet/pch.hpp"
-#include "Sennet/Platform/Linux/LinuxWindow.hpp"
+#include "Platform/Linux/LinuxWindow.hpp"
 
 #include "Sennet/Core/Input.hpp"
 
@@ -7,7 +7,7 @@
 #include "Sennet/Events/KeyEvent.hpp"
 #include "Sennet/Events/MouseEvent.hpp"
 
-#include "Sennet/Platform/OpenGL/OpenGLContext.hpp"
+#include "Platform/OpenGL/OpenGLContext.hpp"
 
 namespace Sennet
 {

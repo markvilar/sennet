@@ -98,7 +98,7 @@ void Renderer2D::Init()
         samplers[i] = i;
 
     // Shader.
-	s_Data.TextureShader = Shader::Create("../../assets/shaders/Texture.glsl");
+	s_Data.TextureShader = Shader::Create("../../assets/Shaders/Texture.glsl");
 	s_Data.TextureShader->Bind();
 	s_Data.TextureShader->SetIntArray("u_Textures", samplers,
         s_Data.MaxTextureSlots);
@@ -124,6 +124,8 @@ void Renderer2D::Shutdown()
     s_Data.QuadIndexCount = 0;
     s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
     s_Data.TextureSlotIndex = 1;
+
+	delete[] s_Data.QuadVertexBufferBase;
 }
 
 void Renderer2D::BeginScene(const OrthographicCamera& camera)

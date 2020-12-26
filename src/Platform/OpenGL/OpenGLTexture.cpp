@@ -1,5 +1,5 @@
 #include "Sennet/pch.hpp"
-#include "Sennet/Platform/OpenGL/OpenGLTexture.hpp"
+#include "Platform/OpenGL/OpenGLTexture.hpp"
 
 #include "glad/glad.h"
 

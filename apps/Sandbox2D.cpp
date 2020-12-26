@@ -13,7 +13,11 @@ Sandbox2D::Sandbox2D()
 void Sandbox2D::OnAttach()
 {
 	m_CheckerboardTexture = Sennet::Texture2D::Create(
-		"../../assets/textures/Checkerboard-600x600.png");
+		"../../assets/Textures/Checkerboard-600x600.png");
+	m_SpriteSheet = Sennet::Texture2D::Create(
+		"../../assets/Textures/RPGSpriteSheet.png");
+
+	Sennet::Renderer2D::Init();
 }
 
 void Sandbox2D::OnDetach()
@@ -45,29 +49,33 @@ void Sandbox2D::OnUpdate(Sennet::Timestep ts)
 		SN_PROFILE_SCOPE("Renderer Draw");
 
 		Sennet::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Sennet::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, 
+		Sennet::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f }, { 0.8f, 0.8f }, 
             glm::radians(rotation), { 0.9f, 0.1f, 0.2f, 1.0f });
-		Sennet::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, 
+		Sennet::Renderer2D::DrawQuad({ 2.0f, -2.0f }, { 0.8f, 0.8f }, 
 			{ 0.8f, 0.2f, 0.3f, 1.0f });
-		Sennet::Renderer2D::DrawQuad({ 0.5f, 0.0f }, { 0.5f, 0.75f }, 
+		Sennet::Renderer2D::DrawQuad({ 2.0f, 2.0f }, { 0.5f, 0.75f }, 
             m_QuadColor);
-		Sennet::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, 
+		Sennet::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.2f }, { 20.0f, 20.0f }, 
             m_CheckerboardTexture, 4.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-        Sennet::Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, 
+        Sennet::Renderer2D::DrawRotatedQuad({ -2.0f, -2.0f, 0.0f }, 
             { 1.0f, 1.0f }, glm::radians(45.0f), m_CheckerboardTexture, 1.0f, 
             glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-		//Sennet::Renderer2D::EndScene();
 
-		//Sennet::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		for (float y = -5.0f; y < 5.0f; y += 0.5f)
 		{
 			for (float x = -5.0f; x < 5.0f; x += 0.5f)
 			{
 				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, 
 					(y + 5.0f) / 10.0f, 0.7f };
-				Sennet::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, color);
+				Sennet::Renderer2D::DrawQuad({ x, y, -0.1f}, { 0.45f, 0.45f }, 
+					color);
 			}
 		}
+
+		Sennet::Renderer2D::DrawRotatedQuad({ -2.0f, 2.0f, 0.0f }, 
+			{ 2.560f, 1.664f }, glm::radians(0.0f), m_SpriteSheet, 1.0f, 
+            glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
+
 		Sennet::Renderer2D::EndScene();
 	}
 }

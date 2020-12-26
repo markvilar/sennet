@@ -39,8 +39,8 @@ private:
 	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
 	float m_CameraTranslationSpeed = 1.5f;
 
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 70.0f;
+	float m_CameraRotation = 0.0f; // Camera rotation in radians.
+	float m_CameraRotationSpeed = 1.0f;
 };
 
 }

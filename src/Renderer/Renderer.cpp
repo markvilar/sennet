@@ -4,7 +4,7 @@
 #include "Sennet/Renderer/RenderCommand.hpp"
 #include "Sennet/Renderer/Renderer2D.hpp"
 
-#include "Sennet/Platform/OpenGL/OpenGLShader.hpp"
+#include "Platform/OpenGL/OpenGLShader.hpp"
 
 namespace Sennet
 {

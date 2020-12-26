@@ -1,5 +1,5 @@
 #pragma once
-#include <Sennet/Sennet.hpp>
+#include "Sennet/Sennet.hpp"
 
 class Sandbox2D : public Sennet::Layer
 {
@@ -21,6 +21,7 @@ private:
 	Sennet::Ref<Sennet::Shader> m_FlatColorShader;
 	Sennet::Ref<Sennet::VertexArray> m_SquareVA;
 	Sennet::Ref<Sennet::Texture2D> m_CheckerboardTexture;
+	Sennet::Ref<Sennet::Texture2D> m_SpriteSheet;
 
 	glm::vec4 m_QuadColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 };

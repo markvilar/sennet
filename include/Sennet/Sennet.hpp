@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Sennet/Core/Base.hpp"
-
 #include "Sennet/Core/Application.hpp"
+#include "Sennet/Core/Base.hpp"
 #include "Sennet/Core/Layer.hpp"
 #include "Sennet/Core/Log.hpp"
 #include "Sennet/Core/Timestep.hpp"

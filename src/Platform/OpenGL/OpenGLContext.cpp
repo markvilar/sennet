@@ -1,5 +1,5 @@
 #include "Sennet/pch.hpp"
-#include "Sennet/Platform/OpenGL/OpenGLContext.hpp"
+#include "Platform/OpenGL/OpenGLContext.hpp"
 
 #include "Sennet/Core/Base.hpp"
 #include "Sennet/Core/Log.hpp"

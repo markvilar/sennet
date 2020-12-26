@@ -3,7 +3,7 @@
 
 #include "Sennet/Renderer/Renderer.hpp"
 
-#include "Sennet/Platform/OpenGL/OpenGLShader.hpp"
+#include "Platform/OpenGL/OpenGLShader.hpp"
 
 namespace Sennet
 {
