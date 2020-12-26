@@ -1,4 +1,4 @@
-#include "Sennet/pch.hpp"
+#include "Sennet/Pch.hpp"
 #include "Platform/OpenGL/OpenGLVertexArray.hpp"
 
 #include "glad/glad.h"

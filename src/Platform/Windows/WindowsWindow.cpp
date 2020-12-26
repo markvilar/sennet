@@ -1,4 +1,4 @@
-#include "Sennet/pch.hpp"
+#include "Sennet/Pch.hpp"
 #include "Platform/Windows/WindowsWindow.hpp"
 
 #include "Sennet/Core/Input.hpp"
