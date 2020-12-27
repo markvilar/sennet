@@ -12,9 +12,7 @@ before_script:
 - sudo apt-get -y install libxcursor-dev
 - sudo apt-get -y install libxi-dev
 - sudo apt-get -y install libxext-dev
-- mkdir build
-- cd build
-- cmake ..
+- cmake -S . -B build
 
 script:
 - cmake --build build/
