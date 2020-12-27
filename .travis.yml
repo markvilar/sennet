@@ -6,7 +6,7 @@ os:
 language: cpp
 
 before_script:
-- sudo apt -y install libxrandr-dev
+- sudo apt-get -y install libxrandr-dev
 - mkdir build
 - cd build
 - cmake ..
