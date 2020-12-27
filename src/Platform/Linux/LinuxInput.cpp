@@ -1,6 +1,6 @@
 #if defined(SN_PLATFORM_LINUX)
 
-#include "Sennet/pch.hpp"
+#include "Sennet/Pch.hpp"
 #include "Sennet/Core/Input.hpp"
 
 #include "Sennet/Core/Application.hpp"
