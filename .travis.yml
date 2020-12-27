@@ -10,6 +10,8 @@ before_script:
 - sudo apt-get -y install libxrandr-dev
 - sudo apt-get -y install libxinerama-dev
 - sudo apt-get -y install libxcursor-dev
+- sudo apt-get -y install libxi-dev
+- sudo apt-get -y install libxext-dev
 - mkdir build
 - cd build
 - cmake ..
