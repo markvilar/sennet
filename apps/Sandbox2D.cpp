@@ -14,8 +14,11 @@ void Sandbox2D::OnAttach()
 {
 	m_CheckerboardTexture = Sennet::Texture2D::Create(
 		"../../assets/Textures/Checkerboard-600x600.png");
-	m_SpriteSheet = Sennet::Texture2D::Create(
-		"../../assets/Textures/RPGSpriteSheet.png");
+
+	Sennet::FramebufferSpecification fbSpec;
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_Framebuffer = Sennet::Framebuffer::Create(fbSpec);
 
 	Sennet::Renderer2D::Init();
 }
@@ -38,6 +41,7 @@ void Sandbox2D::OnUpdate(Sennet::Timestep ts)
 	Sennet::Renderer2D::ResetStats();
 	{
 		SN_PROFILE_SCOPE("Renderer Prep");
+		m_Framebuffer->Bind();
 		Sennet::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
 		Sennet::RenderCommand::Clear();
 	}
@@ -72,11 +76,8 @@ void Sandbox2D::OnUpdate(Sennet::Timestep ts)
 			}
 		}
 
-		Sennet::Renderer2D::DrawRotatedQuad({ -2.0f, 2.0f, 0.0f }, 
-			{ 2.560f, 1.664f }, glm::radians(0.0f), m_SpriteSheet, 1.0f, 
-            glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-
 		Sennet::Renderer2D::EndScene();
+		m_Framebuffer->Unbind();
 	}
 }
 
@@ -149,8 +150,8 @@ void Sandbox2D::OnImGuiRender()
 
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_QuadColor));
 
-		uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
+		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ 1280, 720 });
 		ImGui::End();
 
 	}
@@ -168,7 +169,7 @@ void Sandbox2D::OnImGuiRender()
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_QuadColor));
 
 		uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
+		ImGui::Image((void*)textureID, ImVec2{ 1280, 720 });
 		ImGui::End();
 	}
 }
