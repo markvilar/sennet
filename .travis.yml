@@ -1,18 +1,21 @@
 dist: focal
 
 os:
-	- linux
-	- osx
-	- windows
+- linux
 
 language: cpp
 
 before_script:
-	- cmake --version
-	- cmake -S . -B build
+- sudo apt-get update
+- sudo apt-get -y install libxrandr-dev
+- sudo apt-get -y install libxinerama-dev
+- sudo apt-get -y install libxcursor-dev
+- sudo apt-get -y install libxi-dev
+- sudo apt-get -y install libxext-dev
+- cmake -S . -B build
 
-scipt:
-	- cmake --build build/
+script:
+- cmake --build build/
 
 after_script:
 	

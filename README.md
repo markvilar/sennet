@@ -1,4 +1,4 @@
-# Sennet
+# Sennet [![Build Status](https://travis-ci.com/markvilar/Sennet.svg?branch=master)](https://travis-ci.com/markvilar/Sennet)
 
 Sennet is a static, cross-platform library for creating C++ applications 
 with graphics and networking functionality that is developed with focus on 
