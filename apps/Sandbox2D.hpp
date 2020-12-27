@@ -18,10 +18,8 @@ public:
 private:
 	Sennet::OrthographicCameraController m_CameraController;
 
-	Sennet::Ref<Sennet::Shader> m_FlatColorShader;
-	Sennet::Ref<Sennet::VertexArray> m_SquareVA;
 	Sennet::Ref<Sennet::Texture2D> m_CheckerboardTexture;
-	Sennet::Ref<Sennet::Texture2D> m_SpriteSheet;
+	Sennet::Ref<Sennet::Framebuffer> m_Framebuffer;
 
 	glm::vec4 m_QuadColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 };

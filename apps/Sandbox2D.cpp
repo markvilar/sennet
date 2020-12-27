@@ -14,8 +14,11 @@ void Sandbox2D::OnAttach()
 {
 	m_CheckerboardTexture = Sennet::Texture2D::Create(
 		"../../assets/Textures/Checkerboard-600x600.png");
-	m_SpriteSheet = Sennet::Texture2D::Create(
-		"../../assets/Textures/RPGSpriteSheet.png");
+
+	Sennet::FramebufferSpecification fbSpec;
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_Framebuffer = Sennet::Framebuffer::Create(fbSpec);
 
 	Sennet::Renderer2D::Init();
 }
@@ -38,6 +41,7 @@ void Sandbox2D::OnUpdate(Sennet::Timestep ts)
 	Sennet::Renderer2D::ResetStats();
 	{
 		SN_PROFILE_SCOPE("Renderer Prep");
+		m_Framebuffer->Bind();
 		Sennet::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
 		Sennet::RenderCommand::Clear();
 	}
@@ -72,11 +76,8 @@ void Sandbox2D::OnUpdate(Sennet::Timestep ts)
 			}
 		}
 
-		Sennet::Renderer2D::DrawRotatedQuad({ -2.0f, 2.0f, 0.0f }, 
-			{ 2.560f, 1.664f }, glm::radians(0.0f), m_SpriteSheet, 1.0f, 
-            glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-
 		Sennet::Renderer2D::EndScene();
+		m_Framebuffer->Unbind();
 	}
 }
 
@@ -84,17 +85,93 @@ void Sandbox2D::OnImGuiRender()
 {
 	SN_PROFILE_FUNCTION();
 
-	ImGui::Begin("Settings");
+	static bool dockingEnabled = true;
+	if (dockingEnabled)
+	{
+		static bool dockspaceOpen = true;
+		static bool optionFullscreenPersistant = true;
+		bool optionFullscreen = optionFullscreenPersistant;
+		static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
-	auto stats = Sennet::Renderer2D::GetStats();
-	ImGui::Text("Renderer2D Stats:");
-	ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-	ImGui::Text("Quads: %d", stats.QuadCount);
-	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar 
+			| ImGuiWindowFlags_NoDocking;
+		if (optionFullscreen)
+		{
+			ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGui::SetNextWindowPos(viewport->GetWorkPos());
+			ImGui::SetNextWindowSize(viewport->GetWorkSize());
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			window_flags |= ImGuiWindowFlags_NoTitleBar 
+				| ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize 
+				| ImGuiWindowFlags_NoMove;
+			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus 
+				| ImGuiWindowFlags_NoNavFocus;
+		}
 
-	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_QuadColor));
-	ImGui::End();
+		if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
+			window_flags |= ImGuiWindowFlags_NoBackground;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
+		ImGui::PopStyleVar();
+		
+		if (optionFullscreen)
+			ImGui::PopStyleVar(2);
+
+		// DockSpace
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		{
+			ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), dockspaceFlags);
+		}
+
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Exit"))
+					Sennet::Application::Get().Close();
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
+		ImGui::Begin("Settings");
+
+		auto stats = Sennet::Renderer2D::GetStats();
+		ImGui::Text("Renderer2D Stats:");
+		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+		ImGui::Text("Quads: %d", stats.QuadCount);
+		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_QuadColor));
+
+		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ 1280, 720 });
+		ImGui::End();
+
+	}
+	else
+	{
+		ImGui::Begin("Settings");
+
+		auto stats = Sennet::Renderer2D::GetStats();
+		ImGui::Text("Renderer2D Stats:");
+		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+		ImGui::Text("Quads: %d", stats.QuadCount);
+		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_QuadColor));
+
+		uint32_t textureID = m_CheckerboardTexture->GetRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ 1280, 720 });
+		ImGui::End();
+	}
 }
 
 void Sandbox2D::OnEvent(Sennet::Event& e)

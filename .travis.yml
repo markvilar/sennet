@@ -1,0 +1,18 @@
+dist: focal
+
+os:
+	- linux
+	- osx
+	- windows
+
+language: cpp
+
+before_script:
+	- cmake --version
+	- cmake -S . -B build
+
+scipt:
+	- cmake --build build/
+
+after_script:
+	

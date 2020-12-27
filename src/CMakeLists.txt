@@ -22,7 +22,8 @@ set(SENNET_HDR
 	"Sennet/Network/Message.hpp"
 	"Sennet/Network/Server.hpp"
 	"Sennet/Network/TSQueue.hpp"
-	"Sennet/Renderer/Buffer.hpp"	
+	"Sennet/Renderer/Buffer.hpp"
+	"Sennet/Renderer/Framebuffer.hpp"
 	"Sennet/Renderer/GraphicsContext.hpp"	
 	"Sennet/Renderer/OrthographicCamera.hpp"	
 	"Sennet/Renderer/OrthographicCameraController.hpp"	
@@ -46,6 +47,7 @@ set(SENNET_SRC
 	"Sennet/ImGui/ImGuiLayer.cpp"
 	"Sennet/ImGui/ImGuiUtilities.cpp"
 	"Sennet/Renderer/Buffer.cpp"
+	"Sennet/Renderer/Framebuffer.cpp"
 	"Sennet/Renderer/GraphicsContext.cpp"
 	"Sennet/Renderer/OrthographicCamera.cpp"
 	"Sennet/Renderer/OrthographicCameraController.cpp"
@@ -59,6 +61,7 @@ set(SENNET_SRC
 
 set(PLATFORM_HDR
 	"Platform/OpenGL/OpenGLBuffer.hpp"
+	"Platform/OpenGL/OpenGLFramebuffer.hpp"
 	"Platform/OpenGL/OpenGLContext.hpp"
 	"Platform/OpenGL/OpenGLRendererAPI.hpp"
 	"Platform/OpenGL/OpenGLShader.hpp"
@@ -69,6 +72,7 @@ set(PLATFORM_HDR
 
 set(PLATFORM_SRC
 	"Platform/OpenGL/OpenGLBuffer.cpp"
+	"Platform/OpenGL/OpenGLFramebuffer.cpp"
 	"Platform/OpenGL/OpenGLContext.cpp"
 	"Platform/OpenGL/OpenGLRendererAPI.cpp"
 	"Platform/OpenGL/OpenGLShader.cpp"
@@ -110,8 +114,8 @@ target_link_libraries(Sennet
 	glad
 	glfw
 	imgui
-	stb
-	spdlog)
+	spdlog
+	stb)
 
 # Define macros.
 target_compile_definitions(Sennet
