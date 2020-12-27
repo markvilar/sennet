@@ -2,8 +2,6 @@ dist: focal
 
 os:
 - linux
-- osx
-- windows
 
 language: cpp
 
