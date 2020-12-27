@@ -5,8 +5,12 @@ os:
 
 language: cpp
 
+addons:
+	apt:
+		update: True
+
 before_script:
-- sudo apt install libxrandr-dev
+- sudo apt -y install libxrandr-dev
 - mkdir build
 - cd build
 - cmake ..
