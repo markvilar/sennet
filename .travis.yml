@@ -1,18 +1,18 @@
 dist: focal
 
 os:
-	- linux
-	- osx
-	- windows
+- linux
+- osx
+- windows
 
 language: cpp
 
 before_script:
-	- cmake --version
-	- cmake -S . -B build
+- cmake --version
+- cmake -S . -B build
 
 scipt:
-	- cmake --build build/
+- cmake --build build/
 
 after_script:
 	
