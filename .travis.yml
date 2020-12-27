@@ -6,13 +6,12 @@ os:
 language: cpp
 
 before_script:
+- sudo apt-get update
 - sudo apt-get -y install libxrandr-dev
+- sudo apt-get -y install libxinerama-dev
 - mkdir build
 - cd build
 - cmake ..
-addons:
-  apt:
-    update: true
 
 script:
 - cmake --build build/
