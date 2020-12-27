@@ -7,7 +7,9 @@ language: cpp
 
 before_script:
 - cmake --version
-- cmake -S . -B build
+- mkdir build
+- cd build
+- cmake ..
 
 script:
 - cmake --build build/
