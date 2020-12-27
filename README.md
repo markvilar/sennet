@@ -1,5 +1,7 @@
-# Sennet [![Build Status](https://travis-ci.com/markvilar/Sennet.svg?branch=master)](https://travis-ci.com/markvilar/Sennet)
+# Sennet 
+[![Build Status](https://travis-ci.com/markvilar/Sennet.svg?branch=master)](https://travis-ci.com/markvilar/Sennet)
 
+## Description
 Sennet is a static, cross-platform library for creating C++ applications 
 with graphics and networking functionality that is developed with focus on 
 sensor networking.
@@ -10,11 +12,22 @@ The requirements are:
 - CMake 3.16+
 
 ## CMake configuration and building
-To build Sennet, first configure CMake by setting the source and build directory:
+
+Install GLFW dependencies:
+```
+apt install libxrandr-dev
+apt install libxinerama-dev
+apt install libxcursor-dev
+apt install libxi-dev
+apt install libxext-dev
+```
+
+Configure CMake source and build directories:
 ```
 cmake -S . -B build
 ```
-Then build the library by issuing the following command:
+
+Issue CMake build command:
 ```
 cmake --build build
 ```
