@@ -5,15 +5,14 @@ os:
 
 language: cpp
 
-addons:
-	apt:
-		update: True
-
 before_script:
 - sudo apt -y install libxrandr-dev
 - mkdir build
 - cd build
 - cmake ..
+addons:
+  apt:
+    update: true
 
 script:
 - cmake --build build/
