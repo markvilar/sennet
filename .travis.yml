@@ -11,7 +11,7 @@ before_script:
 - cmake --version
 - cmake -S . -B build
 
-scipt:
+script:
 - cmake --build build/
 
 after_script:
