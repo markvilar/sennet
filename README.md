@@ -40,8 +40,8 @@ cmake --build build
 
 ## Acknowledgements
 I would like to acknowledge the following projects for inspiring this one:
-- [Hazel][https://github.com/TheCherno/Hazel]
-- [FlexEngine][https://github.com/ajweeks/FlexEngine]
-- [olcPixelGameEngine][https://github.com/OneLoneCoder/olcPixelGameEngine]
-- [anki-3d-engine][https://github.com/godlikepanos/anki-3d-engine]
-- [cilantro][https://github.com/kzampog/cilantro]
+- [Hazel](https://github.com/TheCherno/Hazel)
+- [FlexEngine](https://github.com/ajweeks/FlexEngine)
+- [olcPixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine)
+- [anki-3d-engine](https://github.com/godlikepanos/anki-3d-engine)
+- [cilantro](https://github.com/kzampog/cilantro)
