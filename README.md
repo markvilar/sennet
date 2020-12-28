@@ -36,7 +36,7 @@ cmake --build build
 
 ## Development Plan
 
-[Trello board][https://trello.com/b/iZZPB2t0/sennet]
+[Trello board](https://trello.com/b/iZZPB2t0/sennet)
 
 ## Acknowledgements
 I would like to acknowledge the following projects for inspiring this one:
