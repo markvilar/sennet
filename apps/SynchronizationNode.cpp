@@ -6,8 +6,8 @@
 enum class DefaultMessageTypes: uint32_t
 {
 	ServerPing			= 0,
-	ServerSynchronize		= 1,
-	ServerAccept			= 2,
+	ServerSynchronize	= 1,
+	ServerAccept		= 2,
 	ServerDeny			= 3,
 };
 
