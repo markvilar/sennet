@@ -90,10 +90,3 @@ add_subdirectory(extern/glm)
 add_subdirectory(extern/imgui)
 add_subdirectory(extern/spdlog)
 add_subdirectory(extern/stb)
-
-# Testing only available if this is the main app
-# Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
-if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR MODERN_CMAKE_BUILD_TESTING) AND 
-	BUILD_TESTING)
-	add_subdirectory(tests)
-endif()
