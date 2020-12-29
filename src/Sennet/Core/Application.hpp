@@ -11,16 +11,15 @@
 
 #include "Sennet/ImGui/ImGuiLayer.hpp"
 
+int main(int argc, char** argv);
+
 namespace Sennet
 {
-
-// TODO: Look into an alternative to Sennet::main function!
-int main(int argc, char** argv);
 
 class Application
 {
 public:
-	Application();
+	Application(const std::string& name = "Sennet App");
 	virtual ~Application();
 
 	void OnEvent(Event& e);
@@ -31,6 +30,8 @@ public:
 	Window& GetWindow() { return *m_Window; }
 
 	void Close();
+
+	ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 	static Application& Get() { return *s_Instance; }
 
@@ -51,7 +52,7 @@ protected:
 
 private:
 	static Application* s_Instance;
-	friend int main(int argc, char** argv);
+	friend int ::main(int argc, char** argv);
 };
 
 // To be defined in client.

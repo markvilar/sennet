@@ -11,7 +11,7 @@ namespace Sennet
 class LinuxWindow : public Window
 {
 public:
-	LinuxWindow(const WindowProps& props);
+	LinuxWindow(const WindowProperties& props);
 	virtual ~LinuxWindow();
 
 	void OnUpdate() override;
@@ -30,7 +30,7 @@ public:
 	virtual void* GetNativeWindow() const override { return m_Window; }
 
 private:
-	virtual void Init(const WindowProps& props);
+	virtual void Init(const WindowProperties& props);
 	virtual void Shutdown();
 
 private:

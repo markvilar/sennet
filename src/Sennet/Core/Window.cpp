@@ -10,7 +10,7 @@
 namespace Sennet
 {
 
-Scope<Window> Window::Create(const WindowProps& props)
+Scope<Window> Window::Create(const WindowProperties& props)
 {
 #if defined(SN_PLATFORM_WINDOWS)
 	return CreateScope<WindowsWindow>(props);
