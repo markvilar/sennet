@@ -2,9 +2,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(Sennet VERSION 1.0 LANGUAGES CXX C)
 
-# Options
-# option()
-
 # Build configurations
 add_compile_definitions(SN_DEBUG)
 add_compile_definitions(SN_PLATFORM_LINUX)
@@ -39,6 +36,14 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
         	endif()
     	endif()
 endif()
+
+# Git submodule - entt
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/entt/CMakeLists.txt")
+    	message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE "
+		"was turned off or failed. Please update submodules and try "
+		"again.")
+endif()
+
 
 # Git submodule - glad
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/glad/CMakeLists.txt")

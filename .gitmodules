@@ -19,3 +19,6 @@
 [submodule "extern/asio"]
 	path = extern/asio
 	url = ../../markvilar/asio.git
+[submodule "extern/entt"]
+	path = extern/entt
+	url = https://github.com/skypjack/entt.git

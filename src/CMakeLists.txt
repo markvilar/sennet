@@ -100,6 +100,7 @@ target_include_directories(Sennet
 	PUBLIC 
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/extern/asio/asio/include"
+	"${PROJECT_SOURCE_DIR}/extern/entt/single_include"
 	"${PROJECT_SOURCE_DIR}/extern/glad/include"
 	"${PROJECT_SOURCE_DIR}/extern/glfw/include"
 	"${PROJECT_SOURCE_DIR}/extern/glm"
