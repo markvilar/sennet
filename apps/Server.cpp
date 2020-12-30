@@ -50,7 +50,7 @@ protected:
 	}
 };
 
-int main()
+int main(int argc, char** argv)
 {
 	Sennet::Log::Init();
 	CustomServer server(60000);

@@ -30,7 +30,7 @@ public:
 	}
 };
 
-int main()
+int main(int argc, char** argv)
 {
 	Sennet::Log::Init();
 
