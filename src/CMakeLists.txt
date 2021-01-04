@@ -34,6 +34,9 @@ set(SENNET_HDR
 	"Sennet/Renderer/Shader.hpp"
 	"Sennet/Renderer/Texture.hpp"
 	"Sennet/Renderer/VertexArray.hpp"
+	"Sennet/Scene/Components.hpp"
+	"Sennet/Scene/Entity.hpp"
+	"Sennet/Scene/Scene.hpp"
 	"Sennet/Synchronization/Synchronizer.hpp"
 	"Sennet/Synchronization/Timestamp.hpp")
 
@@ -57,9 +60,12 @@ set(SENNET_SRC
 	"Sennet/Renderer/RendererAPI.cpp"
 	"Sennet/Renderer/Shader.cpp"
 	"Sennet/Renderer/Texture.cpp"
-	"Sennet/Renderer/VertexArray.cpp")
+	"Sennet/Renderer/VertexArray.cpp"
+	"Sennet/Scene/Entity.cpp"
+	"Sennet/Scene/Scene.cpp")
 
 set(PLATFORM_HDR
+	"Platform/Linux/LinuxWindow.hpp"
 	"Platform/OpenGL/OpenGLBuffer.hpp"
 	"Platform/OpenGL/OpenGLFramebuffer.hpp"
 	"Platform/OpenGL/OpenGLContext.hpp"
@@ -67,10 +73,11 @@ set(PLATFORM_HDR
 	"Platform/OpenGL/OpenGLShader.hpp"
 	"Platform/OpenGL/OpenGLTexture.hpp"
 	"Platform/OpenGL/OpenGLVertexArray.hpp"
-	"Platform/Windows/WindowsWindow.hpp"
-	"Platform/Linux/LinuxWindow.hpp")
+	"Platform/Windows/WindowsWindow.hpp")
 
 set(PLATFORM_SRC
+	"Platform/Linux/LinuxInput.cpp"
+	"Platform/Linux/LinuxWindow.cpp"
 	"Platform/OpenGL/OpenGLBuffer.cpp"
 	"Platform/OpenGL/OpenGLFramebuffer.cpp"
 	"Platform/OpenGL/OpenGLContext.cpp"
@@ -79,9 +86,7 @@ set(PLATFORM_SRC
 	"Platform/OpenGL/OpenGLTexture.cpp"
 	"Platform/OpenGL/OpenGLVertexArray.cpp"
 	"Platform/Windows/WindowsInput.cpp"
-	"Platform/Windows/WindowsWindow.cpp"
-	"Platform/Linux/LinuxInput.cpp"
-	"Platform/Linux/LinuxWindow.cpp")
+	"Platform/Windows/WindowsWindow.cpp")
 
 # Sennet - Static library.
 add_library(Sennet STATIC
@@ -95,7 +100,7 @@ target_precompile_headers(Sennet
 	PRIVATE
 	"Sennet/Pch.hpp")
 
-# Sennet - Including.
+# Sennet - Include source code and external libraries.
 target_include_directories(Sennet 
 	PUBLIC 
 	"${PROJECT_SOURCE_DIR}/src"
@@ -108,7 +113,7 @@ target_include_directories(Sennet
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	"${PROJECT_SOURCE_DIR}/extern/stb") 
 
-# Sennet - Linking.
+# Sennet - Link external libraries.
 target_link_libraries(Sennet 
 	PRIVATE 
 	glad
