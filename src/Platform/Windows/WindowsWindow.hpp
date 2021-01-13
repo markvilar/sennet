@@ -12,7 +12,7 @@ namespace Sennet
 class WindowsWindow : public Window
 {
 public:
-	WindowsWindow(const WindowProps& props);
+	WindowsWindow(const WindowProperties& props);
 	virtual ~WindowsWindow();
 
 	void OnUpdate() override;
@@ -31,7 +31,7 @@ public:
 	virtual void* GetNativeWindow() const override { return m_Window; }
 
 private:
-	virtual void Init(const WindowProps& props);
+	virtual void Init(const WindowProperties& props);
 	virtual void Shutdown();
 
 private:

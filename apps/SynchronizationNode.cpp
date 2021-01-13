@@ -72,7 +72,7 @@ void interruptHandler(int)
 	stopFlag = 1;
 }
 
-int main()
+int main(int argc, char** argv)
 {
 	// Set up interrupt handler.
 	signal(SIGINT, &interruptHandler);

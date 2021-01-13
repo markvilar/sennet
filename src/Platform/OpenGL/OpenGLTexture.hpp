@@ -19,7 +19,7 @@ public:
 	virtual uint32_t GetWidth() const override { return m_Width; }
 	virtual uint32_t GetHeight() const override { return m_Height; }
 
-	virtual uint32_t GetRendererID() const override { return m_RendererID; }
+	virtual RendererID GetRendererID() const override { return m_RendererID; }
 
 	virtual void SetData(void* data, const uint32_t& size) override;
 
@@ -35,7 +35,7 @@ private:
 	std::string m_Source;
 	uint32_t m_Width;
 	uint32_t m_Height;
-	uint32_t m_RendererID;
+	RendererID m_RendererID;
 	InternalFormat m_InternalFormat;
 	DataFormat m_DataFormat;
 };

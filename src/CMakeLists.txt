@@ -83,21 +83,19 @@ set(PLATFORM_SRC
 	"Platform/Linux/LinuxInput.cpp"
 	"Platform/Linux/LinuxWindow.cpp")
 
-# Add sennet as a static library
+# Sennet - Static library.
 add_library(Sennet STATIC
 	${SENNET_HDR}
 	${SENNET_SRC}
 	${PLATFORM_HDR}
 	${PLATFORM_SRC})
 
-# Precompiled headers
+# Sennet - Precompiled header.
 target_precompile_headers(Sennet 
 	PRIVATE
 	"Sennet/Pch.hpp")
 
-# Include headers and source code from other libraries in sennet. This way we
-# won't have to link all of sennet dependencies into targets that use
-# sennet, but just sennet library itself.
+# Sennet - Including.
 target_include_directories(Sennet 
 	PUBLIC 
 	"${PROJECT_SOURCE_DIR}/src"
@@ -108,7 +106,8 @@ target_include_directories(Sennet
 	"${PROJECT_SOURCE_DIR}/extern/imgui"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	"${PROJECT_SOURCE_DIR}/extern/stb") 
-		
+
+# Sennet - Linking.
 target_link_libraries(Sennet 
 	PRIVATE 
 	glad
@@ -117,15 +116,12 @@ target_link_libraries(Sennet
 	spdlog
 	stb)
 
-# Define macros.
+# Sennet - Definitions.
 target_compile_definitions(Sennet
-	PRIVATE)
+	PRIVATE
+	GLFW_INCLUDE_NONE)
 
-# All users of this will need at least C++17
+# Sennet - Compilation features.
 target_compile_features(Sennet 
 	PUBLIC 
 	cxx_std_17)
-
-# IDEs should put the headers in a nice place
-source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES
-	${HEADER_LIST})

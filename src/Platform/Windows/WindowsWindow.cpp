@@ -19,7 +19,7 @@ static void GLFWErrorCallback(int error, const char* description)
 	SN_CORE_ERROR("GLFW error ({0}): {1}", error, description);
 }
 
-WindowsWindow::WindowsWindow(const WindowProps& props)
+WindowsWindow::WindowsWindow(const WindowProperties& props)
 {
 	Init(props);
 }
@@ -54,7 +54,7 @@ bool WindowsWindow::IsVSync() const
 	return m_Data.VSync;
 }
 
-void WindowsWindow::Init(const WindowProps& props)
+void WindowsWindow::Init(const WindowProperties& props)
 {
 	m_Data.Title = props.Title;
 	m_Data.Width = props.Width;

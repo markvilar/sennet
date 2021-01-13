@@ -16,7 +16,9 @@ public:
 	virtual void Bind() override;
 	virtual void Unbind() override;
 
-	virtual uint32_t GetColorAttachmentRendererID() const override 
+	virtual void Resize(uint32_t width, uint32_t height) override;
+
+	virtual RendererID GetColorAttachmentRendererID() const override 
 	{ 
 		return m_ColorAttachment;
 	}
@@ -27,9 +29,9 @@ public:
 	}
 
 private:
-	uint32_t m_RendererID;
-	uint32_t m_ColorAttachment;
-	uint32_t m_DepthAttachment;
+	RendererID m_RendererID = 0;
+	RendererID m_ColorAttachment = 0;
+	RendererID m_DepthAttachment = 0;
 	FramebufferSpecification m_Specification;
 };
 

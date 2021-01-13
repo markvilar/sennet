@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Sennet/Core/Base.hpp"
+#include "Sennet/Renderer/RendererAPI.hpp"
 
 namespace Sennet
 {
@@ -31,7 +32,7 @@ public:
 	virtual uint32_t GetWidth() const = 0;
 	virtual uint32_t GetHeight() const = 0;
 
-	virtual uint32_t GetRendererID() const = 0;
+	virtual RendererID GetRendererID() const = 0;
 
 	virtual void SetData(void* data, const uint32_t& size) = 0;
 

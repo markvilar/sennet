@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Sennet/Renderer/VertexArray.hpp"
+#include "Sennet/Renderer/RendererAPI.hpp"
 
 namespace Sennet
 {
@@ -29,7 +30,7 @@ public:
 	}
 
 private:
-	uint32_t m_RendererID;
+	RendererID m_RendererID;
 	std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 	Ref<IndexBuffer> m_IndexBuffer;
 };

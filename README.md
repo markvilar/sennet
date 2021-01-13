@@ -45,3 +45,4 @@ I would like to acknowledge the following projects for inspiring this one:
 - [olcPixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine)
 - [anki-3d-engine](https://github.com/godlikepanos/anki-3d-engine)
 - [cilantro](https://github.com/kzampog/cilantro)
+- [tinyply](https://github.com/ddiakopoulos/tinyply)

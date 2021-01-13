@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "Sennet/Renderer/Shader.hpp"
+#include "Sennet/Renderer/RendererAPI.hpp"
 
 // TODO: Remove!
 typedef unsigned int GLenum;
@@ -57,7 +58,7 @@ private:
 	void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 
 private:
-	uint32_t m_RendererID;
+	RendererID m_RendererID;
 	std::string m_Name;
 };
 

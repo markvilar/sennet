@@ -18,21 +18,21 @@ OrthographicCameraController::OrthographicCameraController(float aspectRatio,
 
 void OrthographicCameraController::OnUpdate(Timestep ts)
 {
-	if (Input::IsKeyPressed(SN_KEY_A))
+	if (Input::IsKeyPressed(KeyCode::A))
 		m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
-	else if (Input::IsKeyPressed(SN_KEY_D))
+	else if (Input::IsKeyPressed(KeyCode::D))
 		m_CameraPosition.x += m_CameraTranslationSpeed * ts;
 
-	if (Input::IsKeyPressed(SN_KEY_W))
+	if (Input::IsKeyPressed(KeyCode::W))
 		m_CameraPosition.y += m_CameraTranslationSpeed * ts;
-	else if (Input::IsKeyPressed(SN_KEY_S))
+	else if (Input::IsKeyPressed(KeyCode::S))
 		m_CameraPosition.y -= m_CameraTranslationSpeed * ts;
 
 	if (m_Rotation)
 	{
-		if (Input::IsKeyPressed(SN_KEY_Q))
+		if (Input::IsKeyPressed(KeyCode::Q))
 			m_CameraRotation += m_CameraRotationSpeed * ts;
-		if (Input::IsKeyPressed(SN_KEY_E))
+		if (Input::IsKeyPressed(KeyCode::E))
 			m_CameraRotation -= m_CameraRotationSpeed * ts;
 
 		m_Camera.SetRotation(m_CameraRotation);
@@ -53,6 +53,13 @@ void OrthographicCameraController::OnEvent(Event& e)
 	
 }
 
+void OrthographicCameraController::OnResize(float width, float height)
+{
+	m_AspectRatio = width / height;
+	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, 
+		m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+}
+
 bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 {
 	m_ZoomLevel -= e.GetOffsetY() * 0.25f;
@@ -64,9 +71,7 @@ bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 
 bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 {
-	m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, 
-		m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	OnResize((float)e.GetWidth(), (float)e.GetHeight());
 	return false;
 }
 
