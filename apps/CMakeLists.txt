@@ -3,7 +3,7 @@ add_executable(Client Client.cpp)
 target_compile_features(Client PRIVATE cxx_std_17)
 target_link_libraries(Client PRIVATE Sennet)
 
-# Client
+# Editor
 add_executable(Editor Editor.cpp)
 target_compile_features(Editor PRIVATE cxx_std_17)
 target_link_libraries(Editor PRIVATE Sennet Sennet-Editor)

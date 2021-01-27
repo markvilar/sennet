@@ -58,23 +58,22 @@ void EditorLayer::OnUpdate(Timestep ts)
 	}
 
 	{
-        static float rotation = 0.0f;
-        rotation += ts * 50.0f;
+		static float rotation = 0.0f;
+		rotation += ts * 50.0f;
 
 		SN_PROFILE_SCOPE("Renderer Draw");
 
 		Renderer2D::BeginScene(m_CameraController.GetCamera());
 		Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f }, { 0.8f, 0.8f }, 
-            glm::radians(rotation), { 0.9f, 0.1f, 0.2f, 1.0f });
+			glm::radians(rotation), { 0.9f, 0.1f, 0.2f, 1.0f });
 		Renderer2D::DrawQuad({ 2.0f, -2.0f }, { 0.8f, 0.8f }, 
 			{ 0.8f, 0.2f, 0.3f, 1.0f });
-		Renderer2D::DrawQuad({ 2.0f, 2.0f }, { 0.5f, 0.75f }, 
-            m_QuadColor);
+		Renderer2D::DrawQuad({ 2.0f, 2.0f }, { 0.5f, 0.75f }, m_QuadColor);
 		Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.2f }, { 20.0f, 20.0f }, 
-            m_CheckerboardTexture, 4.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-        Renderer2D::DrawRotatedQuad({ -2.0f, -2.0f, 0.0f }, 
-            { 1.0f, 1.0f }, glm::radians(45.0f), m_CheckerboardTexture, 1.0f, 
-            glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
+			m_CheckerboardTexture, 4.0f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
+		Renderer2D::DrawRotatedQuad({ -2.0f, -2.0f, 0.0f }, { 1.0f, 1.0f }, 
+			glm::radians(45.0f), m_CheckerboardTexture, 1.0f, 
+			glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
 
 		for (float y = -5.0f; y < 5.0f; y += 0.5f)
 		{
@@ -82,8 +81,7 @@ void EditorLayer::OnUpdate(Timestep ts)
 			{
 				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, 
 					(y + 5.0f) / 10.0f, 0.7f };
-				Renderer2D::DrawQuad({ x, y, -0.1f}, { 0.45f, 0.45f }, 
-					color);
+				Renderer2D::DrawQuad({ x, y, -0.1f}, { 0.45f, 0.45f }, color);
 			}
 		}
 
