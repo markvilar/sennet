@@ -97,7 +97,7 @@ void Renderer2D::Init()
     for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
         samplers[i] = i;
 
-    // Shader.
+    // Shader. TODO: Absolute shader path.
 	s_Data.TextureShader = Shader::Create("../../assets/Shaders/Texture.glsl");
 	s_Data.TextureShader->Bind();
 	s_Data.TextureShader->SetIntArray("u_Textures", samplers,
@@ -131,7 +131,7 @@ void Renderer2D::Shutdown()
 void Renderer2D::BeginScene(const OrthographicCamera& camera)
 {
 	s_Data.TextureShader->Bind();
-	s_Data.TextureShader->SetMat4("u_ViewProjection",
+	s_Data.TextureShader->SetMat4("u_ViewProjection", 
 		camera.GetViewProjectionMatrix());
 
     s_Data.QuadIndexCount = 0;
@@ -291,7 +291,7 @@ void Renderer2D::DrawQuad(const glm::mat4& transform,
     for (uint32_t i = 0; i < QuadData::VerticesPerQuad; i++)
     {
         s_Data.QuadVertexBufferPtr->Position = transform * 
-            s_Data.QuadVertexPositions[i];
+			s_Data.QuadVertexPositions[i];
         s_Data.QuadVertexBufferPtr->Color = tintColor;
         s_Data.QuadVertexBufferPtr->TextureCoord = s_Data.QuadTextureCoords[i];
         s_Data.QuadVertexBufferPtr->TextureIndex = textureIndex;

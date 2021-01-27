@@ -15,8 +15,7 @@ class Server
 	// Server class interface.
 public:
 	Server(uint16_t port)
-		: m_Acceptor(m_Context, 
-			asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+		: m_Acceptor(m_Context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
 	{
 	}
 
@@ -67,40 +66,29 @@ public:
 			{
 				if (!ec)
 				{
-					SN_CORE_INFO("[Server] New Connection: "
-						"{0}", socket.remote_endpoint());
+					SN_CORE_INFO("[Server] New Connection: {0}", 
+						socket.remote_endpoint());
 
 					auto newConn = CreateRef<Connection<T>>(
-						Connection<T>::Owner::Server,
-						m_Context,
-						std::move(socket),
-						m_MessagesIn);
-					
+						Connection<T>::Owner::Server, m_Context, 
+						std::move(socket), m_MessagesIn);
 					
 					if (OnClientConnect(newConn))
 					{
 						m_Connections.push_back(newConn);
-						m_Connections.back()->
-							ConnectToClient(
-								m_IDCounter++
-							);
-						SN_CORE_INFO("[Server] " 
-							"Connection {0} "
-							"Approved.", 
-							m_Connections.back()->
-							GetID()
-							);
+						m_Connections.back()->ConnectToClient(m_IDCounter++);
+						SN_CORE_INFO("[Server] Connection {0} Approved.", 
+							m_Connections.back()->GetID());
 					}
 					else
 					{
-						SN_CORE_INFO("[Server] "
-							"Connection Denied.");
+						SN_CORE_INFO("[Server] Connection Denied.");
 					}
 				}
 				else
 				{
-					SN_CORE_ERROR("[Server] New Connection "
-						"Error: {0}", ec.message());
+					SN_CORE_ERROR("[Server] New Connection Error: {0}", 
+						ec.message());
 				}
 
 				WaitForClientConnection();
@@ -117,10 +105,8 @@ public:
 		{
 			OnClientDisconnect(client);
 			client.reset();
-			m_Connections.erase(
-				std::remove(m_Connections.begin(),
-				m_Connections.end(), client),
-				m_Connections.end());
+			m_Connections.erase(std::remove(m_Connections.begin(), 
+				m_Connections.end(), client), m_Connections.end());
 		}
 	}
 

@@ -18,7 +18,7 @@ enum class EventType
 
 enum EventCategory
 {
-	none = 0,
+	None = 0,
 	EventCategoryApplication = BIT(0),
 	EventCategoryInput = BIT(1),
 	EventCategoryKeyboard = BIT(2),

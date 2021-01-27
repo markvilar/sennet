@@ -18,11 +18,9 @@ public:
 		Client
 	};
 
-	Connection(Owner parent, 
-		asio::io_context& context, 
-		asio::ip::tcp::socket socket, 
-		TSQueue<OwnedMessage<T>>& messagesIn)
-		: m_Context(context), m_Socket(std::move(socket)),
+	Connection(Owner parent, asio::io_context& context, 
+		asio::ip::tcp::socket socket, TSQueue<OwnedMessage<T>>& messagesIn)
+		: m_Context(context), m_Socket(std::move(socket)), 
 		m_MessagesIn(messagesIn)
 	{
 		m_Owner = parent;
@@ -55,8 +53,7 @@ public:
 		if (m_Owner == Owner::Client)
 		{
 			asio::async_connect(m_Socket, endpoints,
-				[this](std::error_code ec,
-				asio::ip::tcp::endpoint endpoint)
+				[this](std::error_code ec, asio::ip::tcp::endpoint endpoint)
 				{
 					if (!ec)
 					{
@@ -112,9 +109,7 @@ private:
 					if (m_MessageTemporaryIn.Header.Size > 0)
 					{
 						m_MessageTemporaryIn.Body.resize(
-							m_MessageTemporaryIn.
-							Header.Size
-							);
+							m_MessageTemporaryIn.Header.Size);
 						ReadBody();
 					}
 					else
@@ -124,8 +119,7 @@ private:
 				}
 				else
 				{
-					SN_CORE_ERROR("[{0}] Read Header Fail.",
-						m_ID);
+					SN_CORE_ERROR("[{0}] Read Header Fail.", m_ID);
 					m_Socket.close();
 				}
 			});
@@ -145,8 +139,7 @@ private:
 				}
 				else
 				{
-					SN_CORE_ERROR("[{0}] Read Body Fail.",
-						m_ID);
+					SN_CORE_ERROR("[{0}] Read Body Fail.", m_ID);
 					m_Socket.close();
 				}
 			});
@@ -162,8 +155,7 @@ private:
 			{
 				if (!ec)
 				{
-					if (m_MessagesOut.front().Body.size() >
-						0)
+					if (m_MessagesOut.front().Body.size() > 0)
 					{
 						WriteBody();
 					}
@@ -178,8 +170,7 @@ private:
 				}
 				else
 				{
-					SN_CORE_ERROR("[{0}] Write Header "
-						"Fail.", ec.message());
+					SN_CORE_ERROR("[{0}] Write Header Fail.", ec.message());
 					m_Socket.close();
 				}
 			});
@@ -199,14 +190,12 @@ private:
 
 					if (!m_MessagesOut.empty())
 					{
-						
 						WriteHeader();
 					}
 				}
 				else
 				{
-					SN_CORE_ERROR("[{0}] Write Body Fail.",
-						m_ID);
+					SN_CORE_ERROR("[{0}] Write Body Fail.", m_ID);
 					m_Socket.close();
 				}
 			});
@@ -216,13 +205,12 @@ private:
 	{
 		if (m_Owner == Owner::Server)
 		{
-			m_MessagesIn.push_back({ this->shared_from_this(),
+			m_MessagesIn.push_back({ this->shared_from_this(), 
 				m_MessageTemporaryIn });
 		}
 		else
 		{
-			m_MessagesIn.push_back({ nullptr, 
-				m_MessageTemporaryIn });
+			m_MessagesIn.push_back({ nullptr, m_MessageTemporaryIn });
 		}
 
 		ReadHeader();

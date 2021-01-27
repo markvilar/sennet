@@ -54,7 +54,7 @@ typedef enum class KeyCode : uint16_t
 	Z                   = 90,
 
 	LeftBracket         = 91,  /* [ */
-	Backslash	    = 92,  /* \ */
+	Backslash	        = 92,  /* \ */
 	RightBracket 	    = 93,  /* ] */
 	GraveAccent         = 96,  /* ` */
 
@@ -108,33 +108,33 @@ typedef enum class KeyCode : uint16_t
 	F25                 = 314,
 
 	/* keypad */
-	KP0                = 320,
-	KP1                = 321,
-	KP2                = 322,
-	KP3                = 323,
-	KP4                = 324,
-	KP5                = 325,
-	KP6                = 326,
-	KP7                = 327,
-	KP8                = 328,
-	KP9                = 329,
-	KPDecimal          = 330,
-	KPDivide           = 331,
-	KPMultiply         = 332,
-	KPSubtract         = 333,
-	KPAdd              = 334,
-	KPEnter            = 335,
-	KPEqual            = 336,
+	KP0                 = 320,
+	KP1                 = 321,
+	KP2                 = 322,
+	KP3                 = 323,
+	KP4                 = 324,
+	KP5                 = 325,
+	KP6                 = 326,
+	KP7                 = 327,
+	KP8                 = 328,
+	KP9                 = 329,
+	KPDecimal           = 330,
+	KPDivide            = 331,
+	KPMultiply          = 332,
+	KPSubtract          = 333,
+	KPAdd               = 334,
+	KPEnter             = 335,
+	KPEqual             = 336,
 
-	LeftShift          = 340,
-	LeftControl        = 341,
-	LeftAlt            = 342,
-	LeftSuper          = 343,
-	RightShift         = 344,
-	RightControl       = 345,
-	RightAlt           = 346,
-	RightSuper         = 347,
-	Menu               = 348
+	LeftShift           = 340,
+	LeftControl         = 341,
+	LeftAlt             = 342,
+	LeftSuper           = 343,
+	RightShift          = 344,
+	RightControl        = 345,
+	RightAlt            = 346,
+	RightSuper          = 347,
+	Menu                = 348
 } Key;
 
 inline std::ostream& operator<<(std::ostream& os, KeyCode keyCode)
