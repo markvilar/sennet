@@ -2,10 +2,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(Sennet VERSION 0.1 LANGUAGES CXX C)
 
-# Build configurations
-add_compile_definitions(SN_DEBUG)
-add_compile_definitions(SN_PLATFORM_WINDOWS)
-
 # If main project
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	# Let's ensure -std=c++xx instead of -std=g++xx
