@@ -22,9 +22,9 @@ void OpenGLContext::Init()
 	SN_CORE_ASSERT(status, "Failed to initialize Glad!")
 
 	SN_CORE_INFO("OpenGL Info:");
-	SN_CORE_INFO("	Vendor: {0}", glGetString(GL_VENDOR));
-	SN_CORE_INFO("	Renderer: {0}", glGetString(GL_RENDERER));
-	SN_CORE_INFO("	Version: {0}", glGetString(GL_VERSION));
+	SN_CORE_INFO(" - Vendor:   {0}", glGetString(GL_VENDOR));
+	SN_CORE_INFO(" - Renderer: {0}", glGetString(GL_RENDERER));
+	SN_CORE_INFO(" - Version:  {0}", glGetString(GL_VERSION));
 
 #ifdef SN_ENABLE_ASSERTS
 	int version_major;
@@ -32,8 +32,7 @@ void OpenGLContext::Init()
 	glGetIntegerv(GL_MAJOR_VERSION, &version_major);
 	glGetIntegerv(GL_MINOR_VERSION, &version_minor);
 
-	SN_CORE_ASSERT(version_major > 4 || 
-		(version_major == 4 && version_minor >= 5),
+	SN_CORE_ASSERT(version_major > 4 || (version_major == 4 && version_minor >= 5),
 		"Sennet requires at least OpenGL version 4.5!");
 #endif
 }

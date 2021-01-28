@@ -60,8 +60,8 @@ void LinuxWindow::Init(const WindowProperties& props)
 	m_Data.Width = props.Width;
 	m_Data.Height = props.Height;
 
-	SN_CORE_INFO("Creating window {0}, ({1}, {2})", props.Title, 
-		props.Width, props.Height);
+	SN_CORE_INFO("Creating window {0}, ({1}, {2})", props.Title, props.Width, 
+		props.Height);
 	
 	if (s_GLFWWindowCount == 0)
 	{
@@ -89,8 +89,7 @@ void LinuxWindow::Init(const WindowProperties& props)
 	glfwSetWindowSizeCallback(m_Window, 
 		[](GLFWwindow* window, int width, int height)
 	{
-		WindowData& data =
-			*(WindowData*)glfwGetWindowUserPointer(window);
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 		data.Width= width;
 		data.Height= height;
 
@@ -102,8 +101,7 @@ void LinuxWindow::Init(const WindowProperties& props)
 	glfwSetWindowIconifyCallback(m_Window, [](GLFWwindow* window,
 		int iconified)
 	{
-		WindowData& data =
-			*(WindowData*)glfwGetWindowUserPointer(window);
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 		
 		WindowIconifyEvent event(iconified == 1);
 		data.EventCallback(event);
@@ -111,8 +109,7 @@ void LinuxWindow::Init(const WindowProperties& props)
 	
 	glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 	{
-		WindowData& data =
-			*(WindowData*)glfwGetWindowUserPointer(window);
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 		WindowCloseEvent event;
 		data.EventCallback(event);
 	});
@@ -121,29 +118,25 @@ void LinuxWindow::Init(const WindowProperties& props)
 		[](GLFWwindow* window, int key, int scancode, int action, 
 		int mods)
 	{
-		WindowData& data = 
-			*(WindowData*)glfwGetWindowUserPointer(window);
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 		switch (action)
 		{
 			case GLFW_PRESS:
 			{
-				KeyPressedEvent event(
-					static_cast<KeyCode>(key), 0);
+				KeyPressedEvent event(static_cast<KeyCode>(key), 0);
 				data.EventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE:
 			{
-				KeyReleasedEvent event(
-					static_cast<KeyCode>(key));
+				KeyReleasedEvent event(static_cast<KeyCode>(key));
 				data.EventCallback(event);
 				break;
 			}
 			case GLFW_REPEAT:
 			{
-				KeyPressedEvent event(
-					static_cast<KeyCode>(key), 1);
+				KeyPressedEvent event(static_cast<KeyCode>(key), 1);
 				data.EventCallback(event);
 				break;
 			}
@@ -153,8 +146,7 @@ void LinuxWindow::Init(const WindowProperties& props)
 	glfwSetCharCallback(m_Window,
 		[](GLFWwindow* window, unsigned int keyCode)
 	{
-		WindowData& data =
-			*(WindowData*)glfwGetWindowUserPointer(window);
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 		KeyTypedEvent event(static_cast<KeyCode>(keyCode));
 		data.EventCallback(event);
 	});
@@ -162,22 +154,19 @@ void LinuxWindow::Init(const WindowProperties& props)
 	glfwSetMouseButtonCallback(m_Window,
 		[](GLFWwindow* window, int button, int action, int mods)
 	{
-		WindowData& data =
-			*(WindowData*)glfwGetWindowUserPointer(window);
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 		switch (action)
 		{
 			case GLFW_PRESS:
 			{
-				MouseButtonPressedEvent event(
-					static_cast<MouseCode>(button));
+				MouseButtonPressedEvent event(static_cast<MouseCode>(button));
 				data.EventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE:
 			{
-				MouseButtonReleasedEvent event(
-					static_cast<MouseCode>(button));
+				MouseButtonReleasedEvent event(static_cast<MouseCode>(button));
 				data.EventCallback(event);
 				break;
 			}
@@ -187,8 +176,7 @@ void LinuxWindow::Init(const WindowProperties& props)
 	glfwSetScrollCallback(m_Window,
 		[](GLFWwindow* window, double offsetX, double offsetY)
 	{
-		WindowData& data = 
-			*(WindowData*)glfwGetWindowUserPointer(window);
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 		
 		MouseScrolledEvent event((float)offsetX, (float)offsetY);
 		data.EventCallback(event);
@@ -197,8 +185,7 @@ void LinuxWindow::Init(const WindowProperties& props)
 	glfwSetCursorPosCallback(m_Window,
 		[](GLFWwindow* window, double posX, double posY)
 	{
-		WindowData& data =
-			*(WindowData*)glfwGetWindowUserPointer(window);
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 		
 		MouseMovedEvent event((float)posX, (float)posY);
 		data.EventCallback(event);
@@ -207,8 +194,8 @@ void LinuxWindow::Init(const WindowProperties& props)
 
 void LinuxWindow::Shutdown()
 {
-	SN_CORE_INFO("Deleting window {0}, ({1}, {2})", m_Data.Title,
-		m_Data.Width, m_Data.Height);
+	SN_CORE_INFO("Deleting window {0}, ({1}, {2})", m_Data.Title, m_Data.Width, 
+		m_Data.Height);
 
 	glfwDestroyWindow(m_Window);
 	--s_GLFWWindowCount;

@@ -27,9 +27,8 @@ public:
 		{
 			if (Log::GetCoreLogger())
 			{
-				SN_CORE_ERROR("Synchronizer::BeginSession("
-					"'{0}') when session '{1}' already "
-					"open.", name, m_CurrentSession->Name);
+				SN_CORE_ERROR("Synchronizer::BeginSession('{0}') when session \
+					'{1}' already open.", name, m_CurrentSession->Name);
 			}
 			InternalEndSession();
 		}
@@ -44,8 +43,8 @@ public:
 		{
 			if (Log::GetCoreLogger())
 			{
-				SN_CORE_ERROR("Synchronizer could not open "
-					"synchronization file '{0}'", filepath);
+				SN_CORE_ERROR("Synchronizer could not open synchronization \
+					file '{0}'", filepath);
 			}
 		}
 	}

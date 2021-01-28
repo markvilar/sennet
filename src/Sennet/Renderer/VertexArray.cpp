@@ -13,8 +13,8 @@ Ref<VertexArray> VertexArray::Create()
 	switch (Renderer::GetAPI())
 	{
 		case RendererAPI::API::None: 
-			SN_CORE_ASSERT(false, "Renderer API None is currently \
-				not supported!");
+			SN_CORE_ASSERT(false, "Renderer API None is currently not \
+				supported!");
 		case RendererAPI::API::OpenGL:
 			return CreateRef<OpenGLVertexArray>();
 	}

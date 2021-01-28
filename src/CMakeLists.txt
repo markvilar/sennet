@@ -1,5 +1,6 @@
 set(SENNET_HDR
 	"Sennet/Sennet.hpp"
+	"Sennet/Containers/Image.hpp"
 	"Sennet/Core/Application.hpp"
 	"Sennet/Core/Base.hpp"
 	"Sennet/Core/Input.hpp"
@@ -59,7 +60,7 @@ set(SENNET_SRC
 	"Sennet/Renderer/Texture.cpp"
 	"Sennet/Renderer/VertexArray.cpp")
 
-set(PLATFORM_HDR
+set(SENNET_PLATFORM_HDR
 	"Platform/OpenGL/OpenGLBuffer.hpp"
 	"Platform/OpenGL/OpenGLFramebuffer.hpp"
 	"Platform/OpenGL/OpenGLContext.hpp"
@@ -70,7 +71,7 @@ set(PLATFORM_HDR
 	"Platform/Windows/WindowsWindow.hpp"
 	"Platform/Linux/LinuxWindow.hpp")
 
-set(PLATFORM_SRC
+set(SENNET_PLATFORM_SRC
 	"Platform/OpenGL/OpenGLBuffer.cpp"
 	"Platform/OpenGL/OpenGLFramebuffer.cpp"
 	"Platform/OpenGL/OpenGLContext.cpp"
@@ -83,21 +84,25 @@ set(PLATFORM_SRC
 	"Platform/Linux/LinuxInput.cpp"
 	"Platform/Linux/LinuxWindow.cpp")
 
-# Sennet - Static library.
+set(SENNET_EDITOR_HDR
+	"Editor/EditorLayer.hpp")
+
+set(SENNET_EDITOR_SRC
+	"Editor/EditorLayer.cpp")
+
+
+# ---------------------------------- Sennet -----------------------------------
+
 add_library(Sennet STATIC
 	${SENNET_HDR}
 	${SENNET_SRC}
-	${PLATFORM_HDR}
-	${PLATFORM_SRC})
+	${SENNET_PLATFORM_HDR}
+	${SENNET_PLATFORM_SRC})
 
-# Sennet - Precompiled header.
-target_precompile_headers(Sennet 
-	PRIVATE
+target_precompile_headers(Sennet PRIVATE
 	"Sennet/Pch.hpp")
 
-# Sennet - Including.
-target_include_directories(Sennet 
-	PUBLIC 
+target_include_directories(Sennet PUBLIC 
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/extern/asio/asio/include"
 	"${PROJECT_SOURCE_DIR}/extern/glad/include"
@@ -107,21 +112,39 @@ target_include_directories(Sennet
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include"
 	"${PROJECT_SOURCE_DIR}/extern/stb") 
 
-# Sennet - Linking.
-target_link_libraries(Sennet 
-	PRIVATE 
+target_link_libraries(Sennet PRIVATE 
 	glad
 	glfw
 	imgui
 	spdlog
 	stb)
 
-# Sennet - Definitions.
-target_compile_definitions(Sennet
-	PRIVATE
+target_compile_definitions(Sennet PRIVATE
 	GLFW_INCLUDE_NONE)
 
-# Sennet - Compilation features.
-target_compile_features(Sennet 
-	PUBLIC 
+target_compile_features(Sennet PUBLIC 
 	cxx_std_17)
+
+# ----------------------------------- Editor -----------------------------------
+
+add_library(Sennet-Editor STATIC
+	${SENNET_EDITOR_HDR}
+	${SENNET_EDITOR_SRC})
+
+target_include_directories(Sennet-Editor PUBLIC 
+	"${PROJECT_SOURCE_DIR}/src")
+
+target_link_libraries(Sennet-Editor PRIVATE 
+	Sennet
+	glad
+	glfw
+	imgui
+	spdlog
+	stb)
+
+target_compile_definitions(Sennet-Editor PRIVATE
+	GLFW_INCLUDE_NONE)
+
+target_compile_features(Sennet-Editor PUBLIC 
+	cxx_std_17)
+
