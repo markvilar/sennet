@@ -1,11 +1,8 @@
 set(SENNET_EDITOR_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/Editor/include")
 set(SENNET_EDITOR_SOURCE_DIR "${PROJECT_SOURCE_DIR}/Editor/src")
 
-set(SENNET_EDITOR_HDR
-	"${SENNET_EDITOR_INCLUDE_DIR}/Editor/EditorLayer.hpp")
-
-set(SENNET_EDITOR_SRC
-	"${SENNET_EDITOR_SOURCE_DIR}/Editor/EditorLayer.cpp")
+set(SENNET_EDITOR_HDR "${SENNET_EDITOR_INCLUDE_DIR}/Editor/EditorLayer.hpp")
+set(SENNET_EDITOR_SRC "${SENNET_EDITOR_SOURCE_DIR}/Editor/EditorLayer.cpp")
 	
 add_library(Sennet-Editor STATIC 
 	${SENNET_EDITOR_HDR}
@@ -20,8 +17,15 @@ target_include_directories(Sennet-Editor PUBLIC
 target_link_libraries(Sennet-Editor PRIVATE
 	Sennet)
 
+# Build type
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSN_DEBUG")
+set(CMAKE_CXX_FLAGS_REALESE "${CMAKE_CXX_FLAGS_REALESE} -DSN_REALESE")
+
 target_compile_definitions(Sennet-Editor PRIVATE 
-	GLFW_INCLUDE_NONE)
+	"-DSN_PLATFORM_LINUX"
+	"-DGLFW_INCLUDE_NONE")
 
 target_compile_features(Sennet-Editor PUBLIC 
 	cxx_std_17)
+
+add_subdirectory(apps)

@@ -1,47 +1,3 @@
-# Git submodule - glad
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule glad was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-# Git submodule - glfw
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule glfw was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-# Git submodule - glm
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule glm was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-# Git submodule - imgui
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule imgui was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-# Git submodule - spdlog
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule spdlog was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-
-# External libraries
-add_subdirectory(vendor/glad)
-add_subdirectory(vendor/glfw)
-add_subdirectory(vendor/glm)
-add_subdirectory(vendor/imgui)
-add_subdirectory(vendor/spdlog)
-add_subdirectory(vendor/stb)
-
 set(SENNET_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/Sennet/include")
 set(SENNET_SOURCE_DIR "${PROJECT_SOURCE_DIR}/Sennet/src")
 
@@ -140,6 +96,12 @@ add_library(Sennet STATIC
 target_precompile_headers(Sennet PRIVATE 
 	"${SENNET_INCLUDE_DIR}/Sennet/Pch.hpp")
 
+# External libraries.
+add_subdirectory(vendor)
+
+# Executables.
+add_subdirectory(apps)
+
 target_include_directories(Sennet PUBLIC 
 	"${SENNET_INCLUDE_DIR}"
 	"vendor/asio/asio/include"
@@ -151,14 +113,24 @@ target_include_directories(Sennet PUBLIC
 	"vendor/stb") 
 
 target_link_libraries(Sennet PRIVATE 
-	glad
-	glfw
-	imgui
-	spdlog
+	glad 
+	glfw 
+	imgui 
+	spdlog 
 	stb)
 
+# Build type.
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSN_DEBUG")
+set(CMAKE_CXX_FLAGS_REALESE "${CMAKE_CXX_FLAGS_REALESE} -DSN_REALESE")
+
+message(STATUS)
+message(STATUS "Sennet build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Sennet C++ flags: ${CMAKE_CXX_FLAGS}")
+
+# TODO: Build platform.
 target_compile_definitions(Sennet PRIVATE 
-	GLFW_INCLUDE_NONE)
+	"-DSN_PLATFORM_LINUX"
+	"-DGLFW_INCLUDE_NONE")
 
 target_compile_features(Sennet PUBLIC 
 	cxx_std_17)

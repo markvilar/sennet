@@ -4,12 +4,9 @@ project(Sennet VERSION 0.1 LANGUAGES CXX C)
 
 # If main project
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-	# Let's ensure -std=c++xx instead of -std=g++xx
-	set(CMAKE_CXX_EXTENSIONS OFF)
-	# Support folders in IDEs
-	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-	# Enable testing
-	include(CTest)
+	set(CMAKE_CXX_EXTENSIONS OFF) # -std=c++xx instead of -std=g++xx
+	set_property(GLOBAL PROPERTY USE_FOLDERS ON) # Support folders in IDEs
+	include(CTest) # Enable testing
 endif()
 
 # Find packages
@@ -37,8 +34,3 @@ add_subdirectory(Sennet)
 
 # Editor library
 add_subdirectory(Editor)
-
-# Executable code - compile if main project
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-	add_subdirectory(Applications)
-endif()
