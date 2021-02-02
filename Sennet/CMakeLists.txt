@@ -112,7 +112,7 @@ target_include_directories(Sennet PUBLIC
 	"vendor/spdlog/include"
 	"vendor/stb") 
 
-target_link_libraries(Sennet PRIVATE glad glfw imgui spdlog stb)
+target_link_libraries(Sennet PRIVATE glad glfw imgui spdlog)
 
 # Build type flags.
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSN_DEBUG")
