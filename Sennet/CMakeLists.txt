@@ -112,25 +112,26 @@ target_include_directories(Sennet PUBLIC
 	"vendor/spdlog/include"
 	"vendor/stb") 
 
-target_link_libraries(Sennet PRIVATE 
-	glad 
-	glfw 
-	imgui 
-	spdlog 
-	stb)
+target_link_libraries(Sennet PRIVATE glad glfw imgui spdlog stb)
 
-# Build type.
+# Build type flags.
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSN_DEBUG")
 set(CMAKE_CXX_FLAGS_REALESE "${CMAKE_CXX_FLAGS_REALESE} -DSN_REALESE")
 
-message(STATUS)
+# Build platform flags.
+if(UNIX)
+	string(CONCAT CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} " "-DSN_PLATFORM_LINUX "
+		"-DGLFW_INCLUDE_NONE ")
+elseif(WIN32)
+	string(CONCAT CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} " "-DSN_PLATFORM_WINDOWS "
+		"-DGLFW_INCLUDE_NONE ")
+endif()
+
+message("\nCMake System: ${CMAKE_SYSTEM}")
+message("CMake C++ compiler: ${CMAKE_CXX_COMPILER}\n")
+
 message(STATUS "Sennet build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Sennet C++ flags: ${CMAKE_CXX_FLAGS}")
 
-# TODO: Build platform.
-target_compile_definitions(Sennet PRIVATE 
-	"-DSN_PLATFORM_LINUX"
-	"-DGLFW_INCLUDE_NONE")
-
-target_compile_features(Sennet PUBLIC 
-	cxx_std_17)
+target_compile_definitions(Sennet PRIVATE)
+target_compile_features(Sennet PUBLIC cxx_std_17)

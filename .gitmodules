@@ -3,7 +3,7 @@
 	url = https://github.com/gabime/spdlog.git
 [submodule "Sennet/vendor/imgui"]
 	path = Sennet/vendor/imgui
-	url = https://github.com/markvilar/imgui
+	url = https://github.com/markvilar/imgui.git
 [submodule "Sennet/vendor/glfw"]
 	path = Sennet/vendor/glfw
 	url = https://github.com/markvilar/glfw.git

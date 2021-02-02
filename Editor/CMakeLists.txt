@@ -14,18 +14,23 @@ target_include_directories(Sennet-Editor PUBLIC
 	"${PROJECT_SOURCE_DIR}/extern/imgui"
 	"${PROJECT_SOURCE_DIR}/extern/spdlog/include")
 
-target_link_libraries(Sennet-Editor PRIVATE
-	Sennet)
+add_subdirectory(vendor)
+add_subdirectory(apps)
 
-# Build type
+target_link_libraries(Sennet-Editor PRIVATE Sennet)
+
+# Build type flags.
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSN_DEBUG")
 set(CMAKE_CXX_FLAGS_REALESE "${CMAKE_CXX_FLAGS_REALESE} -DSN_REALESE")
 
-target_compile_definitions(Sennet-Editor PRIVATE 
-	"-DSN_PLATFORM_LINUX"
-	"-DGLFW_INCLUDE_NONE")
+# Build platform flags.
+if(UNIX)
+	string(CONCAT CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} " "-DSN_PLATFORM_LINUX "
+		"-DGLFW_INCLUDE_NONE ")
+elseif(WIN32)
+	string(CONCAT CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} " "-DSN_PLATFORM_WINDOWS "
+		"-DGLFW_INCLUDE_NONE ")
+endif()
 
-target_compile_features(Sennet-Editor PUBLIC 
-	cxx_std_17)
-
-add_subdirectory(apps)
+target_compile_definitions(Sennet-Editor PRIVATE)
+target_compile_features(Sennet-Editor PUBLIC cxx_std_17)

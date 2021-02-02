@@ -9,39 +9,37 @@ geometric data visualization and sensor networking.
 ## Requirements
 The requirements are:
 - C++17 compiler
-- CMake 3.16+
+- CMake 3.16 (or higher)
 
 ## GLFW dependencies on Linux distributions
 
 Sennet currently uses GLFW for its window and input system. Depending on the
 windowing system of the OS, GLFW requires installation of additional libraries
 on Linux. For example, Linux distributions using the X11 windowing system
-requires installation of the following dependencies:
-```
-libxrandr-dev
-libxinerama-dev
-libxcursor-dev
-libxi-dev
-libxext-dev
-```
+requires installation of the following dependencies: `libxrandr-dev` 
+`libxinerama-dev` `libxcursor-dev` `libxi-dev` `libxext-dev`
 
-To install:
+To install via `apt`:
 ```
 apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev
 ```
 
-## Building with CMake on Linux
+## Building with CMake - Makefiles on Unix
 
 Debug mode:
 ```
-cmake -S . -B build -"DCMAKE_BUILD_TYPE=Debug"
-cmake --build build --config Debug
+git clone https://gitub.com/markvilar/Sennet.git
+cd Sennet
+cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
+cmake --build build/ --config Debug
 ```
 
 Realese mode:
 ```
-cmake -S . -B build -"DCMAKE_BUILD_TYPE=Realese"
-cmake --build build --config Realese
+git clone https://gitub.com/markvilar/Sennet.git
+cd Sennet
+cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Realese"
+cmake --build build/ --config Realese
 ```
 
 ## Development Plan
