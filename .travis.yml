@@ -5,12 +5,12 @@ os: linux
 dist: focal
 		
 install:
-- sudo apt update
-- sudo apt -y install libxrandr-dev
-- sudo apt -y install libxinerama-dev
-- sudo apt -y install libxcursor-dev
-- sudo apt -y install libxi-dev
-- sudo apt -y install libxext-dev
+- sudo apt-get update
+- sudo apt-get -y install libxrandr-dev
+- sudo apt-get -y install libxinerama-dev
+- sudo apt-get -y install libxcursor-dev
+- sudo apt-get -y install libxi-dev
+- sudo apt-get -y install libxext-dev
 
 before_script:
 
