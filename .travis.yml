@@ -5,21 +5,25 @@ jobs:
 		- os: linux
 		  dist: focal
 
+compiler:
+- gcc
+- clang
+
 before_script:
 - if [ "$TRAVIS_OS_NAME" = "linux" ];
-	then sudo apt update;
-	then sudo apt -y install libxrandr-dev;
-	then sudo apt -y install libxinerama-dev;
-	then sudo apt -y install libxcursor-dev;
-	then sudo apt -y install libxi-dev;
-	then sudo apt -y install libxext-dev; 
-	fi
+- then sudo apt update;
+- then sudo apt -y install libxrandr-dev;
+- then sudo apt -y install libxinerama-dev;
+- then sudo apt -y install libxcursor-dev;
+- then sudo apt -y install libxi-dev;
+- then sudo apt -y install libxext-dev; 
+- fi
 
 script:
 - if [ "$TRAVIS_OS_NAME" = "linux" ];
-	then cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug";
-	then cmake --build build/;
-	fi
+- then cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug";
+- then cmake --build build/;
+- fi
 
 after_script:
 
