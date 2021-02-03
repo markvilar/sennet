@@ -4,15 +4,13 @@ os: linux
 
 dist: focal
 		
-install:
+before_script:
 - sudo apt-get update
 - sudo apt-get -y install libxrandr-dev
 - sudo apt-get -y install libxinerama-dev
 - sudo apt-get -y install libxcursor-dev
 - sudo apt-get -y install libxi-dev
 - sudo apt-get -y install libxext-dev
-
-before_script:
 
 script:
 - cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
