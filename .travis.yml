@@ -4,10 +4,6 @@ os: linux
 
 dist: focal
 		
-compiler:
-- gcc
-- clang
-
 install:
 - sudo apt update
 - sudo apt -y install libxrandr-dev
