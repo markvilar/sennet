@@ -1,9 +1,10 @@
+dist: focal
+
+os:
+- linux
+
 language: cpp
 
-os: linux
-
-dist: focal
-		
 before_script:
 - sudo apt-get update
 - sudo apt-get -y install libxrandr-dev
@@ -11,10 +12,10 @@ before_script:
 - sudo apt-get -y install libxcursor-dev
 - sudo apt-get -y install libxi-dev
 - sudo apt-get -y install libxext-dev
+- cmake -S . -B build -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
 
 script:
-- cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
-- cmake --build build/
+- cmake --build build
 
 after_script:
-
+	
