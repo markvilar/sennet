@@ -1,6 +1,3 @@
-set(SENNET_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/Sennet/include")
-set(SENNET_SOURCE_DIR "${PROJECT_SOURCE_DIR}/Sennet/src")
-
 set(SENNET_HDR
 	"${SENNET_INCLUDE_DIR}/Sennet/Sennet.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Containers/Image.hpp"
@@ -93,14 +90,13 @@ add_library(Sennet STATIC
 	${SENNET_PLATFORM_HDR}
 	${SENNET_PLATFORM_SRC})
 
-target_precompile_headers(Sennet PRIVATE 
-	"${SENNET_INCLUDE_DIR}/Sennet/Pch.hpp")
+target_precompile_headers(Sennet PRIVATE "${SENNET_INCLUDE_DIR}/Sennet/Pch.hpp")
 
-# External libraries.
 add_subdirectory(vendor)
 
-# Executables.
-add_subdirectory(apps)
+if(SENNET_BUILD_EXAMPLE)
+	add_subdirectory(example)
+endif()
 
 target_include_directories(Sennet PUBLIC 
 	"${SENNET_INCLUDE_DIR}"
@@ -113,25 +109,5 @@ target_include_directories(Sennet PUBLIC
 	"vendor/stb") 
 
 target_link_libraries(Sennet PRIVATE glad glfw imgui spdlog)
-
-# Build type flags.
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSN_DEBUG")
-set(CMAKE_CXX_FLAGS_REALESE "${CMAKE_CXX_FLAGS_REALESE} -DSN_REALESE")
-
-# Build platform flags.
-if(UNIX)
-	string(CONCAT CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} " "-DSN_PLATFORM_LINUX "
-		"-DGLFW_INCLUDE_NONE ")
-elseif(WIN32)
-	string(CONCAT CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} " "-DSN_PLATFORM_WINDOWS "
-		"-DGLFW_INCLUDE_NONE ")
-endif()
-
-message("\nCMake System: ${CMAKE_SYSTEM}")
-message("CMake C++ compiler: ${CMAKE_CXX_COMPILER}\n")
-
-message(STATUS "Sennet build type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "Sennet C++ flags: ${CMAKE_CXX_FLAGS}")
-
 target_compile_definitions(Sennet PRIVATE)
 target_compile_features(Sennet PUBLIC cxx_std_17)

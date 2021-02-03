@@ -24,14 +24,14 @@ To install via `apt`:
 apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev
 ```
 
-## Building with CMake - Makefiles on Unix
+## Building with CMake - Single configuration generators (Unix Makefiles)
 
 Debug mode:
 ```
 git clone https://gitub.com/markvilar/Sennet.git
 cd Sennet
 cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
-cmake --build build/ --config Debug
+cmake --build build/
 ```
 
 Realese mode:
@@ -39,6 +39,24 @@ Realese mode:
 git clone https://gitub.com/markvilar/Sennet.git
 cd Sennet
 cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Realese"
+cmake --build build/
+```
+
+## Building with CMake - Multiple configuration generators (Visual Studio)
+
+Debug mode:
+```
+git clone https://gitub.com/markvilar/Sennet.git
+cd Sennet
+cmake -S . -B build/ -G "Visual Studio 16 2019" -A x64
+cmake --build build/ --config Debug
+```
+
+Realese mode:
+```
+git clone https://gitub.com/markvilar/Sennet.git
+cd Sennet
+cmake -S . -B build/ -G "Visual Studio 16 2019" -A x64
 cmake --build build/ --config Realese
 ```
 
