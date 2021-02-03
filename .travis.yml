@@ -8,17 +8,19 @@ compiler:
 - gcc
 - clang
 
+install:
+- sudo apt update
+- sudo apt -y install libxrandr-dev
+- sudo apt -y install libxinerama-dev
+- sudo apt -y install libxcursor-dev
+- sudo apt -y install libxi-dev
+- sudo apt -y install libxext-dev
+
 before_script:
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt update; fi
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt -y install libxrandr-dev; fi
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt -y install libxinerama-dev; fi
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt -y install libxcursor-dev; fi
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt -y install libxi-dev; fi
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt -y install libxext-dev; fi
 
 script:
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"; fi
-- if [ "$TRAVIS_OS_NAME" = "linux" ]; then cmake --build build/; fi
+- cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
+- cmake --build build/
 
 after_script:
 
