@@ -4,17 +4,17 @@ os: linux
 
 language: cpp
 
-addon:
-	apt:
-		update: true
-		packages:
-			- cmake
-			- libxrandr-dev
-			- libxinerama-dev
-			- libxcursov-dev
-			- libxi-dev
-			- libxext-dev
+addons:
+  apt:
+    update: true
+    packages:
+      - cmake
+      - libxrandr-dev
+      - libxinerama-dev
+      - libxcursor-dev
+      - libxi-dev
+      - libxext-dev
 
 script:
-	- cmake -S . -B build -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
-	- cmake --build build
+  - cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
+  - cmake --build build/
