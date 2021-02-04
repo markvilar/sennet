@@ -1,21 +1,22 @@
 dist: focal
 
-os:
-- linux
+os: linux
 
 language: cpp
 
-before_script:
-- sudo apt-get update
-- sudo apt-get -y install libxrandr-dev
-- sudo apt-get -y install libxinerama-dev
-- sudo apt-get -y install libxcursor-dev
-- sudo apt-get -y install libxi-dev
-- sudo apt-get -y install libxext-dev
-- cmake -S . -B build -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
+addon:
+	apt:
+		update: true
+		packages:
+			- cmake
+			- libxrandr-dev
+			- libxinerama-dev
+			- libxcursov-dev
+			- libxi-dev
+			- libxext-dev
 
 script:
-- cmake --build build
-
-after_script:
-	
+	- if [ $TRAVIS_OS_NAME = linux ]; 
+		then cmake -S . -B build -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug";
+		fi
+	- cmake --build build
