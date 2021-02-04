@@ -16,7 +16,5 @@ addon:
 			- libxext-dev
 
 script:
-	- if [ $TRAVIS_OS_NAME = linux ]; 
-		then cmake -S . -B build -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug";
-		fi
+	- cmake -S . -B build -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
 	- cmake --build build
