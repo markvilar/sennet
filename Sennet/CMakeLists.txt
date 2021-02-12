@@ -1,50 +1,3 @@
-# Git submodule - glad
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule glad was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-# Git submodule - glfw
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule glfw was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-# Git submodule - glm
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule glm was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-# Git submodule - imgui
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule imgui was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-# Git submodule - spdlog
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/CMakeLists.txt")
-    	message(FATAL_ERROR "Sennet submodule spdlog was not downloaded! "
-		"GIT_SUBMODULE was turned off or failed. Please update submodules and "
-		"try again.")
-endif()
-
-
-# External libraries
-add_subdirectory(vendor/glad)
-add_subdirectory(vendor/glfw)
-add_subdirectory(vendor/glm)
-add_subdirectory(vendor/imgui)
-add_subdirectory(vendor/spdlog)
-add_subdirectory(vendor/stb)
-
-set(SENNET_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/Sennet/include")
-set(SENNET_SOURCE_DIR "${PROJECT_SOURCE_DIR}/Sennet/src")
-
 set(SENNET_HDR
 	"${SENNET_INCLUDE_DIR}/Sennet/Sennet.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Containers/Image.hpp"
@@ -137,8 +90,13 @@ add_library(Sennet STATIC
 	${SENNET_PLATFORM_HDR}
 	${SENNET_PLATFORM_SRC})
 
-target_precompile_headers(Sennet PRIVATE 
-	"${SENNET_INCLUDE_DIR}/Sennet/Pch.hpp")
+target_precompile_headers(Sennet PRIVATE "${SENNET_INCLUDE_DIR}/Sennet/Pch.hpp")
+
+add_subdirectory(vendor)
+
+if(SENNET_BUILD_EXAMPLE)
+	add_subdirectory(example)
+endif()
 
 target_include_directories(Sennet PUBLIC 
 	"${SENNET_INCLUDE_DIR}"
@@ -150,15 +108,6 @@ target_include_directories(Sennet PUBLIC
 	"vendor/spdlog/include"
 	"vendor/stb") 
 
-target_link_libraries(Sennet PRIVATE 
-	glad
-	glfw
-	imgui
-	spdlog
-	stb)
-
-target_compile_definitions(Sennet PRIVATE 
-	GLFW_INCLUDE_NONE)
-
-target_compile_features(Sennet PUBLIC 
-	cxx_std_17)
+target_link_libraries(Sennet PRIVATE glad glfw imgui spdlog)
+target_compile_definitions(Sennet PRIVATE)
+target_compile_features(Sennet PUBLIC cxx_std_17)

@@ -98,7 +98,7 @@ void Renderer2D::Init()
         samplers[i] = i;
 
     // Shader. TODO: Absolute shader path.
-	s_Data.TextureShader = Shader::Create("../../assets/Shaders/Texture.glsl");
+	s_Data.TextureShader = Shader::Create("../assets/Shaders/Texture.glsl");
 	s_Data.TextureShader->Bind();
 	s_Data.TextureShader->SetIntArray("u_Textures", samplers,
         s_Data.MaxTextureSlots);
