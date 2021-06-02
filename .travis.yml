@@ -1,21 +1,20 @@
 dist: focal
 
-os:
-- linux
+os: linux
 
 language: cpp
 
-before_script:
-- sudo apt-get update
-- sudo apt-get -y install libxrandr-dev
-- sudo apt-get -y install libxinerama-dev
-- sudo apt-get -y install libxcursor-dev
-- sudo apt-get -y install libxi-dev
-- sudo apt-get -y install libxext-dev
-- cmake -S . -B build
+addons:
+  apt:
+    update: true
+    packages:
+      - cmake
+      - libxrandr-dev
+      - libxinerama-dev
+      - libxcursor-dev
+      - libxi-dev
+      - libxext-dev
 
 script:
-- cmake --build build
-
-after_script:
-	
+  - cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
+  - cmake --build build/

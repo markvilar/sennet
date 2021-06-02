@@ -4,20 +4,18 @@
 
 #if defined(SN_PLATFORM_LINUX)
 #elif defined(SN_PLATFORM_WINDOWS)
-	#error "Windows is not supported yet!"
 #elif defined(SN_PLATFORM_MACOS)
 	#error "MACOS is not supported yet!"
 #elif defined(SN_PLATFORM_IOS)
 	#error "IOS is not supported yet!"
 #else
-	#error "Unknown platform!"
+	#error "Unknown build platform!"
 #endif
 
 #if defined(SN_DEBUG)
 #elif defined(SN_REALESE)
-#elif defined(SN_DIST)
 #else
-	#error "Unknown build configuration!"
+	#error "Unknown build type!"
 #endif
 
 #if defined(SN_DEBUG)
