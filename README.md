@@ -3,35 +3,61 @@
 
 ## Description
 Sennet is a static, cross-platform library for creating C++ applications 
-with graphics and networking functionality that is developed with focus on 
+with graphics and networking functionality, that is developed with focus on 
 geometric data visualization and sensor networking.
 
 ## Requirements
 The requirements are:
 - C++17 compiler
-- CMake 3.16+
+- CMake 3.16 (or higher)
 
-## Dependencies
+## GLFW dependencies on Linux distributions
 
-Install GLFW dependencies:
+Sennet currently uses GLFW for its window and input system. Depending on the
+windowing system of the OS, GLFW requires installation of additional libraries
+on Linux. For example, Linux distributions using the X11 windowing system
+requires installation of the following dependencies: `libxrandr-dev` 
+`libxinerama-dev` `libxcursor-dev` `libxi-dev` `libxext-dev`
+
+To install via `apt`:
 ```
-apt install libxrandr-dev
-apt install libxinerama-dev
-apt install libxcursor-dev
-apt install libxi-dev
-apt install libxext-dev
-```
-
-## Building with CMake
-
-Configure CMake source and build directories:
-```
-cmake -S . -B build
+apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev
 ```
 
-Issue CMake build command:
+## Building with CMake - Single configuration generators (Unix Makefiles)
+
+Debug mode:
 ```
-cmake --build build
+git clone https://gitub.com/markvilar/Sennet.git
+cd Sennet
+cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug"
+cmake --build build/
+```
+
+Realese mode:
+```
+git clone https://gitub.com/markvilar/Sennet.git
+cd Sennet
+cmake -S . -B build/ -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Realese"
+cmake --build build/
+```
+
+## Building with CMake - Multiple configuration generators (Visual Studio)
+
+Debug mode:
+```
+git clone https://gitub.com/markvilar/Sennet.git
+cd Sennet
+cmake -S . -B build/ -G "Visual Studio 16 2019" -A x64
+cmake --build build/ --config Debug
+```
+
+Realese mode:
+```
+git clone https://gitub.com/markvilar/Sennet.git
+cd Sennet
+cmake -S . -B build/ -G "Visual Studio 16 2019" -A x64
+cmake --build build/ --config Realese
 ```
 
 ## Development Plan
@@ -45,3 +71,4 @@ I would like to acknowledge the following projects for inspiring this one:
 - [olcPixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine)
 - [anki-3d-engine](https://github.com/godlikepanos/anki-3d-engine)
 - [cilantro](https://github.com/kzampog/cilantro)
+- [tinyply](https://github.com/ddiakopoulos/tinyply)
