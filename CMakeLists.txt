@@ -104,8 +104,6 @@ message(STATUS "Sennet C++ flags: ${CMAKE_CXX_FLAGS}")
 # ---- Source -----------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
-set(SENNET_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/Sennet/include")
-set(SENNET_SOURCE_DIR "${PROJECT_SOURCE_DIR}/Sennet/src")
 
 add_subdirectory(Sennet)
 

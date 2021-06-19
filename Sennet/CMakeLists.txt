@@ -1,3 +1,7 @@
+set(SENNET_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/Sennet/Include")
+set(SENNET_SOURCE_DIR "${PROJECT_SOURCE_DIR}/Sennet/Source")
+set(SENNET_VENDOR_DIR "${PROJECT_SOURCE_DIR}/Sennet/Vendor")
+
 set(SENNET_HDR
 	"${SENNET_INCLUDE_DIR}/Sennet/Sennet.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Containers/Image.hpp"
@@ -92,21 +96,21 @@ add_library(Sennet STATIC
 
 target_precompile_headers(Sennet PRIVATE "${SENNET_INCLUDE_DIR}/Sennet/Pch.hpp")
 
-add_subdirectory(vendor)
+add_subdirectory(Vendor)
 
 if(SENNET_BUILD_EXAMPLE)
-	add_subdirectory(example)
+	add_subdirectory(Example)
 endif()
 
 target_include_directories(Sennet PUBLIC 
 	"${SENNET_INCLUDE_DIR}"
-	"vendor/asio/asio/include"
-	"vendor/glad/include"
-	"vendor/glfw/include"
-	"vendor/glm"
-	"vendor/imgui"
-	"vendor/spdlog/include"
-	"vendor/stb") 
+	"${SENNET_VENDOR_DIR}/asio/asio/include"
+	"${SENNET_VENDOR_DIR}/glad/include"
+	"${SENNET_VENDOR_DIR}/glfw/include"
+	"${SENNET_VENDOR_DIR}/glm"
+	"${SENNET_VENDOR_DIR}/imgui"
+	"${SENNET_VENDOR_DIR}/spdlog/include"
+	"${SENNET_VENDOR_DIR}/stb") 
 
 target_link_libraries(Sennet PRIVATE glad glfw imgui spdlog)
 target_compile_definitions(Sennet PRIVATE)
