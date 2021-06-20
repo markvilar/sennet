@@ -1,6 +1,6 @@
 #pragma once
 
-#include "asio.hpp"
+#include <asio.hpp>
 
 #include "Sennet/Network/ThreadSafeQueue.hpp"
 #include "Sennet/Network/TCP/Message.hpp"
@@ -81,17 +81,17 @@ public:
 					{
 						m_Connections.push_back(newConn);
 						m_Connections.back()->ConnectToClient(m_IDCounter++);
-						SN_CORE_INFO("[Server] Connection {0} Approved.", 
+						SN_CORE_INFO("[Server] Connection {0} approved.", 
 							m_Connections.back()->GetID());
 					}
 					else
 					{
-						SN_CORE_INFO("[Server] Connection Denied.");
+						SN_CORE_INFO("[Server] Connection denied.");
 					}
 				}
 				else
 				{
-					SN_CORE_ERROR("[Server] New Connection Error: {0}", 
+					SN_CORE_ERROR("[Server] New connection error: {0}", 
 						ec.message());
 				}
 

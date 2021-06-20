@@ -1,6 +1,6 @@
 #pragma once
 
-#include "asio.hpp"
+#include <asio.hpp>
 
 #include "Sennet/Network/ThreadSafeQueue.hpp"
 #include "Sennet/Network/TCP/Message.hpp"
@@ -56,6 +56,7 @@ public:
 	{
 		if (m_Owner == Owner::Client)
 		{
+            // TODO: Set up timeout.
 			asio::async_connect(m_Socket, endpoints,
 				[this](std::error_code ec, asio::ip::tcp::endpoint endpoint)
 				{
@@ -110,6 +111,7 @@ private:
 			{
 				if (!ec)
 				{
+                    // If the message has a body.
 					if (m_MessageTemporaryIn.Header.Size > 0)
 					{
 						m_MessageTemporaryIn.Body.resize(
@@ -123,7 +125,7 @@ private:
 				}
 				else
 				{
-					SN_CORE_ERROR("[{0}] Read Header Fail.", m_ID);
+					SN_CORE_ERROR("[{0}] Read Header Failed.", m_ID);
 					m_Socket.close();
 				}
 			});
@@ -143,7 +145,7 @@ private:
 				}
 				else
 				{
-					SN_CORE_ERROR("[{0}] Read Body Fail.", m_ID);
+					SN_CORE_ERROR("[{0}] ReadBody() failed.", m_ID);
 					m_Socket.close();
 				}
 			});
@@ -174,7 +176,7 @@ private:
 				}
 				else
 				{
-					SN_CORE_ERROR("[{0}] Write Header Fail.", ec.message());
+					SN_CORE_ERROR("[{0}] WriteHeader() failed.", ec.message());
 					m_Socket.close();
 				}
 			});
@@ -199,7 +201,7 @@ private:
 				}
 				else
 				{
-					SN_CORE_ERROR("[{0}] Write Body Fail.", m_ID);
+					SN_CORE_ERROR("[{0}] WriteBody() failed.", m_ID);
 					m_Socket.close();
 				}
 			});

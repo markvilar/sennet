@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Sennet VERSION 0.1 LANGUAGES CXX)
 
 # -----------------------------------------------------------------------------
-# ---- Main -------------------------------------------------------------------
+# ---- Main project -----------------------------------------------------------
 # -----------------------------------------------------------------------------
 
 if(NOT DEFINED SENNET_MAIN_PROJECT)
@@ -31,11 +31,20 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSN_DEBUG")
 set(CMAKE_CXX_FLAGS_REALESE "${CMAKE_CXX_FLAGS_REALESE} -DSN_REALESE")
 
 # -----------------------------------------------------------------------------
+# ---- Build options ----------------------------------------------------------
+# -----------------------------------------------------------------------------
+
+option(SENNET_BUILD_SHARED   "Build shared library."     OFF)
+option(SENNET_BUILD_EXAMPLE  "Build library examples."   ON)
+option(SENNET_BUILD_EDITOR   "Build Sennet editor."      ON)
+option(SENNET_BUILD_WARNINGS "Enable compiler warnings." OFF)
+
+# -----------------------------------------------------------------------------
 # ---- Compiler configuration -------------------------------------------------
 # -----------------------------------------------------------------------------
 
 if(NOT CMAKE_CXX_STANDARD)
-	set(CMAKE_CXX_STANDARD 17)
+	set(CMAKE_CXX_STANDARD 20)
 	set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
@@ -43,15 +52,6 @@ if(SENNET_MAIN_PROJECT)
 	set(CMAKE_CXX_EXTENSIONS OFF)
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
-
-# -----------------------------------------------------------------------------
-# ---- Build options ----------------------------------------------------------
-# -----------------------------------------------------------------------------
-
-option(SENNET_BUILD_SHARED "Build shared library." OFF)
-option(SENNET_BUILD_EXAMPLE "Build library example." ON)
-option(SENNET_BUILD_EDITOR "Build editor." ${SENNET_MAIN_PROJECT})
-option(SENNET_BUILD_WARNINGS "Enable compiler warnings." OFF)
 
 # -----------------------------------------------------------------------------
 # ---- Git --------------------------------------------------------------------
@@ -90,20 +90,12 @@ endif()
 # ---- Print ------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
-message(STATUS "System: ${CMAKE_SYSTEM}")
-message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
-message(STATUS "System version: ${CMAKE_SYSTEM_VERSION}")
-message(STATUS "System processor: ${CMAKE_SYSTEM_PROCESSOR}")
-message(STATUS "System host name: ${CMAKE_HOST_SYSTEM_NAME}")
-message(STATUS "C++ compiler: ${CMAKE_CXX_COMPILER}")
-
 message(STATUS "Sennet build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Sennet C++ flags: ${CMAKE_CXX_FLAGS}")
 
 # -----------------------------------------------------------------------------
 # ---- Source -----------------------------------------------------------------
 # -----------------------------------------------------------------------------
-
 
 add_subdirectory(Sennet)
 

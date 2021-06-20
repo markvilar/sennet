@@ -1,6 +1,10 @@
 #pragma once
 
-#include "asio.hpp"
+#include <asio.hpp>
+
+#include <evpp/tcp_client.h>
+#include <evpp/buffer.h>
+#include <evpp/tcp_conn.h>
 
 #include "Sennet/Network/ThreadSafeQueue.hpp"
 #include "Sennet/Network/TCP/Message.hpp"
@@ -33,10 +37,13 @@ public:
 			asio::ip::tcp::resolver::results_type endpoints =
 				resolver.resolve(host, std::to_string(port));
 
+            // Create socket. TODO: Add socket options.
+            asio::ip::tcp::socket socket(m_Context);
+
 			m_Connection = CreateScope<Connection<T>>(
-				Connection<T>::Owner::Client,
+                Connection<T>::Owner::Client,
 				m_Context,
-				asio::ip::tcp::socket(m_Context),
+				std::move(socket),
 				m_MessagesIn);
 
 			m_Connection->ConnectToServer(endpoints);
@@ -49,7 +56,7 @@ public:
 		}
 		catch (std::exception& e)
 		{
-			SN_CORE_ERROR("[TCPClient] Exception: {0}", e.what());
+			SN_CORE_ERROR("[Client] Exception: {0}", e.what());
 			return false;
 		}
 		return true;
