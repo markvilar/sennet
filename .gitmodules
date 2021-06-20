@@ -20,3 +20,6 @@
 [submodule "Sennet/vendor/stb"]
 	path = Sennet/Vendor/stb
 	url = https://github.com/markvilar/stb.git
+[submodule "Sennet/Vendor/evpp"]
+	path = Sennet/Vendor/evpp
+	url = https://github.com/markvilar/evpp.git
