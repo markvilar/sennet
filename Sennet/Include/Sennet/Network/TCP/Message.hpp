@@ -3,6 +3,9 @@
 namespace Sennet
 {
 
+namespace TCP
+{
+
 template <typename T>
 struct MessageHeader
 {
@@ -129,4 +132,5 @@ struct OwnedMessage
 	}
 };
 
-}
+} // namespace TCP
+} // namespace Sennet

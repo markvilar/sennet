@@ -2,11 +2,14 @@
 
 #include "asio.hpp"
 
-#include "Sennet/Network/Connection.hpp"
-#include "Sennet/Network/Message.hpp"
-#include "Sennet/Network/TSQueue.hpp"
+#include "Sennet/Network/ThreadSafeQueue.hpp"
+#include "Sennet/Network/TCP/Message.hpp"
+#include "Sennet/Network/TCP/Connection.hpp"
 
 namespace Sennet
+{
+
+namespace TCP
 {
 
 template <typename T>
@@ -46,7 +49,7 @@ public:
 		}
 		catch (std::exception& e)
 		{
-			SN_CORE_ERROR("[Client] Exception: {0}", e.what());
+			SN_CORE_ERROR("[TCPClient] Exception: {0}", e.what());
 			return false;
 		}
 		return true;
@@ -88,13 +91,13 @@ public:
 		}
 	}
 	
-	TSQueue<OwnedMessage<T>>& Incoming() 
+	ThreadSafeQueue<OwnedMessage<T>>& Incoming() 
 	{ 
 		return m_MessagesIn; 
 	}
 
 protected:
-	// Temporary.
+	// TODO: Temporary.
 	asio::io_context m_Context;
 
 	std::thread m_ContextThread;
@@ -102,7 +105,8 @@ protected:
 	Scope<Connection<T>> m_Connection;
 
 private:
-	TSQueue<OwnedMessage<T>> m_MessagesIn;
+	ThreadSafeQueue<OwnedMessage<T>> m_MessagesIn;
 };
 
-}
+} // namespace TCP
+} // namespace Sennet

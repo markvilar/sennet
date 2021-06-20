@@ -2,10 +2,13 @@
 
 #include "asio.hpp"
 
-#include "Sennet/Network/Message.hpp"
-#include "Sennet/Network/TSQueue.hpp"
+#include "Sennet/Network/ThreadSafeQueue.hpp"
+#include "Sennet/Network/TCP/Message.hpp"
 
 namespace Sennet
+{
+
+namespace TCP
 {
 
 template <typename T> 
@@ -19,7 +22,8 @@ public:
 	};
 
 	Connection(Owner parent, asio::io_context& context, 
-		asio::ip::tcp::socket socket, TSQueue<OwnedMessage<T>>& messagesIn)
+		asio::ip::tcp::socket socket, 
+        ThreadSafeQueue<OwnedMessage<T>>& messagesIn)
 		: m_Context(context), m_Socket(std::move(socket)), 
 		m_MessagesIn(messagesIn)
 	{
@@ -225,13 +229,14 @@ protected:
 	uint32_t m_ID = 0;
 
 	// Outgoing message queue owned by connection.
-	TSQueue<Message<T>> m_MessagesOut;
+	ThreadSafeQueue<Message<T>> m_MessagesOut;
 	
 	// Incoming message queue provided by client/server.
-	TSQueue<OwnedMessage<T>>& m_MessagesIn;
+	ThreadSafeQueue<OwnedMessage<T>>& m_MessagesIn;
 
 	// Message used to temporarily store incoming messages.
 	Message<T> m_MessageTemporaryIn;
 };
 
-}
+} // namespace TCP
+} // namespace Sennet

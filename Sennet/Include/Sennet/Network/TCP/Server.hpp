@@ -2,11 +2,14 @@
 
 #include "asio.hpp"
 
-#include "Sennet/Network/Connection.hpp"
-#include "Sennet/Network/Message.hpp"
-#include "Sennet/Network/TSQueue.hpp"
+#include "Sennet/Network/ThreadSafeQueue.hpp"
+#include "Sennet/Network/TCP/Message.hpp"
+#include "Sennet/Network/TCP/Connection.hpp"
 
 namespace Sennet
+{
+
+namespace TCP
 {
 
 template <typename T>
@@ -15,7 +18,8 @@ class Server
 	// Server class interface.
 public:
 	Server(uint16_t port)
-		: m_Acceptor(m_Context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+		: m_Acceptor(m_Context, 
+            asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
 	{
 	}
 
@@ -167,7 +171,7 @@ protected:
 	}
 
 protected:
-	TSQueue<OwnedMessage<T>> m_MessagesIn;
+	ThreadSafeQueue<OwnedMessage<T>> m_MessagesIn;
 
 	// Temporary.
 	asio::io_context m_Context;
@@ -180,4 +184,5 @@ protected:
 	std::deque<Ref<Connection<T>>> m_Connections;
 };
 
-}
+} // namespace TCP
+} // namespace Sennet

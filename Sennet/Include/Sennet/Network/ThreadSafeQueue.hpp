@@ -4,17 +4,17 @@ namespace Sennet
 {
 
 template <typename T>
-class TSQueue
+class ThreadSafeQueue
 {
 public:
-	TSQueue() = default;
-	virtual ~TSQueue()
+	ThreadSafeQueue() = default;
+	virtual ~ThreadSafeQueue()
 	{
 		std::scoped_lock lock(m_Mutex);
 		clear();
 	}
 
-	TSQueue(const TSQueue<T>&) = delete;
+	ThreadSafeQueue(const ThreadSafeQueue<T>&) = delete;
 
 	const T& front()
 	{

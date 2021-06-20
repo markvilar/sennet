@@ -13,19 +13,17 @@ enum class CustomMessageTypes : uint32_t
 	ServerMessage,
 };
 
-class CustomClient : public Sennet::Client<CustomMessageTypes>
+class CustomClient : public Sennet::TCP::Client<CustomMessageTypes>
 {
 public:
 	void PingServer()
 	{
-		Sennet::Message<CustomMessageTypes> message;
+		Sennet::TCP::Message<CustomMessageTypes> message;
 		message.Header.ID = CustomMessageTypes::ServerPing;
 		std::chrono::system_clock::time_point time = 
 			std::chrono::system_clock::now();
 
 		message << time;
-		SN_INFO("Message size: {0}", message.Size());
-		SN_INFO("Message body size: {0}", message.Body.size());
 		Send(message);
 	}
 };

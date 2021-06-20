@@ -13,30 +13,30 @@ enum class CustomMessageTypes : uint32_t
 	ServerMessage,
 };
 
-class CustomServer : public Sennet::Server<CustomMessageTypes>
+class CustomServer : public Sennet::TCP::Server<CustomMessageTypes>
 {
 public:
-	CustomServer(uint16_t port) : Sennet::Server<CustomMessageTypes>(port)
+	CustomServer(uint16_t port) : Sennet::TCP::Server<CustomMessageTypes>(port)
 	{
 	}
 
 protected:
 	virtual bool OnClientConnect(
-		Sennet::Ref<Sennet::Connection<CustomMessageTypes>> client)
+		Sennet::Ref<Sennet::TCP::Connection<CustomMessageTypes>> client)
 		override 
 	{
 		return true;
 	}
 
 	virtual void OnClientDisconnect(
-		Sennet::Ref<Sennet::Connection<CustomMessageTypes>>) 
+		Sennet::Ref<Sennet::TCP::Connection<CustomMessageTypes>>) 
 		override
 	{
 	}
 
 	virtual void OnMessage(
-		Sennet::Ref<Sennet::Connection<CustomMessageTypes>> client,
-		Sennet::Message<CustomMessageTypes>& message) 
+		Sennet::Ref<Sennet::TCP::Connection<CustomMessageTypes>> client,
+		Sennet::TCP::Message<CustomMessageTypes>& message) 
 		override
 	{
 		switch (message.Header.ID)

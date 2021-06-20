@@ -49,7 +49,7 @@ endif()
 # -----------------------------------------------------------------------------
 
 option(SENNET_BUILD_SHARED "Build shared library." OFF)
-option(SENNET_BUILD_EXAMPLE "Build library example." OFF)
+option(SENNET_BUILD_EXAMPLE "Build library example." ON)
 option(SENNET_BUILD_EDITOR "Build editor." ${SENNET_MAIN_PROJECT})
 option(SENNET_BUILD_WARNINGS "Enable compiler warnings." OFF)
 
