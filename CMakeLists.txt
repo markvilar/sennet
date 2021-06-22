@@ -17,6 +17,14 @@ if(NOT DEFINED SENNET_MAIN_PROJECT)
 		set(SENNET_MAIN_PROJECT OFF)
 	endif()
 endif()
+# -----------------------------------------------------------------------------
+# ---- Build options ----------------------------------------------------------
+# -----------------------------------------------------------------------------
+
+option(SENNET_BUILD_SHARED   "Build shared library."     OFF)
+option(SENNET_BUILD_EXAMPLE  "Build examples."           ON)
+option(SENNET_BUILD_EDITOR   "Build editor."             ON)
+option(SENNET_BUILD_WARNINGS "Enable compiler warnings." ON)
 
 # -----------------------------------------------------------------------------
 # ---- Build type -------------------------------------------------------------
@@ -29,15 +37,6 @@ endif()
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSN_DEBUG")
 set(CMAKE_CXX_FLAGS_REALESE "${CMAKE_CXX_FLAGS_REALESE} -DSN_REALESE")
-
-# -----------------------------------------------------------------------------
-# ---- Build options ----------------------------------------------------------
-# -----------------------------------------------------------------------------
-
-option(SENNET_BUILD_SHARED   "Build shared library."     OFF)
-option(SENNET_BUILD_EXAMPLE  "Build library examples."   ON)
-option(SENNET_BUILD_EDITOR   "Build Sennet editor."      ON)
-option(SENNET_BUILD_WARNINGS "Enable compiler warnings." OFF)
 
 # -----------------------------------------------------------------------------
 # ---- Compiler configuration -------------------------------------------------

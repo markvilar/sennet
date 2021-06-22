@@ -11,43 +11,43 @@ namespace Sennet
 class LinuxWindow : public Window
 {
 public:
-	LinuxWindow(const WindowProperties& props);
-	virtual ~LinuxWindow();
+    LinuxWindow(const WindowProperties& props);
+    virtual ~LinuxWindow();
 
-	void OnUpdate() override;
+    void OnUpdate() override;
 
-	unsigned int GetWidth() const override { return m_Data.Width; }
-	unsigned int GetHeight() const override { return m_Data.Height; }
+    unsigned int GetWidth() const override { return m_Data.Width; }
+    unsigned int GetHeight() const override { return m_Data.Height; }
 
-	// Window attributes.
-	void SetEventCallback (const EventCallbackFn& callback) override
-	{
-		m_Data.EventCallback = callback;
-	}
-	void SetVSync(bool enabled) override;
-	bool IsVSync() const override;
+    // Window attributes.
+    void SetEventCallback(const EventCallbackFn& callback) override
+    {
+        m_Data.EventCallback = callback;
+    }
+    void SetVSync(bool enabled) override;
+    bool IsVSync() const override;
 
-	virtual void* GetNativeWindow() const override { return m_Window; }
-
-private:
-	virtual void Init(const WindowProperties& props);
-	virtual void Shutdown();
+    virtual void* GetNativeWindow() const override { return m_Window; }
 
 private:
-	GLFWwindow* m_Window;
-	Scope<GraphicsContext> m_Context;
+    virtual void Init(const WindowProperties& props);
+    virtual void Shutdown();
 
-	struct WindowData
-	{
-		std::string Title;
-		unsigned int Width;
-		unsigned int Height;
-		bool VSync;
+private:
+    GLFWwindow* m_Window;
+    Scope<GraphicsContext> m_Context;
 
-		EventCallbackFn EventCallback;
-	};
+    struct WindowData
+    {
+        std::string Title;
+        unsigned int Width;
+        unsigned int Height;
+        bool VSync;
 
-	WindowData m_Data;
+        EventCallbackFn EventCallback;
+    };
+
+    WindowData m_Data;
 };
 
-}
+} // namespace Sennet

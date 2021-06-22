@@ -14,16 +14,16 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <vector>
-#include <unordered_map>
+#include <queue>
 #include <sstream>
 #include <string>
 #include <thread>
-#include <queue>
+#include <unordered_map>
+#include <vector>
 
 #include "Sennet/Core/Log.hpp"
 #include "Sennet/Debug/Instrumentor.hpp"
 
 #ifdef SN_PLATFORM_WINDOWS
-	#include <Windows.h>
+#include <Windows.h>
 #endif

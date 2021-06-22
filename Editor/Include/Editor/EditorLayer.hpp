@@ -9,28 +9,28 @@ namespace Sennet
 class EditorLayer : public Layer
 {
 public:
-	EditorLayer();
-	~EditorLayer() = default;
+    EditorLayer();
+    ~EditorLayer() = default;
 
-	virtual void OnAttach() override;
-	virtual void OnDetach() override;
-	virtual void OnUpdate(Timestep ts) override;
+    virtual void OnAttach() override;
+    virtual void OnDetach() override;
+    virtual void OnUpdate(Timestep ts) override;
 
-	virtual void OnImGuiRender() override;
+    virtual void OnImGuiRender() override;
 
-	virtual void OnEvent(Event& e) override;
+    virtual void OnEvent(Event& e) override;
 
 private:
-	OrthographicCameraController m_CameraController;
+    OrthographicCameraController m_CameraController;
 
-	Ref<Texture2D> m_CheckerboardTexture;
-	Ref<Framebuffer> m_Framebuffer;
+    Ref<Texture2D> m_CheckerboardTexture;
+    Ref<Framebuffer> m_Framebuffer;
 
-	bool m_ViewportFocused = false;
-	bool m_ViewportHovered = false;
+    bool m_ViewportFocused = false;
+    bool m_ViewportHovered = false;
 
-	glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-	glm::vec4 m_QuadColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+    glm::vec2 m_ViewportSize = {0.0f, 0.0f};
+    glm::vec4 m_QuadColor = {0.2f, 0.3f, 0.8f, 1.0f};
 };
 
-}
+} // namespace Sennet

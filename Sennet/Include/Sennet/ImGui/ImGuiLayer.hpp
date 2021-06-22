@@ -12,22 +12,21 @@ namespace Sennet
 class ImGuiLayer : public Layer
 {
 public:
-	ImGuiLayer();
-	~ImGuiLayer() = default;
+    ImGuiLayer();
+    ~ImGuiLayer() = default;
 
-	virtual void OnAttach() override;
-	virtual void OnDetach() override;
-	virtual void OnEvent(Event& e) override;
+    virtual void OnAttach() override;
+    virtual void OnDetach() override;
+    virtual void OnEvent(Event& e) override;
 
-	void Begin();
-	void End();
+    void Begin();
+    void End();
 
-	void BlockEvents(bool block) { m_BlockEvents = block; }
+    void BlockEvents(bool block) { m_BlockEvents = block; }
 
 private:
-	bool m_BlockEvents = true;
-	float m_Time;
-
+    bool m_BlockEvents = true;
+    float m_Time;
 };
 
-}
+} // namespace Sennet

@@ -11,19 +11,19 @@ namespace Sennet
 class Layer
 {
 public:
-	Layer(const std::string& name = "layer");
-	virtual ~Layer() = default;
+    Layer(const std::string& name = "layer");
+    virtual ~Layer() = default;
 
-	virtual void OnAttach() {}
-	virtual void OnDetach() {}
-	virtual void OnUpdate(Timestep ts) {}
-	virtual void OnImGuiRender() {}
-	virtual void OnEvent(Event& e) {}
+    virtual void OnAttach() {}
+    virtual void OnDetach() {}
+    virtual void OnUpdate(Timestep ts) {}
+    virtual void OnImGuiRender() {}
+    virtual void OnEvent(Event& e) {}
 
-	inline const std::string& GetName() const { return m_DebugName; }
+    inline const std::string& GetName() const { return m_DebugName; }
 
 protected:
-	std::string m_DebugName;
+    std::string m_DebugName;
 };
 
-}
+} // namespace Sennet
