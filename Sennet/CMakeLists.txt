@@ -105,7 +105,6 @@ endif()
 target_include_directories(Sennet PUBLIC 
 	"${SENNET_INCLUDE_DIR}"
 	"${SENNET_VENDOR_DIR}/asio/asio/include"
-    "${SENNET_VENDOR_DIR}/evpp"
 	"${SENNET_VENDOR_DIR}/glad/include"
 	"${SENNET_VENDOR_DIR}/glfw/include"
 	"${SENNET_VENDOR_DIR}/glm"
@@ -113,6 +112,6 @@ target_include_directories(Sennet PUBLIC
 	"${SENNET_VENDOR_DIR}/spdlog/include"
 	"${SENNET_VENDOR_DIR}/stb") 
 
-target_link_libraries(Sennet PRIVATE evpp glad glfw imgui spdlog)
+target_link_libraries(Sennet PRIVATE glad glfw imgui spdlog)
 target_compile_definitions(Sennet PRIVATE)
 target_compile_features(Sennet PUBLIC cxx_std_20)
