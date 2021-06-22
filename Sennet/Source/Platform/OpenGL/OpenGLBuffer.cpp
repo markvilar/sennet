@@ -1,5 +1,5 @@
-#include "Sennet/Pch.hpp"
 #include "Platform/OpenGL/OpenGLBuffer.hpp"
+#include "Sennet/Pch.hpp"
 
 #include "glad/glad.h"
 
@@ -12,34 +12,28 @@ namespace Sennet
 
 OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
 {
-	glCreateBuffers(1, &m_RendererID);
-	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+    glCreateBuffers(1, &m_RendererID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+    glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 }
 
 OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 {
-	glCreateBuffers(1, &m_RendererID);
-	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+    glCreateBuffers(1, &m_RendererID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+    glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
 
-OpenGLVertexBuffer::~OpenGLVertexBuffer()
-{
-	glDeleteBuffers(1, &m_RendererID);
-}
+OpenGLVertexBuffer::~OpenGLVertexBuffer() { glDeleteBuffers(1, &m_RendererID); }
 
 void OpenGLVertexBuffer::Bind() const
 {
-	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 }
 
-void OpenGLVertexBuffer::Unbind() const
-{
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
+void OpenGLVertexBuffer::Unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-void OpenGLVertexBuffer::SetData(const void* data, uint32_t size) 
+void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
@@ -50,28 +44,26 @@ void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
 ///////////////////////////////////////////////////////////////////////////////
 
 OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
-	: m_Count(count)
+    : m_Count(count)
 {
-	glCreateBuffers(1, &m_RendererID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices,
-		GL_STATIC_DRAW);
+    glCreateBuffers(1, &m_RendererID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+        count * sizeof(uint32_t),
+        indices,
+        GL_STATIC_DRAW);
 }
 
-OpenGLIndexBuffer::~OpenGLIndexBuffer()
-{
-	glDeleteBuffers(1, &m_RendererID);
-}
+OpenGLIndexBuffer::~OpenGLIndexBuffer() { glDeleteBuffers(1, &m_RendererID); }
 
 void OpenGLIndexBuffer::Bind() const
 {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 }
 
 void OpenGLIndexBuffer::Unbind() const
 {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-}
+} // namespace Sennet
