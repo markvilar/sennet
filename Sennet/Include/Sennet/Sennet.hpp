@@ -19,6 +19,8 @@
 #include "Sennet/Network/TCP/Connection.hpp"
 #include "Sennet/Network/TCP/Message.hpp"
 #include "Sennet/Network/TCP/Server.hpp"
+
+#include "Sennet/Network/Socket.hpp"
 #include "Sennet/Network/ThreadSafeQueue.hpp"
 
 #include "Sennet/Renderer/Buffer.hpp"

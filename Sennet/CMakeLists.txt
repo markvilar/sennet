@@ -4,7 +4,6 @@ set(SENNET_VENDOR_DIR "${PROJECT_SOURCE_DIR}/Sennet/Vendor")
 
 set(SENNET_HDR
 	"${SENNET_INCLUDE_DIR}/Sennet/Sennet.hpp"
-	"${SENNET_INCLUDE_DIR}/Sennet/Containers/Image.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Core/Application.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Core/Base.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Core/Input.hpp"
@@ -22,6 +21,8 @@ set(SENNET_HDR
 	"${SENNET_INCLUDE_DIR}/Sennet/Events/MouseEvent.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/ImGui/ImGuiLayer.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/ImGui/ImGuiUtilities.hpp"
+    "${SENNET_INCLUDE_DIR}/Sennet/Network/Base.hpp"
+    "${SENNET_INCLUDE_DIR}/Sennet/Network/Socket.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Network/ThreadSafeQueue.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Network/TCP/Message.hpp"
 	"${SENNET_INCLUDE_DIR}/Sennet/Network/TCP/Client.hpp"
@@ -51,6 +52,7 @@ set(SENNET_SRC
 	"${SENNET_SOURCE_DIR}/Sennet/ImGui/ImGuiBuild.cpp"
 	"${SENNET_SOURCE_DIR}/Sennet/ImGui/ImGuiLayer.cpp"
 	"${SENNET_SOURCE_DIR}/Sennet/ImGui/ImGuiUtilities.cpp"
+    "${SENNET_SOURCE_DIR}/Sennet/Network/Socket.cpp"
 	"${SENNET_SOURCE_DIR}/Sennet/Renderer/Buffer.cpp"
 	"${SENNET_SOURCE_DIR}/Sennet/Renderer/Framebuffer.cpp"
 	"${SENNET_SOURCE_DIR}/Sennet/Renderer/GraphicsContext.cpp"
@@ -73,6 +75,7 @@ set(SENNET_PLATFORM_HDR
 	"${SENNET_INCLUDE_DIR}/Platform/OpenGL/OpenGLTexture.hpp"
 	"${SENNET_INCLUDE_DIR}/Platform/OpenGL/OpenGLVertexArray.hpp"
 	"${SENNET_INCLUDE_DIR}/Platform/Windows/WindowsWindow.hpp"
+    "${SENNET_INCLUDE_DIR}/Platform/Linux/LinuxSocket.hpp"
 	"${SENNET_INCLUDE_DIR}/Platform/Linux/LinuxWindow.hpp")
 
 set(SENNET_PLATFORM_SRC
@@ -86,7 +89,8 @@ set(SENNET_PLATFORM_SRC
 	"${SENNET_SOURCE_DIR}/Platform/Windows/WindowsInput.cpp"
 	"${SENNET_SOURCE_DIR}/Platform/Windows/WindowsWindow.cpp"
 	"${SENNET_SOURCE_DIR}/Platform/Linux/LinuxInput.cpp"
-	"${SENNET_SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp")
+	"${SENNET_SOURCE_DIR}/Platform/Linux/LinuxSocket.cpp"
+    "${SENNET_SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp")
 
 add_library(Sennet STATIC 
 	${SENNET_HDR}

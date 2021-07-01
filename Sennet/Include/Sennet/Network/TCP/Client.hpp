@@ -2,10 +2,6 @@
 
 #include <asio.hpp>
 
-#include <evpp/buffer.h>
-#include <evpp/tcp_client.h>
-#include <evpp/tcp_conn.h>
-
 #include "Sennet/Network/TCP/Connection.hpp"
 #include "Sennet/Network/TCP/Message.hpp"
 #include "Sennet/Network/ThreadSafeQueue.hpp"
